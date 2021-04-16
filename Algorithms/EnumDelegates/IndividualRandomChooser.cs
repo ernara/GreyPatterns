@@ -43,8 +43,9 @@ namespace Algorithms
         private static Individual RankBasedChoose(int index)
         {
             List<int> FitnessList = new();
+            TotalSum = 0;
 
-            for (int i = Algorithm.PopulationSize ; i > 0; i--)
+            for (int i = Algorithm.PopulationSize; i > 0; i--)
             {
                 TotalSum += i;
                 FitnessList.Add(TotalSum);
@@ -77,8 +78,9 @@ namespace Algorithms
         private static Individual FitnessBasedChoose(int index)
         {
             List<int> FitnessList = new();
+            TotalSum = 0;
 
-            for (int i = Algorithm.PopulationSize; i > 0; i--)
+            for (int i = Algorithm.PopulationSize-1; i >= 0; i--)
             {
                 TotalSum += Algorithm.Population[i].Fitness;
                 FitnessList.Add(TotalSum);
@@ -92,7 +94,7 @@ namespace Algorithms
 
                 for (int i = 0; i < FitnessList.Count; i++)
                 {
-                    if (FitnessList[i] > randomValue)
+                    if (FitnessList[i] > randomValue)  
                     {
                         randomValue = i;
                         break;
@@ -105,6 +107,7 @@ namespace Algorithms
                 }
 
             }
+
         }
 
     }

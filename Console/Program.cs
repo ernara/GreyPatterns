@@ -29,8 +29,6 @@ namespace Consolee
         public static void Main()
         {
 
-
-
             //var list = new List<int>(Enumerable.Range(0,63));
             //var result = GetPermutations(list, 16);
             ////int i = 0;
