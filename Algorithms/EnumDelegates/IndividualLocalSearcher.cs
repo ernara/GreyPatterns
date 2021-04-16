@@ -10,23 +10,25 @@ namespace Algorithms
     {
         private static Action<Individual, int, int> searcher = new(FastLocalSearch);
 
-        public static void LocalSearch(this Individual individual)
+        public static void LocalSearch(this Individual individual, bool on = true)
         {
-            if (individual.Genes.Count == Individual.N)
+            if (on)
             {
-                searcher(individual, Individual.N, Individual.M);
+                if (individual.Genes.Count == Individual.N)
+                {
+                    searcher(individual, Individual.N, Individual.M);
 
+                }
+                else if (individual.Genes.Count == Mirror.SmallerN)
+                {
+                    searcher(individual, Mirror.SmallerN, Mirror.SmallerN);
+                }
+                else
+                {
+                    throw new ArgumentException("Wrong individual.Genes.Count");
+                }
+                individual.CalculateFitness();
             }
-            else if (individual.Genes.Count == Mirror.SmallerN)
-            {
-                searcher(individual, Mirror.SmallerN, Mirror.SmallerN);
-            }
-            else
-            {
-                throw new ArgumentException("Wrong individual.Genes.Count");
-            }
-
-            individual.CalculateFitness();
         }
 
         public static void ChooseLocalSearcherType(LocalSearchType localSearchType)

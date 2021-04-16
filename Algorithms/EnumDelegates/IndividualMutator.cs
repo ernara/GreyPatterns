@@ -10,14 +10,13 @@ namespace Algorithms
         private readonly static Random Random = new();
         private static Action<Individual> mutator = new(RandomMutate);
 
-        public static void Mutate(this Individual individual)
+        public static void Mutate(this Individual individual, bool on = true)
         {
-            mutator(individual);
-            individual.CalculateFitness();
-
-            if (LocalSearchFlag.Mutate)
-                individual.LocalSearch();
-
+            if (on)
+            {
+                mutator(individual);
+                individual.CalculateFitness();
+            }
         }
 
         public static void ChooseMutatorType(MutateType mutateType)

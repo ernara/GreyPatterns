@@ -28,22 +28,25 @@ namespace Consolee
         }
         public static void Main()
         {
-            var list = new List<int>(Enumerable.Range(0,63));
-            var result = GetPermutations(list, 16);
-            //int i = 0;
-            foreach (var perm in result)
-            {
-                foreach (var c in perm)
-                {
-                    Console.Write(c + " ");
-                }
-                //if (i % 1000000 == 0)
-                //{
-                //    Console.WriteLine(i);
-                //}
-                //++i;
-                Console.WriteLine();
-            }
+
+
+
+            //var list = new List<int>(Enumerable.Range(0,63));
+            //var result = GetPermutations(list, 16);
+            ////int i = 0;
+            //foreach (var perm in result)
+            //{
+            //    foreach (var c in perm)
+            //    {
+            //        Console.Write(c + " ");
+            //    }
+            //    //if (i % 1000000 == 0)
+            //    //{
+            //    //    Console.WriteLine(i);
+            //    //}
+            //    //++i;
+            //    Console.WriteLine();
+            //}
         }
 
     }

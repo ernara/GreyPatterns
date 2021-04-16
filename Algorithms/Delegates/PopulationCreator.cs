@@ -14,6 +14,7 @@ namespace Algorithms
             for (int i = 0; i < Algorithm.PopulationSize; ++i)
             {
                 population.Add(new Individual());
+                population[i].LocalSearch(LocalSearchFlag.PopulationCreation);
             }
 
             return population.OrderBy(individual => individual.Fitness).ToList();

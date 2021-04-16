@@ -17,13 +17,13 @@ namespace Algorithms
         {
             individual.ChangeToSmallMirror();
 
-            if (LocalSearchFlag.SmallMirror)
-                individual.LocalSearch();
+            individual.Mutate(MutateFlag.SmallMirror);
+            individual.LocalSearch(MutateFlag.SmallMirror);
 
             individual.ChangeToBigMirror();
 
-            if (LocalSearchFlag.BigMirror)
-                individual.LocalSearch();
+            individual.Mutate(MutateFlag.SmallMirror);
+            individual.LocalSearch();
         }
 
         private static void ChangeToSmallMirror(this Individual individual)
