@@ -26,7 +26,7 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void TestPopulationsize()
+        public void TestPopulationCreator()
         {
             Algorithm = new Algorithm(N1, N2, M, -10);
             Assert.AreEqual(Algorithm.PopulationSize, Algorithm.Population.Count);

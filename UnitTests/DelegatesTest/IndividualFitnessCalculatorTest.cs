@@ -35,10 +35,24 @@ namespace UnitTests
         }
 
         [TestMethod]
+        public void TestAllCalculateFitness()
+        {
+            IndividualFitnessCalculator.CalculateFitness(Individual.Genes);
+            int CalculatedFitnessByGenes = Individual.Fitness;
+            IndividualFitnessCalculator.CalculateFitness(Individual);
+            int CalculatedFitnessByIndividual = Individual.Fitness;
+
+            int CalculatedFitnessByReturn = IndividualFitnessCalculator.ReturnCalculatedFitness(Individual);
+
+            Assert.AreEqual(CalculatedFitnessByGenes,CalculatedFitnessByIndividual);
+            Assert.AreEqual(CalculatedFitnessByIndividual, CalculatedFitnessByReturn);
+        }
+
+        [TestMethod]
         public void TestCalculateFitness()
         {
             Individual Individual2 = new(Individual.Genes,0);
-            Individual2.CalculateFitness();
+            IndividualFitnessCalculator.CalculateFitness(Individual2);
             Assert.IsTrue(Individual.Fitness>0);
             Assert.AreEqual(Individual.Fitness, Individual2.Fitness);
         }
@@ -50,7 +64,7 @@ namespace UnitTests
             {
                 Mirror.ChooseMirrorType((MirrorType)mirrorType);
                 Individual.Genes = Enumerable.Range(0, Mirror.SmallerN).ToList();
-                Individual.CalculateFitness();
+                IndividualFitnessCalculator.CalculateFitness(Individual);
                 Assert.IsTrue(Individual.Fitness > 0);
             }
         }
@@ -59,7 +73,7 @@ namespace UnitTests
         public void TestCalculateFitnessException()
         {
             Individual.Genes.RemoveAt(0);
-            Assert.ThrowsException<ArgumentException>(() => Individual.CalculateFitness());
+            Assert.ThrowsException<ArgumentException>(() => IndividualFitnessCalculator.CalculateFitness(Individual));
         }
 
     }

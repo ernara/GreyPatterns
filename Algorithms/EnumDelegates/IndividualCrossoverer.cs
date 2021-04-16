@@ -16,8 +16,8 @@ namespace Algorithms
             crossoverer(individual, individual2);
             individual.CalculateFitness();
 
-            individual.Mutate(MutateFlag.Crossover);
-            individual.LocalSearch(LocalSearchFlag.Crossover);
+            individual.Mutate(MutateFlags.Crossover);
+            individual.LocalSearch(LocalSearchFlags.Crossover);
 
             individual.CalculateFitness();
         }

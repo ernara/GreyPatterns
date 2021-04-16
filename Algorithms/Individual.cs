@@ -51,7 +51,6 @@ namespace Algorithms
             {
                 genes += i.ToString() + " ";
             }
-
             return $"Genes: {genes}| Fitness: {Fitness}";
         }
 

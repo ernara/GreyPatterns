@@ -20,7 +20,8 @@ namespace Algorithms
         private Func<int, Individual> ChooseRandomIndividual;
 
         public Algorithm(int n1, int n2, int m, int populationSize,
-            LocalSearchFlag localSearchFlags,
+            MutateFlags mutateFlags,
+            LocalSearchFlags localSearchFlags,
             int oldPopulationSize = 10, int crossoverPopulationSize = 80, int newPopulationSize = 10, int mutateChance = 10,
 
             LocalSearchType localSearchType = LocalSearchType.Fast,
@@ -36,8 +37,9 @@ namespace Algorithms
 
             IndividualFitnessCalculator.SetUpParameters();
             Population = PopulationCreator.CreatePopulation();
+            SaveBestIndividual();
 
-            BestIndividual = new Individual(Population[0]);
+
         }
 
         public Algorithm(int n1, int n2, int m, int populationSize,
@@ -53,7 +55,7 @@ namespace Algorithms
             SetUpParameters(n1, n2, m, populationSize, oldPopulationSize, crossoverPopulationSize, newPopulationSize, mutateChance);
             SetUpDelegates(localSearchType, individualType, mirrorType, randomChooseType, crossoverType, mutateType);
 
-            _ = new LocalSearchFlag(true, false, false, false);
+            _ = new LocalSearchFlags(true, false, false, false);
             IndividualFitnessCalculator.SetUpParameters();
             Population = PopulationCreator.CreatePopulation();
 
@@ -67,6 +69,17 @@ namespace Algorithms
             for (int i = 0; i < generations || stopwatch.ElapsedMilliseconds < time; i++)
             {
                 Do();
+                SaveBestIndividual();
+            }
+        }
+
+        public void SaveBestIndividual()
+        {
+            Population = Population.OrderBy(i => i.Fitness).ToList();
+
+            if (Population[0].Fitness < BestIndividual.Fitness)
+            {
+                BestIndividual = new Individual(Population[0]);
             }
         }
 

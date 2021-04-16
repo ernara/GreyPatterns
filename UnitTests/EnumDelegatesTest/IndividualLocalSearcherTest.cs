@@ -23,9 +23,9 @@ namespace UnitTests
         [TestInitialize]
         public void TestInitialize()
         {
-            N1 = 10;
-            N2 = 10;
-            M = 10;
+            N1 = 32;
+            N2 = 32;
+            M = 16;
             PopulationSize = 1;
 
             Algorithm = new Algorithm(N1, N2, M, PopulationSize);
