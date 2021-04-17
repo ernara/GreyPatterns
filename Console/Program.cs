@@ -27,15 +27,7 @@ namespace Consolee
         }
         public static void Main()
         {
-            //foreach (var mirrorType in Enum.GetValues(typeof(MirrorType)))
-            //{
-            //    Mirror.ChooseMirrorType((MirrorType)mirrorType);
-            //    Individual = new(Algorithm.BestIndividual);
-            //    Individual.MakeMirrored();
-            //    Assert.IsTrue(Individual.Fitness < Algorithm.BestIndividual.Fitness);
-            //    Assert.IsTrue(Individual.Fitness > 0);
-            //}
+            
         }
-
     }
 }

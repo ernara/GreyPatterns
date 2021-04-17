@@ -29,47 +29,35 @@ namespace GUI
            
         }
 
+		public Rectangle[,] CurrentMatrix = new Rectangle[16, 16];
 
-		private const int gameWidth = 16;
-
-		private const int gameHeight = gameWidth;
 		private const double spacing = 1.0;
 
 		private readonly Brush ON = Brushes.Black;
 		private readonly Brush OFF = Brushes.LightGray;
 
-		private int roundCount = 0;
 
-		public Rectangle[,] matrix = new Rectangle[gameHeight, gameWidth];
 		private readonly DispatcherTimer timer = new DispatcherTimer();
 
 		private async void NewAlgorithm(object sender, RoutedEventArgs e)
 		{
-			Algorithm Algorithm = new Algorithm(Convert.ToInt32(N1_Text.Text), Convert.ToInt32(N2_Text.Text), Convert.ToInt32(M_Text.Text), 1);
+			Algorithm Algorithm = new Algorithm(Convert.ToInt32(N1_Text.Text), Convert.ToInt32(N2_Text.Text), Convert.ToInt32(M_Text.Text), Convert.ToInt32(PopulationSize_Text.Text));
 			CreateCanvas();
 
-            for (int ii = 0; ii < 1000000; ii++)
-            {
-                roundCount++;
+			Stopwatch stopwatch = new();
+
+			stopwatch.Start();
+
+			for (int i = 0; i < Convert.ToInt32(Iterations_Text.Text) || stopwatch.ElapsedMilliseconds < Convert.ToInt32(Time_Text.Text) * 1000; i++)
+			{
                 Algorithm.Next();
 
-                Coordinate coordinate;
-
-                for (int i = 0; i < Individual.M; i++)
-                {
-                    coordinate = new Coordinate(Algorithm.Population[0].Genes[i], Individual.N2);
-                    matrix[coordinate.Y, coordinate.X].Fill = ON;
-                }
-
-                for (int i = Individual.M; i < Individual.N; i++)
-                {
-                    coordinate = new Coordinate(Algorithm.Population[0].Genes[i], Individual.N2);
-                    matrix[coordinate.Y, coordinate.X].Fill = OFF;
-                }
+			    Paint();
+                
                 await Task.Delay(1);
-
             }
 
+			stopwatch.Stop();
 
         }
 
