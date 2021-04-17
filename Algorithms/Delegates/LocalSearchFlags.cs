@@ -16,10 +16,10 @@ namespace Algorithms
         public LocalSearchFlags(bool populationCreation = false, bool smallMirror = false, bool bigMirror = false, bool crossover = false)
         {
             PopulationCreation = populationCreation;
-            Crossover = crossover;
             SmallMirror = smallMirror;
             BigMirror = bigMirror;
+            Crossover = crossover;
         }
-        
+
     }
 }

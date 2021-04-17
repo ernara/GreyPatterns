@@ -91,15 +91,24 @@ namespace Algorithms
 
         public void Do()
         {
+            List<Individual> NewPopulation = new(Population.Take(OldPopulationSize));
+
+            Individual child;
+
             for (int i = OldPopulationSize; i < CrossoverPopulationSize + OldPopulationSize; ++i)
             {
-                Population[i].Crossover(ChooseRandomIndividual(i));
+                child = new(Population[i]);
+                child.Crossover(ChooseRandomIndividual(i));
+                NewPopulation.Add(child);
             }
 
             for (int i = 0; i < NewPopulationSize; ++i)
             {
-                Population[Population.Count - 1 - i] = new Individual();
+                NewPopulation.Add(new Individual());
             }
+
+            Population = NewPopulation;
+
         }
 
 
