@@ -26,9 +26,9 @@ namespace GUI
 		public MainWindow()
 		{
 			InitializeComponent();
-		}
+           
+        }
 
-		Algorithm Algorithm = new Algorithm(16, 16, 32, 100, new MutateFlags(), new LocalSearchFlags());
 
 		private const int gameWidth = 16;
 
@@ -45,55 +45,34 @@ namespace GUI
 
 		private async void NewAlgorithm(object sender, RoutedEventArgs e)
 		{
+			Algorithm Algorithm = new Algorithm(Convert.ToInt32(N1_Text.Text), Convert.ToInt32(N2_Text.Text), Convert.ToInt32(M_Text.Text), 1);
+			CreateCanvas();
+
             for (int ii = 0; ii < 1000000; ii++)
             {
-				roundCount++;
-				Algorithm.Next();
+                roundCount++;
+                Algorithm.Next();
 
-				Coordinate coordinate;
+                Coordinate coordinate;
 
-				for (int i = 0; i < Individual.M; i++)
-				{
-					coordinate = new Coordinate(Algorithm.Population[99].Genes[i], Individual.N2);
-					matrix[coordinate.Y, coordinate.X].Fill = ON;
-				}
+                for (int i = 0; i < Individual.M; i++)
+                {
+                    coordinate = new Coordinate(Algorithm.Population[0].Genes[i], Individual.N2);
+                    matrix[coordinate.Y, coordinate.X].Fill = ON;
+                }
 
-				for (int i = Individual.M; i < Individual.N; i++)
-				{
-					coordinate = new Coordinate(Algorithm.Population[99].Genes[i], Individual.N2);
-					matrix[coordinate.Y, coordinate.X].Fill = OFF;
-				}
-				await Task.Delay(1);
+                for (int i = Individual.M; i < Individual.N; i++)
+                {
+                    coordinate = new Coordinate(Algorithm.Population[0].Genes[i], Individual.N2);
+                    matrix[coordinate.Y, coordinate.X].Fill = OFF;
+                }
+                await Task.Delay(1);
 
-			}
+            }
 
 
-		}
+        }
 
-		private void buildCanvas()
-		{
-			for (int y = 0; y < gameHeight; y++)
-			{
-				for (int x = 0; x < gameWidth; x++)
-				{
-					Rectangle r = new Rectangle
-					{
-						Width = Board.ActualWidth / gameWidth - spacing,
-						Height = Board.ActualHeight / gameHeight - spacing,
-						Fill = OFF
-					};
-					Board.Children.Add(r);
-
-					Canvas.SetLeft(r, x * Board.ActualWidth / gameWidth);
-					Canvas.SetTop(r, y * Board.ActualHeight / gameHeight);
-
-					matrix[y, x] = r;
-
-					r.MouseDown += R_MouseEnter;
-					r.MouseEnter += R_MouseEnter;
-				}
-			}
-		}
 
 		private void R_MouseEnter(object sender, MouseEventArgs e)
 		{
@@ -107,8 +86,6 @@ namespace GUI
 			pixel.Fill = pixel.Fill == ON ? OFF : ON;
 		}
 
-		private void game_Loaded(object sender, RoutedEventArgs e) => buildCanvas();
-
 
 		private void gameSpeedSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
@@ -116,6 +93,15 @@ namespace GUI
 			double value = slider.Value;
 
 			timer.Interval = TimeSpan.FromMilliseconds(1000 - Math.Ceiling(value * 100));
+		}
+
+        private void Board_Loaded(object sender, RoutedEventArgs e)
+        {
+			Algorithm Algorithm = new Algorithm(Convert.ToInt32(N1_Text.Text), Convert.ToInt32(N2_Text.Text), Convert.ToInt32(M_Text.Text), 1);
+
+			CreateCanvas();
+
+
 		}
 	}
 }

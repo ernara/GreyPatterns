@@ -108,7 +108,6 @@ namespace Algorithms
             }
 
             Population = NewPopulation;
-
         }
 
 
@@ -120,9 +119,20 @@ namespace Algorithms
             Individual.SetUpParameters(n1, n2, m);
 
             PopulationSize = populationSize;
-            OldPopulationSize = Convert.ToInt32((double)oldPopulationSize/100* populationSize);
-            CrossoverPopulationSize = Convert.ToInt32((double)crossoverPopulationSize / 100 * populationSize);
-            NewPopulationSize = Convert.ToInt32((double)newPopulationSize / 100 * populationSize);
+
+            if (populationSize==1)
+            {
+                OldPopulationSize = 0;
+                crossoverPopulationSize = 0;
+                NewPopulationSize = 1;
+            }
+            else
+            {
+                OldPopulationSize = Convert.ToInt32((double)oldPopulationSize / 100 * populationSize);
+                CrossoverPopulationSize = Convert.ToInt32((double)crossoverPopulationSize / 100 * populationSize);
+                NewPopulationSize = Convert.ToInt32((double)newPopulationSize / 100 * populationSize);
+            }
+            
             MutateChance = mutateChance;
         }
 

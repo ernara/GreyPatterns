@@ -7,7 +7,6 @@ using System.Linq;
 
 namespace Consolee
 {
-    
     static class Program
     {
         private static IEnumerable<IEnumerable<T>> GetPermutations<T>(IEnumerable<T> items, int count)

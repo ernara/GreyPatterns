@@ -38,7 +38,7 @@
             </Grid.ColumnDefinitions>
 
             <!--Canvas1-->
-            <Canvas x:Name="Board" HorizontalAlignment="Left" Height="512" VerticalAlignment="Top" Width="512" Loaded="game_Loaded" />
+            <Canvas x:Name="Board" HorizontalAlignment="Left" Height="512" VerticalAlignment="Top" Width="512" Loaded="Board_Loaded"/>
 
             <!--Canvas2-->
             <Border Grid.Column="2" Height="514" Width="514" BorderBrush="Black" BorderThickness="1" d:IsLocked="True">

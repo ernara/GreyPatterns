@@ -128,6 +128,15 @@ namespace UnitTests
         }
 
         [TestMethod]
+        public void TestParametersWhenPopulationSizeIsOne()
+        {
+            Algorithm = new Algorithm(N1, N2, M, 1, 3, 2, 95, MutateChance);
+            Assert.AreEqual(Algorithm.OldPopulationSize, 0);
+            Assert.AreEqual(Algorithm.CrossoverPopulationSize, 0);
+            Assert.AreEqual(Algorithm.NewPopulationSize, 1);
+        }
+
+        [TestMethod]
         public void TestMutateChance()
         {
             Algorithm = new Algorithm(N1, N2, M, PopulationSize, OldPopulationSize, CrossoverPopulationSize, NewPopulationSize, -10);
