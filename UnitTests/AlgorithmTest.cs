@@ -30,7 +30,7 @@ namespace UnitTests
             N1 = 5;
             N2 = 5;
             M = 3;
-            PopulationSize = 1;
+            PopulationSize = 100;
 
             OldPopulationSize = 10;
             CrossoverPopulationSize = 80;
@@ -85,13 +85,13 @@ namespace UnitTests
         [TestMethod]
         public void TestOldPopulationSize()
         {
-            Algorithm = new Algorithm(N1, N2, M, PopulationSize, -10, CrossoverPopulationSize, NewPopulationSize, MutateChance); 
+            Algorithm = new Algorithm(N1, N2, M, PopulationSize, -10, CrossoverPopulationSize, NewPopulationSize, MutateChance);
             Assert.AreEqual(Algorithm.OldPopulationSize, 0);
             Algorithm = new Algorithm(N1, N2, M, PopulationSize, 5, CrossoverPopulationSize, NewPopulationSize, MutateChance);
             Assert.AreEqual(Algorithm.OldPopulationSize, 5);
             Assert.AreEqual(Algorithm.CrossoverPopulationSize, 85);
 
-            Algorithm = new Algorithm(N1, N2, M, PopulationSize, 1000, CrossoverPopulationSize, NewPopulationSize, MutateChance); 
+            Algorithm = new Algorithm(N1, N2, M, PopulationSize, 1000, CrossoverPopulationSize, NewPopulationSize, MutateChance);
             Assert.AreEqual(Algorithm.OldPopulationSize, 10);
 
             Algorithm = new Algorithm(N1, N2, M, PopulationSize, 95, 3, 2, MutateChance);
@@ -139,18 +139,18 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void TestToString()
+        public void TestNext()
         {
-            Assert.AreEqual(new Individual(new List<int>() { 0,1,2},0).ToString(), "Genes: 0 1 2 | Fitness: 0");
+            Algorithm = new Algorithm(16, 16, 32, 10, new MutateFlags(false,false,false,false), new LocalSearchFlags(false,false,false,true));
+            Individual individual = new(Algorithm.BestIndividual);
+            Algorithm.Next(0,10);
+            Assert.IsTrue(Algorithm.BestIndividual.Fitness < individual.Fitness);
         }
 
         [TestMethod]
-
-        public void TestNext()
+        public void TestToString()
         {
-            //Individual individual = new(Algorithm.);
-            //Algorithm.Next(10, 0);
-
+            Assert.AreEqual(new Individual(new List<int>() { 0, 1, 2 }, 0).ToString(), "Genes: 0 1 2 | Fitness: 0");
         }
 
     }

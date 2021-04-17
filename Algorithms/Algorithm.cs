@@ -37,8 +37,7 @@ namespace Algorithms
 
             IndividualFitnessCalculator.SetUpParameters();
             Population = PopulationCreator.CreatePopulation();
-            SaveBestIndividual();
-
+            BestIndividual = new(Population[0]);
 
         }
 
@@ -55,18 +54,25 @@ namespace Algorithms
             SetUpParameters(n1, n2, m, populationSize, oldPopulationSize, crossoverPopulationSize, newPopulationSize, mutateChance);
             SetUpDelegates(localSearchType, individualType, mirrorType, randomChooseType, crossoverType, mutateType);
 
-            _ = new LocalSearchFlags(true, false, false, false);
+            _ = new MutateFlags(false, false, false, false);
+            _ = new LocalSearchFlags(false, false, false, false);
             IndividualFitnessCalculator.SetUpParameters();
             Population = PopulationCreator.CreatePopulation();
+            BestIndividual = new(Population[0]);
 
-            BestIndividual = new Individual(Population[0]);
+        }
+
+        public void Next()
+        {
+            Next(1, 0);
         }
 
         public void Next(int generations, int time)
         {
             Stopwatch stopwatch = new();
+            stopwatch.Start();
 
-            for (int i = 0; i < generations || stopwatch.ElapsedMilliseconds < time; i++)
+            for (int i = 0; i < generations || stopwatch.ElapsedMilliseconds < time * 1000; i++)
             {
                 Do();
                 SaveBestIndividual();
@@ -105,9 +111,9 @@ namespace Algorithms
             Individual.SetUpParameters(n1, n2, m);
 
             PopulationSize = populationSize;
-            OldPopulationSize = oldPopulationSize;
-            CrossoverPopulationSize = crossoverPopulationSize;
-            NewPopulationSize = newPopulationSize;
+            OldPopulationSize = Convert.ToInt32((double)oldPopulationSize/100* populationSize);
+            CrossoverPopulationSize = Convert.ToInt32((double)crossoverPopulationSize / 100 * populationSize);
+            NewPopulationSize = Convert.ToInt32((double)newPopulationSize / 100 * populationSize);
             MutateChance = mutateChance;
         }
 
@@ -133,14 +139,14 @@ namespace Algorithms
             oldPopulationSize = oldPopulationSize < 0 ? 0 : oldPopulationSize > 100 ? 100 : oldPopulationSize;
             newPopulationSize = newPopulationSize < 0 ? 0 : newPopulationSize > 100 ? 100 : newPopulationSize;
             mutateChance = mutateChance < 0 ? 0 : mutateChance > 100 ? 100 : mutateChance;
-           
+
             if (oldPopulationSize + crossoverPopulationSize + newPopulationSize > 100)
             {
                 oldPopulationSize = oldPopulationSize > 10 ? 10 : oldPopulationSize;
                 newPopulationSize = newPopulationSize > 10 ? 10 : newPopulationSize;
             }
 
-            crossoverPopulationSize = 100 - oldPopulationSize - newPopulationSize ;
+            crossoverPopulationSize = 100 - oldPopulationSize - newPopulationSize;
         }
 
 
