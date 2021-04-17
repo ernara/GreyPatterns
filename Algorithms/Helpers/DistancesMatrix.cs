@@ -14,11 +14,6 @@ namespace Algorithms
             get { return Array[i, j]; }
         }
 
-        public DistancesMatrix()
-        {
-            throw new NotImplementedException();
-        }
-
         public DistancesMatrix(int n1, int n2)
         {
             int n = n1 * n2;
