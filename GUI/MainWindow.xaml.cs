@@ -18,78 +18,94 @@ using Algorithms;
 
 namespace GUI
 {
-	/// <summary>
-	/// Interaction logic for MainWindow.xaml
-	/// </summary>
-	public partial class MainWindow : Window
-	{
-		public MainWindow()
-		{
-			InitializeComponent();
-           
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+            ANewIndividualType.ItemsSource = Enum.GetValues(typeof(IndividualType));
+            ANewIndividualType.SelectedIndex = 0;
+
+            ACrossoverType.ItemsSource = Enum.GetValues(typeof(CrossoverType));
+            ACrossoverType.SelectedIndex = 0;
+
+            AIndividualChooserType.ItemsSource = Enum.GetValues(typeof(RandomChooseType));
+            AIndividualChooserType.SelectedIndex = 0;
+
+            AMirrorType.ItemsSource = Enum.GetValues(typeof(MirrorType));
+            AMirrorType.SelectedIndex = 0;
+
+            AMutateType.ItemsSource = Enum.GetValues(typeof(MutateType));
+            AMutateType.SelectedIndex = 1;
+
+            ALocalSearchType.ItemsSource = Enum.GetValues(typeof(LocalSearchType));
+            ALocalSearchType.SelectedIndex = 0;
+
         }
 
-		public Rectangle[,] CurrentMatrix = new Rectangle[16, 16];
+        public Rectangle[,] CurrentMatrix = new Rectangle[16, 16];
 
-		private const double spacing = 1.0;
+        private const double spacing = 1.0;
 
-		private readonly Brush ON = Brushes.Black;
-		private readonly Brush OFF = Brushes.LightGray;
+        private readonly Brush ON = Brushes.Black;
+        private readonly Brush OFF = Brushes.LightGray;
 
+        private async void NewAlgorithm(object sender, RoutedEventArgs e)
+        {
+            Algorithm Algorithm = new(Convert.ToInt32(N1_Text.Text), Convert.ToInt32(N2_Text.Text),
+                Convert.ToInt32(M_Text.Text), Convert.ToInt32(PopulationSize_Text.Text),
+            new MutateFlags(Mutate0.IsEnabled, Mutate1.IsEnabled, Mutate2.IsEnabled, Mutate3.IsEnabled),
+            new LocalSearchFlags(LocalSearch1.IsEnabled, LocalSearch2.IsEnabled, LocalSearch3.IsEnabled),
+            Convert.ToInt32(OldPopulationSize_Text.Text), Convert.ToInt32(CrossPopulationSize_Text.Text),
+            Convert.ToInt32(NewPopulationSize_Text.Text), Convert.ToInt32(MutateChance_Text.Text),
+            (LocalSearchType)ALocalSearchType.SelectedIndex,(IndividualType)ANewIndividualType.SelectedIndex,
+            (MirrorType)AMirrorType.SelectedIndex, (RandomChooseType)AIndividualChooserType.SelectedIndex,
+            (CrossoverType)ACrossoverType.SelectedIndex,(MutateType)AMutateType.SelectedIndex);
 
-		private readonly DispatcherTimer timer = new DispatcherTimer();
+            CreateCanvas();
 
-		private async void NewAlgorithm(object sender, RoutedEventArgs e)
-		{
-			Algorithm Algorithm = new Algorithm(Convert.ToInt32(N1_Text.Text), Convert.ToInt32(N2_Text.Text), Convert.ToInt32(M_Text.Text), Convert.ToInt32(PopulationSize_Text.Text));
-			CreateCanvas();
+            Stopwatch stopwatch = new();
+            stopwatch.Start();
 
-			Stopwatch stopwatch = new();
+            Stopwatch stopwatchFPS = new();
+            stopwatchFPS.Start();
 
-			stopwatch.Start();
-
-			for (int i = 0; i < Convert.ToInt32(Iterations_Text.Text) || stopwatch.ElapsedMilliseconds < Convert.ToInt32(Time_Text.Text) * 1000; i++)
-			{
+            for (int i = 0; i < Convert.ToInt32(Iterations_Text.Text) || stopwatch.ElapsedMilliseconds < Convert.ToInt32(Time_Text.Text) * 1000; i++)
+            {
                 Algorithm.Next();
 
-			    Paint();
-                
-                await Task.Delay(1);
+                Paint();
+
+                await Task.Delay((int)Math.Max(1.0, 1000.0 / FPS.Value - stopwatchFPS.ElapsedMilliseconds));
+                stopwatchFPS.Restart();
             }
 
-			stopwatch.Stop();
+            stopwatch.Stop();
 
         }
 
 
-		private void R_MouseEnter(object sender, MouseEventArgs e)
-		{
-			coordinate.Content = Mouse.GetPosition(Board);
+        private void R_MouseEnter(object sender, MouseEventArgs e)
+        {
+            //coordinate.Content = Mouse.GetPosition(Board);
 
-			bool leftButton = e.LeftButton == MouseButtonState.Pressed;
-			if (!leftButton) return;
+            bool leftButton = e.LeftButton == MouseButtonState.Pressed;
+            if (!leftButton) return;
 
-			Rectangle pixel = (Rectangle)sender;
+            Rectangle pixel = (Rectangle)sender;
 
-			pixel.Fill = pixel.Fill == ON ? OFF : ON;
-		}
+            pixel.Fill = pixel.Fill == ON ? OFF : ON;
+        }
 
-
-		private void gameSpeedSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-		{
-			var slider = sender as Slider;
-			double value = slider.Value;
-
-			timer.Interval = TimeSpan.FromMilliseconds(1000 - Math.Ceiling(value * 100));
-		}
 
         private void Board_Loaded(object sender, RoutedEventArgs e)
         {
-			Algorithm Algorithm = new Algorithm(Convert.ToInt32(N1_Text.Text), Convert.ToInt32(N2_Text.Text), Convert.ToInt32(M_Text.Text), 1);
-
-			CreateCanvas();
-
-
-		}
-	}
+            Algorithm Algorithm = new(Convert.ToInt32(N1_Text.Text), Convert.ToInt32(N2_Text.Text), Convert.ToInt32(M_Text.Text), 1);
+            Algorithm.Next();
+            CreateCanvas();
+        }
+    }
 }

@@ -10,46 +10,47 @@
         WindowStyle = "None">
     <Grid >
         
+        <!--Grid aukščiai-->
          <Grid.RowDefinitions  >
             <RowDefinition Height="20" />
-            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" /> <!--All-->
             <RowDefinition Height="20" />
 
         </Grid.RowDefinitions>
 
         <!--Grid ilgiai-->
         <Grid.ColumnDefinitions  >
+            <ColumnDefinition Width="20" /> 
+            <ColumnDefinition Width="auto" /> <!--Canvas-->
             <ColumnDefinition Width="20" />
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="20" />
-            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" /> <!--Menu-->
             <ColumnDefinition Width="20" />
         </Grid.ColumnDefinitions>
 
 
         <!--Canvas-->
-        <Grid Grid.Row="1" Grid.Column="1" d:IsLocked="True">
+        <Grid Grid.Row="1" Grid.Column="1" >
 
             <!--Canvas ilgiai-->
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="512"/>
                 <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="512"/>
             </Grid.ColumnDefinitions>
 
             <!--Canvas1-->
-            <Canvas x:Name="Board" HorizontalAlignment="Left" Height="512" VerticalAlignment="Top" Width="512" Loaded="Board_Loaded"/>
+            <Canvas x:Name="Board" HorizontalAlignment="Left" Height="512" Width="512" Loaded="Board_Loaded"/>
 
             <!--Canvas2-->
-            <Border Grid.Column="2" Height="514" Width="514" BorderBrush="Black" BorderThickness="1" d:IsLocked="True">
-                <Canvas x:Name="BestCanvas" Height="512" Width="512" ClipToBounds="True" d:IsLocked="True"/>
+            <Border Grid.Column="2" Height="514" Width="514" BorderBrush="Black" BorderThickness="1" >
+                <Canvas x:Name="BestCanvas" Height="512" Width="512" ClipToBounds="True" />
             </Border>
 
         </Grid>
 
 
         <!--Menu-->
-        <Grid Grid.Row="1" Grid.Column="3" d:IsLocked="True">
+        <Grid Grid.Row="1" Grid.Column="3" >
 
             <!--Menu aukščiai-->
             <Grid.RowDefinitions  >
@@ -58,10 +59,12 @@
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="10" />
                 <RowDefinition Height="auto" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
 
             <!--Pirmas Menu-->
-            <Grid Grid.Row="0" d:IsLocked="True" >
+            <Grid Grid.Row="0"  >
 
                 <!--Visi Pirmo Menu ilgiai-->
                 <Grid.ColumnDefinitions>
@@ -82,56 +85,66 @@
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
 
                 <!--Pirmo Pirmo Menu tekstai-->
-                <TextBlock Text="N1: " Grid.Column="0" Grid.Row="0" d:IsLocked="True"/>
-                <TextBlock Text="N2: " Grid.Column="0" Grid.Row="1" d:IsLocked="True"/>
-                <TextBlock Text="M: " Grid.Column="0" Grid.Row="2" d:IsLocked="True"/>
-                <TextBlock Text="Type:" Grid.Column="0" Grid.Row="3" d:IsLocked="True"/>
-                <TextBlock Text="Iterations: " Grid.Column="0" Grid.Row="4" d:IsLocked="True"/>
-                <TextBlock Text="Time: " Grid.Column="0" Grid.Row="5" d:IsLocked="True"/>
-                <TextBlock Text="Local Search: " Grid.Column="0" Grid.Row="6" d:IsLocked="True"/>
-                <TextBlock Text="FPS: " Grid.Column="0" Grid.Row="7" d:IsLocked="True"/>
+                <TextBlock Text="N1: " Grid.Column="0" Grid.Row="0"  />
+                <TextBlock Text="N2: " Grid.Column="0" Grid.Row="1" />
+                <TextBlock Text="M: " Grid.Column="0" Grid.Row="2"/>
+                <TextBlock Text="NewIndividualType: " Grid.Column="0" Grid.Row="3" />
+                <TextBlock Text="CrossoverType:" Grid.Column="0" Grid.Row="4" />
+                <TextBlock Text="MutateType:" Grid.Column="0" Grid.Row="5" />
+                <TextBlock Text="LocalSearchType:" Grid.Column="0" Grid.Row="6" />
+                <TextBlock Text="IndividualChooserType" Grid.Column="0" Grid.Row="7" />
+                <TextBlock Text="MirrorType" Grid.Column="0" Grid.Row="8" />
+                <TextBlock Text="Iterations: " Grid.Column="0" Grid.Row="9" />
+                <TextBlock Text="Time: " Grid.Column="0" Grid.Row="10" />
+                <TextBlock Text="Max FPS: " Grid.Column="0" Grid.Row="11" />
 
                 <!--Pirmo Menu values-->
-                <TextBox x:Name="N1_Text" Text="16" Grid.Column="1" Grid.Row="0" d:IsLocked="True"/>
-                <TextBox x:Name="N2_Text" Text="16" Grid.Column="1" Grid.Row="1" d:IsLocked="True" />
-                <TextBox x:Name="M_Text" Text="32" Grid.Column="1" Grid.Row="2" d:IsLocked="True" />
-                <!--<ComboBox x:Name="AlgorithType" SelectionChanged="AlgorithType_SelectionChanged" Grid.Column="1" Grid.Row="3" d:IsLocked="True"/>-->
-                <TextBox x:Name="Iterations_Text" Text="10"  Grid.Column="1" Grid.Row="4" d:IsLocked="True"/>
-                <TextBox x:Name="Time_Text" Text="10" Grid.Column="1" Grid.Row="5" d:IsLocked="True" />
-                <CheckBox x:Name="Local_Search_Check" IsChecked="False" Grid.Column="1" Grid.Row="6" d:IsLocked="True" IsEnabled="false"/>
+                <TextBox x:Name="N1_Text" Text="16" Grid.Column="1" Grid.Row="0" />
+                <TextBox x:Name="N2_Text" Text="16" Grid.Column="1" Grid.Row="1"  />
+                <TextBox x:Name="M_Text" Text="32" Grid.Column="1" Grid.Row="2"  />
+                <ComboBox x:Name="ANewIndividualType"  Grid.Column="1" Grid.Row="3" />
+                <ComboBox x:Name="ACrossoverType"  Grid.Column="1" Grid.Row="4" />
+                <ComboBox x:Name="AMutateType"  Grid.Column="1" Grid.Row="5" />
+                <ComboBox x:Name="ALocalSearchType"  Grid.Column="1" Grid.Row="6" />
+                <ComboBox x:Name="AIndividualChooserType"  Grid.Column="1" Grid.Row="7" />
+                <ComboBox x:Name="AMirrorType"  Grid.Column="1" Grid.Row="8" />
+                <TextBox x:Name="Iterations_Text" Text="0"   Grid.Column="1" Grid.Row="9" />
+                <TextBox x:Name="Time_Text" Text="2"   Grid.Column="1" Grid.Row="10" />
 
                 <!--Pirmo Menu Slideris su Value-->
-                <Grid Grid.Column="1" Grid.Row="7" d:IsLocked="True" >
+                <Grid Grid.Column="1" Grid.Row="11" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <Slider Maximum="100" Minimum="1" TickPlacement="BottomRight" TickFrequency="1" Grid.Column="0" Grid.Row="0" 
-                    IsSnapToTickEnabled="True"  x:Name="FPS"  Value="100" d:IsLocked="True" />
-
-                    <!--<Slider x:Name="gameSpeedSlider" Grid.Column="0" Grid.Row="0"   Width="75" ValueChanged="gameSpeedSlider_ValueChanged" />-->
-
+                    <Slider Maximum="1000" Minimum="1"  TickPlacement="BottomRight" TickFrequency="1" Grid.Column="0" Grid.Row="0" 
+                    IsSnapToTickEnabled="True"  x:Name="FPS"  Value="1000"  />
 
                     <TextBlock Margin="10, 0, 0, 0" Grid.Column="1" Grid.Row="0"
-                    Text="{Binding ElementName=FPS, Path=Value, UpdateSourceTrigger=PropertyChanged}" d:IsLocked="True"/>
+                    Text="{Binding ElementName=FPS, Path=Value, UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
 
             </Grid>
 
 
             <!--New ir Next-->
-            <Grid Grid.Row="2" d:IsLocked="True" >
+            <Grid Grid.Row="2"  >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Content="New" Click="NewAlgorithm" Width="145" Grid.Column="0" d:IsLocked="True"/>
-                <!--/<Button Content="Next" Click="Button_Next" Width="145" Grid.Column="1" d:IsLocked="True"/>-->
+                <Button Content="New" Click="NewAlgorithm" Width="145" Grid.Column="0" />
+                <Button Content="Next"  Width="145" Grid.Column="1" />
 
                 <!--<Button Content="Start!" Width="145" Grid.Column="0" Click="ButtonStart_Click" />
                 <Button Content="Next &gt;&gt;" Width="145" Grid.Column="1" Click="ButtonNext_Click"  />-->
@@ -140,7 +153,7 @@
 
 
             <!-- Antras Menu-->
-            <Grid Grid.Row="4" IsEnabled="true" x:Name="OptionalParameters" d:IsLocked="True" >
+            <Grid Grid.Row="4" IsEnabled="true" x:Name="OptionalParameters">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="*"/>
@@ -154,31 +167,76 @@
                     <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
-                <TextBlock Text="Population Size:" Grid.Column="0" Grid.Row="0" d:IsLocked="True"/>
-                <TextBlock Text="Old Population:" Grid.Column="0" Grid.Row="1" d:IsLocked="True"/>
-                <TextBlock Text="Cross Population: " Grid.Column="0" Grid.Row="2" d:IsLocked="True"/>
-                <TextBlock Text="New Population:" Grid.Column="0" Grid.Row="3" d:IsLocked="True"/>
-                <TextBlock Text="Mutate Chance: " Grid.Column="0" Grid.Row="4" d:IsLocked="True"/>
+                <!--Pirmo Antro Menu tekstai-->
+                <TextBlock Text="Population Size:" Grid.Column="0" Grid.Row="0" />
+                <TextBlock Text="Old Population:" Grid.Column="0" Grid.Row="1" />
+                <TextBlock Text="Cross Population: " Grid.Column="0" Grid.Row="2" />
+                <TextBlock Text="New Population:" Grid.Column="0" Grid.Row="3" />
+                <TextBlock Text="Mutate Chance: " Grid.Column="0" Grid.Row="4" />
 
-                <!--<Slider Maximum="100" Minimum="1" TickPlacement="BottomRight" TickFrequency="1" Grid.Column="0" Grid.Row="0" 
-                    IsSnapToTickEnabled="True"  x:Name="FPS"  Value="100" d:IsLocked="True" />-->
+                <TextBox x:Name="PopulationSize_Text" Text="1" Grid.Column="1" Grid.Row="0" />
+                <TextBox x:Name="OldPopulationSize_Text" Text="1" Grid.Column="1" Grid.Row="1" />
+                <TextBox x:Name="CrossPopulationSize_Text" Text="98" Grid.Column="1" Grid.Row="2" />
+                <TextBox x:Name="NewPopulationSize_Text" Text="1" Grid.Column="1" Grid.Row="3" />
+                <TextBox x:Name="MutateChance_Text" Text="10" Grid.Column="1" Grid.Row="4" />
+            </Grid>
 
-                <!--<TextBlock Margin="10, 0, 0, 0" Grid.Column="1" Grid.Row="0"
-                    Text="{Binding ElementName=FPS, Path=Value, UpdateSourceTrigger=PropertyChanged}" d:IsLocked="True"/>-->
+            <!--PopulationCreation = populationCreation;
+            SmallMirror = smallMirror;
+            BigMirror = bigMirror;
+            Crossover = crossover;-->
 
-                <TextBox x:Name="PopulationSize_Text" Text="1" Grid.Column="1" Grid.Row="0" d:IsLocked="True"/>
-                <TextBox x:Name="OldPopulationSize_Text" Text="1" Grid.Column="1" Grid.Row="1" d:IsLocked="True"/>
-                <TextBox x:Name="CrossPopulationSize_Text" Text="98" Grid.Column="1" Grid.Row="2" d:IsLocked="True"/>
-                <TextBox x:Name="NewPopulationSize_Text" Text="1" Grid.Column="1" Grid.Row="3" d:IsLocked="True"/>
-                <TextBox x:Name="MutateChance_Text" Text="10" Grid.Column="1" Grid.Row="4" d:IsLocked="True"/>
+            <!-- Trečias Menu-->
+            <Grid Grid.Row="6" IsEnabled="true" x:Name="Flags">
+
+                <!--Visi Flags Menu ilgiai-->
+                <Grid.ColumnDefinitions >
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!--Visi Flags Menu aukščiai-->
+                <Grid.RowDefinitions  >
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto"  />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+
+
+                <!--Visi Flagu tekstai-->
+                <TextBlock Text="Creation" Grid.Column="2" Grid.Row="0" />
+                <TextBlock Text="SmallMirror" Grid.Column="4" Grid.Row="0" />
+                <TextBlock Text="BigMirror" Grid.Column="6" Grid.Row="0" />
+                <TextBlock Text="Crossover" Grid.Column="8" Grid.Row="0" />
+                <TextBlock Text="Mutate" Grid.Column="0" Grid.Row="1" />
+                <TextBlock Text="LocalSearch" Grid.Column="0" Grid.Row="2" />
+
+                <!--Visi Flagu Values-->
+                <CheckBox x:Name="Mutate0" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" />
+                <CheckBox x:Name="Mutate1" Grid.Column="4" Grid.Row="1" HorizontalAlignment="Center" />
+                <CheckBox x:Name="Mutate2" Grid.Column="6" Grid.Row="1" HorizontalAlignment="Center" />
+                <CheckBox x:Name="Mutate3" Grid.Column="8" Grid.Row="1" HorizontalAlignment="Center" />
+                <CheckBox x:Name="LocalSearch0" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Center" />
+                <CheckBox x:Name="LocalSearch1" Grid.Column="4" Grid.Row="2" HorizontalAlignment="Center" />
+                <CheckBox x:Name="LocalSearch2" Grid.Column="6" Grid.Row="2" HorizontalAlignment="Center" />
+                <CheckBox x:Name="LocalSearch3" Grid.Column="8" Grid.Row="2" HorizontalAlignment="Center" />
+
+
+                <!--<TextBox x:Name="PopulationSize_Text" Text="1" Grid.Column="1" Grid.Row="0" />
+                <TextBox x:Name="OldPopulationSize_Text" Text="1" Grid.Column="1" Grid.Row="1" />
+                <TextBox x:Name="CrossPopulationSize_Text" Text="98" Grid.Column="1" Grid.Row="2" />
+                <TextBox x:Name="NewPopulationSize_Text" Text="1" Grid.Column="1" Grid.Row="3" />
+                <TextBox x:Name="MutateChance_Text" Text="10" Grid.Column="1" Grid.Row="4" />-->
             </Grid>
 
         </Grid>
-        
-        
-        <Label x:Name="coordinate" Content="0,0" />
-        <Label x:Name="round" Content="0"  Width="75" />
-        
         
     </Grid>
 </Window>

@@ -8,9 +8,9 @@ namespace UnitTests
     [TestClass]
     public class LocalSearchFlagsTest
     {
-        int N1;
-        int N2;
-        int M;
+        public int N1;
+        public int N2;
+        public int M;
         public Algorithm Algorithm;
         public Individual Individual;
         public Individual Individual2;
@@ -39,20 +39,20 @@ namespace UnitTests
             Individual2 = new Individual(Algorithm.BestIndividual);
 
             Assert.IsTrue(Individual.Fitness > Individual2.Fitness);
-            
-            new LocalSearchFlags(false, true);
+
+            _ = new LocalSearchFlags(false, true);
             Individual2 = new Individual(Individual);
             Individual2.MakeMirrored();
             Assert.IsTrue(Individual.Fitness > Individual2.Fitness);
 
 
-            new LocalSearchFlags(false, false, true);
+            _ = new LocalSearchFlags(false, false, true);
             Individual2 = new Individual(Individual);
             Individual2.MakeMirrored();
             Assert.IsTrue(Individual.Fitness > Individual2.Fitness);
 
-            
-            new LocalSearchFlags(false, false, false, true);
+
+            _ = new LocalSearchFlags(false, false, false, true);
             Individual2 = new Individual(Individual);
             Individual2.Crossover(Individual2);
             Assert.IsTrue(Individual.Fitness > Individual2.Fitness);

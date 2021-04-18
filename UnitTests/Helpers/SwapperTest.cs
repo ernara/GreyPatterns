@@ -22,7 +22,7 @@ namespace UnitTests
         [TestMethod]
         public void TestReturnRandomNumber()
         {
-            List<int> list = new List<int>() { 0, 1, 2, 3, 4, 5 };
+            List<int> list = new() { 0, 1, 2, 3, 4, 5 };
 
             Assert.AreEqual(3, list[3]);
             Swapper.Swap(list, 3, 5);

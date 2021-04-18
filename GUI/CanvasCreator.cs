@@ -29,8 +29,8 @@ namespace GUI
 			{
 				for (int x = 0; x < Individual.N2; x++)
 				{
-					Rectangle r = new Rectangle
-					{
+					Rectangle r = new()
+                    {
 						Width = Board.ActualWidth / Individual.N1 - spacing,
 						Height = Board.ActualHeight / Individual.N2 - spacing,
 						Fill = OFF

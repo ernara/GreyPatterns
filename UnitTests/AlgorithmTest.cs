@@ -96,6 +96,11 @@ namespace UnitTests
 
             Algorithm = new Algorithm(N1, N2, M, PopulationSize, 95, 3, 2, MutateChance);
             Assert.AreEqual(Algorithm.OldPopulationSize, 95);
+            
+            Algorithm = new Algorithm(N1, N2, M, 1, 100, 0, 0, MutateChance);
+            Assert.AreEqual(Algorithm.OldPopulationSize, 1);
+
+
         }
 
         [TestMethod]
@@ -131,9 +136,9 @@ namespace UnitTests
         public void TestParametersWhenPopulationSizeIsOne()
         {
             Algorithm = new Algorithm(N1, N2, M, 1, 3, 2, 95, MutateChance);
-            Assert.AreEqual(Algorithm.OldPopulationSize, 0);
+            Assert.AreEqual(Algorithm.OldPopulationSize, 1);
             Assert.AreEqual(Algorithm.CrossoverPopulationSize, 0);
-            Assert.AreEqual(Algorithm.NewPopulationSize, 1);
+            Assert.AreEqual(Algorithm.NewPopulationSize, 0);
         }
 
         [TestMethod]
@@ -155,6 +160,14 @@ namespace UnitTests
             Algorithm.Next(0,10);
             Assert.IsTrue(Algorithm.BestIndividual.Fitness < individual.Fitness);
         }
+
+        //[TestMethod]
+
+        //public void TestFull()
+        //{
+        //    Algorithm = new Algorithm(16, 16, 32, 10, new MutateFlags(), new LocalSearchFlags(),100,0,0,100,LocalSearchType.Best,IndividualType.Mirror,
+        //        );
+        //}
 
         [TestMethod]
         public void TestToString()

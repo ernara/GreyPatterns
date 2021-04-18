@@ -8,9 +8,9 @@ namespace UnitTests
     [TestClass]
     public class MutateFlagsTest
     {
-        int N1;
-        int N2;
-        int M;
+        public int N1;
+        public int N2;
+        public int M;
         public Algorithm Algorithm;
         public Individual Individual;
         public Individual Individual2;
@@ -41,19 +41,19 @@ namespace UnitTests
             Assert.AreNotEqual(Individual.Fitness, Individual2.Fitness);
 
 
-            new MutateFlags(false, true);
+            _ = new MutateFlags(false, true);
             Individual2 = new Individual(Individual);
             Individual2.MakeMirrored();
             Assert.AreNotEqual(Individual.Fitness, Individual2.Fitness);
 
 
-            new MutateFlags(false, false, true);
+            _ = new MutateFlags(false, false, true);
             Individual2 = new Individual(Individual);
             Individual2.MakeMirrored();
             Assert.AreNotEqual(Individual.Fitness, Individual2.Fitness);
 
 
-            new MutateFlags(false, false, false, true);
+            _ = new MutateFlags(false, false, false, true);
             Individual2 = new Individual(Individual);
             Individual2.Crossover(Individual2);
             Assert.AreNotEqual(Individual.Fitness, Individual2.Fitness);

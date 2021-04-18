@@ -122,10 +122,11 @@ namespace Algorithms
 
             if (populationSize==1)
             {
-                OldPopulationSize = 0;
+                OldPopulationSize = 1;
                 crossoverPopulationSize = 0;
-                NewPopulationSize = 1;
+                NewPopulationSize = 0;
             }
+
             else
             {
                 OldPopulationSize = Convert.ToInt32((double)oldPopulationSize / 100 * populationSize);

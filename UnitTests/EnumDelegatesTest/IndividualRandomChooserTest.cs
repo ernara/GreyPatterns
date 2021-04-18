@@ -11,7 +11,7 @@ namespace UnitTests
         int N2;
         int M;
         int PopulationSize;
-        Algorithm Algorithm;
+        public Algorithm Algorithm;
         private Func<int, Individual> ChooseRandomIndividual;
 
         [TestCleanup]
