@@ -10,9 +10,9 @@ namespace Algorithms
     {
         private static Action<Individual, int, int> searcher = new(FastLocalSearch);
 
-        public static void LocalSearch(this Individual individual, bool on = true)
+        public static void LocalSearch(this Individual individual, bool? on)
         {
-            if (on)
+            if ((bool)on)
             {
                 if (individual.Genes.Count == Individual.N)
                 {

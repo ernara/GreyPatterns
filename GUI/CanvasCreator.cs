@@ -40,7 +40,7 @@ namespace GUI
 					{
 						Width = Board.ActualWidth / Individual.N1 - spacing,
 						Height = Board.ActualHeight / Individual.N2 - spacing,
-						Fill = ON
+						Fill = OFF
 					};
 					Board.Children.Add(r);
 
@@ -59,7 +59,6 @@ namespace GUI
 		{
 			BestMatrix = new Rectangle[Individual.N1, Individual.N2];
 
-
 			Board2.Children.RemoveRange(0, Board2.Children.Count);
 
 			for (int y = 0; y < Individual.N1; y++)
@@ -70,7 +69,7 @@ namespace GUI
 					{
 						Width = Board2.ActualWidth / Individual.N1 - spacing,
 						Height = Board2.ActualHeight / Individual.N2 - spacing,
-						Fill = ON
+						Fill = OFF
 					};
 					Board2.Children.Add(r);
 

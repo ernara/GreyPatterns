@@ -79,7 +79,7 @@ namespace Algorithms
             }
         }
 
-        public void SaveBestIndividual()
+        public static void SaveBestIndividual()
         {
             Population = Population.OrderBy(i => i.Fitness).ToList();
 
@@ -108,6 +108,13 @@ namespace Algorithms
             }
 
             Population = NewPopulation;
+
+            if (Population.Count == 1)
+            {
+                Population[0].Mutate(MutateFlags.PopulationSizeIsOne);
+                Population[0].LocalSearch(LocalSearchFlags.PopulationSizeIsOne);
+            }
+
         }
 
 

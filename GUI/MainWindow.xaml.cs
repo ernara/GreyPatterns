@@ -56,8 +56,8 @@ namespace GUI
         {
             Algorithm Algorithm = new(Convert.ToInt32(N1_Text.Text), Convert.ToInt32(N2_Text.Text),
                 Convert.ToInt32(M_Text.Text), Convert.ToInt32(PopulationSize_Text.Text),
-            new MutateFlags(Mutate0.IsEnabled, Mutate1.IsEnabled, Mutate2.IsEnabled, Mutate3.IsEnabled),
-            new LocalSearchFlags(LocalSearch1.IsEnabled, LocalSearch2.IsEnabled, LocalSearch3.IsEnabled),
+            new MutateFlags(Mutate0.IsChecked, Mutate1.IsChecked, Mutate2.IsChecked, Mutate3.IsChecked, PMutate.IsChecked),
+            new LocalSearchFlags(LocalSearch0.IsChecked, LocalSearch1.IsChecked, LocalSearch2.IsChecked, LocalSearch3.IsChecked, PLocalSearch.IsChecked),
             Convert.ToInt32(OldPopulationSize_Text.Text), Convert.ToInt32(CrossPopulationSize_Text.Text),
             Convert.ToInt32(NewPopulationSize_Text.Text), Convert.ToInt32(MutateChance_Text.Text),
             (LocalSearchType)ALocalSearchType.SelectedIndex, (IndividualType)ANewIndividualType.SelectedIndex,
@@ -65,8 +65,6 @@ namespace GUI
             (CrossoverType)ACrossoverType.SelectedIndex, (MutateType)AMutateType.SelectedIndex);
 
             CreateCanvas();
-            Trace.WriteLine($"aftercanvas matrix.length {CurrentMatrix.Length}");
-
 
             Stopwatch stopwatch = new();
             stopwatch.Start();
@@ -94,8 +92,6 @@ namespace GUI
 
         private void R_MouseEnter(object sender, MouseEventArgs e)
         {
-            //coordinate.Content = Mouse.GetPosition(Board);
-
             bool leftButton = e.LeftButton == MouseButtonState.Pressed;
             if (!leftButton) return;
 

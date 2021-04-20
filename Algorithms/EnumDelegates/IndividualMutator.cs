@@ -10,9 +10,9 @@ namespace Algorithms
         private readonly static Random Random = new();
         private static Action<Individual> mutator = new(RandomMutate);
 
-        public static void Mutate(this Individual individual, bool on = true)
+        public static void Mutate(this Individual individual, bool? on)
         {
-            if (on)
+            if ((bool)on)
             {
                 mutator(individual);
                 individual.CalculateFitness();
