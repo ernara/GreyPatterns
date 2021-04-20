@@ -8,7 +8,10 @@ namespace Algorithms
 {
     public static class IndividualLocalSearcher
     {
+        private static readonly Random Random = new ();
+
         private static Action<Individual, int, int> searcher = new(FastLocalSearch);
+
 
         public static void LocalSearch(this Individual individual, bool? on)
         {
@@ -37,6 +40,8 @@ namespace Algorithms
             {
                 LocalSearchType.Fast => new(FastLocalSearch),
                 LocalSearchType.Best => new(BestLocalSearch),
+                LocalSearchType.NearBest => new (NearBestLocalSearch),
+                LocalSearchType.NearMutateBest => new (NearMutateBestLocalSearch),
                 _ => throw new ArgumentException("Wrong LocalSearchType"),
             };
         }
@@ -71,6 +76,67 @@ namespace Algorithms
                     currentFitness = individual.Fitness;
                 else break;
             }
+        }
+
+        private static void NearBestLocalSearch(Individual individual, int n, int m)
+        {
+            Individual currentIndividual = new(individual);
+            int localFitness = individual.Fitness;
+
+            List<int> mutuableVariations;
+
+
+            for (int i = 0; i < Individual.M; ++i)
+            {
+                mutuableVariations = new List<int>(individual.FindMutableGenes(i));
+                localFitness.FindBestIndividual(individual, currentIndividual, mutuableVariations, i);
+
+            }
+
+            individual.Genes = currentIndividual.Genes;
+        }
+
+        private static void NearMutateBestLocalSearch(Individual individual, int n, int m)
+        {
+            Individual currentIndividual = new(individual);
+            int localFitness;
+
+            List<int> mutuableVariations;
+
+            for (int i = 0; i < Individual.M; ++i)
+            {
+                mutuableVariations = new List<int>(individual.FindMutableGenes(i));
+
+                if (mutuableVariations.Count>0)
+                {
+                    int randomIndex = Random.Next(mutuableVariations.Count);
+                    int mutuableVariationindex = individual.Genes.FindIndex(x => { return x == mutuableVariations[randomIndex]; });
+                    mutuableVariations.RemoveAt(randomIndex);
+
+                    currentIndividual.Genes.Swap(i, mutuableVariationindex);
+                    localFitness = currentIndividual.ReturnCalculatedFitness();
+                    localFitness.FindBestIndividual(individual, currentIndividual, mutuableVariations, i);
+                }
+            }
+
+            individual.Genes = currentIndividual.Genes;
+        }
+
+        
+
+        private static void FindBestIndividual(this ref int localFitness, Individual individual, Individual currentIndividual, List<int> mutuableVariations, int i)
+        {
+            for (int j = 0; j < mutuableVariations.Count; ++j)
+            {
+                int mutuableVariationindex = individual.Genes.FindIndex(x => { return x == mutuableVariations[j]; });
+                currentIndividual.Genes.Swap(i, mutuableVariationindex);
+                localFitness = currentIndividual.ReturnCalculatedFitness();
+
+                if (localFitness > currentIndividual.Fitness)
+                    currentIndividual.Genes.Swap(i, mutuableVariationindex);
+                else currentIndividual.Fitness = localFitness;
+            }
+
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Algorithms
 
     public enum MutateType { Random, Near, RandomAll, NearAll }
 
-    public enum LocalSearchType { Fast, Best }
+    public enum LocalSearchType { Fast, Best, NearBest, NearMutateBest }
 
     public enum CrossoverType { Random, Part }
 

@@ -17,7 +17,6 @@ namespace UnitTests
         [TestCleanup]
         public void TestCleanup()
         {
-
         }
 
         [TestInitialize]
@@ -40,17 +39,16 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void TestLocalSearchs()
+        public void TestLocalSearchsWhenPopulationSize()
         {
             foreach (var localSearchType in Enum.GetValues(typeof(LocalSearchType)))
             {
                 IndividualLocalSearcher.ChooseLocalSearcherType((LocalSearchType)localSearchType);
-                Individual.LocalSearch();
+                Individual.LocalSearch(true);
                 Assert.AreNotEqual(Individual.ToString(), Algorithm.ToString());
                 Individual = new(Algorithm.BestIndividual);
-
             }
-                
+
         }
 
 

@@ -77,24 +77,31 @@ namespace Algorithms
 
         }
 
-        private static List<int> FindMutableGenes(this Individual Individual, int index)
+        public static List<int> FindMutableGenes(this Individual Individual, int index)
         {
             List<int> blackCells = new(Individual.Genes.Take(Individual.M));
             List<int> mutableCells = new();
 
-            mutableCells.Add(blackCells[index] + 1);
-            mutableCells.Add(blackCells[index] - 1);
-            mutableCells.Add(blackCells[index] - Individual.N2 + 1);
-            mutableCells.Add(blackCells[index] + Individual.N2 + 1);
-            mutableCells.Add(blackCells[index] - Individual.N2 - 1);
-            mutableCells.Add(blackCells[index] + Individual.N2 - 1);
+            if (SameLine(Individual.Genes[index], blackCells[index] + 1))
+            {
+                mutableCells.Add(blackCells[index] + 1);
+                mutableCells.Add(blackCells[index] - Individual.N2 + 1);
+                mutableCells.Add(blackCells[index] + Individual.N2 + 1);
+            }
+
+            if (SameLine(Individual.Genes[index], blackCells[index] - 1))
+            {
+                mutableCells.Add(blackCells[index] - 1);
+                mutableCells.Add(blackCells[index] - Individual.N2 - 1);
+                mutableCells.Add(blackCells[index] + Individual.N2 - 1);
+            }
+                
             mutableCells.Add(blackCells[index] - Individual.N2);
             mutableCells.Add(blackCells[index] + Individual.N2);
 
             for (int i = 0; i < mutableCells.Count; ++i)
             {
-                if (mutableCells[i] < 0 || mutableCells[i] >= Individual.N || blackCells.Contains(mutableCells[i]) 
-                    || !SameLine(Individual.Genes[index],mutableCells[i]))
+                if (mutableCells[i] < 0 || mutableCells[i] >= Individual.N || blackCells.Contains(mutableCells[i]))
                 {
                     mutableCells.RemoveAt(i);
                     i--;

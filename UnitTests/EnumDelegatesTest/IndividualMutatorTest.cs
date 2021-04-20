@@ -17,7 +17,6 @@ namespace UnitTests
         [TestCleanup]
         public void TestCleanup()
         {
-
         }
 
         [TestInitialize]
@@ -44,14 +43,15 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void TestMutates()
+        public void TestMutatesWhenPopulationSizeIsOne()
         {
             foreach (var mutateType in Enum.GetValues(typeof(MutateType)))
             {
                 Algorithm = new Algorithm(N1, N2, M, PopulationSize);
+                _ = new MutateFlags(false, false, false, false, true);
                 Individual = new(Algorithm.BestIndividual);
                 IndividualMutator.ChooseMutatorType((MutateType)mutateType);
-                Individual.Mutate();
+                Individual.Mutate(true);
 
                 Assert.AreNotEqual(Individual.ToString(), Algorithm.ToString());
             }
