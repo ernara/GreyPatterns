@@ -41,10 +41,8 @@
             <!--Canvas1-->
             <Canvas x:Name="Board" HorizontalAlignment="Left" Height="512" Width="512" Loaded="Board_Loaded"/>
 
-            <!--Canvas2-->
-            <Border Grid.Column="2" Height="514" Width="514" BorderBrush="Black" BorderThickness="1" >
-                <Canvas x:Name="BestCanvas" Height="512" Width="512" ClipToBounds="True" />
-            </Border>
+
+            <Canvas x:Name="Board2" HorizontalAlignment="Left" Height="512" Width="512" Loaded="Board_Loaded2"/>
 
         </Grid>
 

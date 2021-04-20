@@ -1,33 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using Algorithms;
-using System.Threading;
-using System.Linq;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Diagnostics;
+//using Algorithms;
+//using System.Threading;
+//using System.Linq;
+//using System.Numerics;
 
-namespace Consolee
-{
-    static class Program
-    {
-        private static IEnumerable<IEnumerable<T>> GetPermutations<T>(IEnumerable<T> items, int count)
-        {
-            int i = 0;
-            foreach (var item in items)
-            {
-                if (count == 1)
-                    yield return new T[] { item };
-                else
-                {
-                    foreach (var result in GetPermutations(items.Skip(i + 1), count - 1))
-                        yield return new T[] { item }.Concat(result);
-                }
+//namespace Consolee
+//{
+//    static class Program
+//    {
+//        public static void MBrot()
+//        {
+//            //float epsilon = 0.0001; // The step size across the X and Y axis
+//            float x;
+//            float y;
+//            int maxIterations = 10; // increasing this will give you a more detailed fractal
+//            int maxColors = 256; // Change as appropriate for your display.
 
-                ++i;
-            }
-        }
-        public static void Main()
-        {
+//            Complex Z;
+//            Complex C;
+//            int iterations;
+//            for (x = -2; x <= 2; x += epsilon)
+//            {
+//                for (y = -2; y <= 2; y += epsilon)
+//                {
+//                    iterations = 0;
+//                    C = new Complex(x, y);
+//                    Z = new Complex(0, 0);
+//                    while (Complex.Abs(Z) < 2 && iterations < maxIterations)
+//                    {
+//                        Z = Z * Z + C;
+//                        iterations++;
+//                    }
+//                    //Screen.Plot(x, y, iterations % maxColors); //depending on the number of iterations, color a pixel.
+//                }
+//            }
+//        }
+//        public static void Main()
+//        {
             
-        }
-    }
-}
+//        }
+//    }
+//}

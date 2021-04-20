@@ -22,7 +22,14 @@ namespace GUI
 	{
 		public void CreateCanvas()
 		{
+			CreateBoard();
+			CreateBoard2();
+		}
+
+		private void CreateBoard()
+        {
 			CurrentMatrix = new Rectangle[Individual.N1, Individual.N2];
+
 			Board.Children.RemoveRange(0, Board.Children.Count);
 
 			for (int y = 0; y < Individual.N1; y++)
@@ -30,17 +37,47 @@ namespace GUI
 				for (int x = 0; x < Individual.N2; x++)
 				{
 					Rectangle r = new()
-                    {
+					{
 						Width = Board.ActualWidth / Individual.N1 - spacing,
 						Height = Board.ActualHeight / Individual.N2 - spacing,
-						Fill = OFF
+						Fill = ON
 					};
 					Board.Children.Add(r);
 
-					Canvas.SetLeft(r, x * Board.ActualWidth / Individual.N1);
-					Canvas.SetTop(r, y * Board.ActualHeight / Individual.N2);
+                    Canvas.SetLeft(r, x * Board.ActualWidth / Individual.N1);
+                    Canvas.SetTop(r, y * Board.ActualHeight / Individual.N2);
 
 					CurrentMatrix[y, x] = r;
+
+					r.MouseDown += R_MouseEnter;
+					r.MouseEnter += R_MouseEnter;
+				}
+			}
+		}
+
+		private void CreateBoard2()
+		{
+			BestMatrix = new Rectangle[Individual.N1, Individual.N2];
+
+
+			Board2.Children.RemoveRange(0, Board2.Children.Count);
+
+			for (int y = 0; y < Individual.N1; y++)
+			{
+				for (int x = 0; x < Individual.N2; x++)
+				{
+					Rectangle r = new()
+					{
+						Width = Board2.ActualWidth / Individual.N1 - spacing,
+						Height = Board2.ActualHeight / Individual.N2 - spacing,
+						Fill = ON
+					};
+					Board2.Children.Add(r);
+
+					Canvas.SetLeft(r, Board.ActualWidth + 20 + x * Board2.ActualWidth / Individual.N1);
+					Canvas.SetTop(r, y * Board2.ActualHeight / Individual.N2);
+
+					BestMatrix[y, x] = r;
 
 					r.MouseDown += R_MouseEnter;
 					r.MouseEnter += R_MouseEnter;

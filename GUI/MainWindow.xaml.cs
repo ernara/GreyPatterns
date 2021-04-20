@@ -18,9 +18,6 @@ using Algorithms;
 
 namespace GUI
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
@@ -39,14 +36,16 @@ namespace GUI
             AMirrorType.SelectedIndex = 0;
 
             AMutateType.ItemsSource = Enum.GetValues(typeof(MutateType));
-            AMutateType.SelectedIndex = 1;
+            AMutateType.SelectedIndex = 0;
 
             ALocalSearchType.ItemsSource = Enum.GetValues(typeof(LocalSearchType));
             ALocalSearchType.SelectedIndex = 0;
 
         }
 
-        public Rectangle[,] CurrentMatrix = new Rectangle[16, 16];
+        public Rectangle[,] CurrentMatrix;
+
+        public Rectangle[,] BestMatrix;
 
         private const double spacing = 1.0;
 
@@ -61,11 +60,13 @@ namespace GUI
             new LocalSearchFlags(LocalSearch1.IsEnabled, LocalSearch2.IsEnabled, LocalSearch3.IsEnabled),
             Convert.ToInt32(OldPopulationSize_Text.Text), Convert.ToInt32(CrossPopulationSize_Text.Text),
             Convert.ToInt32(NewPopulationSize_Text.Text), Convert.ToInt32(MutateChance_Text.Text),
-            (LocalSearchType)ALocalSearchType.SelectedIndex,(IndividualType)ANewIndividualType.SelectedIndex,
+            (LocalSearchType)ALocalSearchType.SelectedIndex, (IndividualType)ANewIndividualType.SelectedIndex,
             (MirrorType)AMirrorType.SelectedIndex, (RandomChooseType)AIndividualChooserType.SelectedIndex,
-            (CrossoverType)ACrossoverType.SelectedIndex,(MutateType)AMutateType.SelectedIndex);
+            (CrossoverType)ACrossoverType.SelectedIndex, (MutateType)AMutateType.SelectedIndex);
 
             CreateCanvas();
+            Trace.WriteLine($"aftercanvas matrix.length {CurrentMatrix.Length}");
+
 
             Stopwatch stopwatch = new();
             stopwatch.Start();
@@ -73,11 +74,14 @@ namespace GUI
             Stopwatch stopwatchFPS = new();
             stopwatchFPS.Start();
 
+            
+
             for (int i = 0; i < Convert.ToInt32(Iterations_Text.Text) || stopwatch.ElapsedMilliseconds < Convert.ToInt32(Time_Text.Text) * 1000; i++)
             {
                 Algorithm.Next();
 
                 Paint();
+                //CurrentMatrix[0, 0].Fill = ON;
 
                 await Task.Delay((int)Math.Max(1.0, 1000.0 / FPS.Value - stopwatchFPS.ElapsedMilliseconds));
                 stopwatchFPS.Restart();
@@ -104,8 +108,11 @@ namespace GUI
         private void Board_Loaded(object sender, RoutedEventArgs e)
         {
             Algorithm Algorithm = new(Convert.ToInt32(N1_Text.Text), Convert.ToInt32(N2_Text.Text), Convert.ToInt32(M_Text.Text), 1);
-            Algorithm.Next();
             CreateCanvas();
+        }
+
+        private void Board_Loaded2(object sender, RoutedEventArgs e)
+        {
         }
     }
 }

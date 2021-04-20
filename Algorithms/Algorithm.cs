@@ -15,7 +15,7 @@ namespace Algorithms
         public static int MutateChance { get; private set; }
 
         public static List<Individual> Population { get; private set; }
-        public Individual BestIndividual { get; private set; }
+        public static Individual BestIndividual { get; private set; }
 
         private Func<int, Individual> ChooseRandomIndividual;
 
