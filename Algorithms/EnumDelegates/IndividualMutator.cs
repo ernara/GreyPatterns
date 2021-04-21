@@ -8,15 +8,27 @@ namespace Algorithms
     public static class IndividualMutator
     {
         private readonly static Random Random = new();
-        private static Action<Individual> mutator = new(RandomMutate);
+        private static Action<Individual, int, int, int> mutator = new(RandomMutate);
 
         public static void Mutate(this Individual individual, bool? on)
         {
             if ((bool)on)
             {
-                mutator(individual);
-                individual.CalculateFitness();
+                if (individual.Genes.Count == Individual.N)
+                {
+                    mutator(individual, Individual.N, Individual.N2, Individual.M);
+
+                }
+                else if (individual.Genes.Count == Mirror.SmallerN)
+                {
+                    mutator(individual, Mirror.SmallerN, Individual.N2, Mirror.SmallerN);
+                }
+                else
+                {
+                    throw new ArgumentException("Wrong individual.Genes.Count");
+                }
             }
+
         }
 
         public static void ChooseMutatorType(MutateType mutateType)
@@ -33,15 +45,15 @@ namespace Algorithms
 
         }
 
-        private static void RandomMutate(Individual individual)
+        private static void RandomMutate(Individual individual, int n, int n2, int m)
         {
-            individual.Genes.Swap(Random.Next(Individual.M), Random.Next(Individual.M, Individual.N - Individual.M));
+            individual.Genes.Swap(Random.Next(m), Random.Next(m,n));
         }
 
-        private static void RandomNearMutate(Individual individual)
+        private static void RandomNearMutate(Individual individual, int n, int n2, int m)
         {
-            int randomGeneIndex = Random.Next(Individual.M); 
-            List<int> mutuableVariations = new(individual.FindMutableGenes(randomGeneIndex)); 
+            int randomGeneIndex = Random.Next(m); 
+            List<int> mutuableVariations = new(individual.FindMutableGenes(randomGeneIndex,n,n2)); 
             
             if (mutuableVariations.Count > 0)
             {
@@ -52,21 +64,21 @@ namespace Algorithms
 
         }
 
-        private static void RandomAllMutate(Individual individual)
+        private static void RandomAllMutate(Individual individual, int n, int n2, int m)
         {
-            for (int i = 0; i < Individual.M; i++)
+            for (int i = 0; i < m; i++)
             {
-                individual.Genes.Swap(i, Random.Next(Individual.M, Individual.N - Individual.M));
+                individual.Genes.Swap(i, Random.Next(m, n - m));
             }
         }
 
-        private static void NearAllMutate(Individual individual)
+        private static void NearAllMutate(Individual individual, int n, int n2, int m)
         {
             List<int> mutuableVariations;
 
             for (int i = 0; i < Individual.M; ++i)
             {
-                mutuableVariations = new List<int>(individual.FindMutableGenes(i));
+                mutuableVariations = new List<int>(individual.FindMutableGenes(i,n,n2));
                 if (mutuableVariations.Count > 0)
                 {
                     int mutuableVariation = mutuableVariations[Random.Next(mutuableVariations.Count)];
@@ -77,31 +89,31 @@ namespace Algorithms
 
         }
 
-        public static List<int> FindMutableGenes(this Individual Individual, int index)
+        public static List<int> FindMutableGenes(this Individual Individual, int index, int n, int n2)
         {
             List<int> blackCells = new(Individual.Genes.Take(Individual.M));
             List<int> mutableCells = new();
 
-            if (SameLine(Individual.Genes[index], blackCells[index] + 1))
+            if (SameLine(Individual.Genes[index], blackCells[index] + 1,n2))
             {
                 mutableCells.Add(blackCells[index] + 1);
-                mutableCells.Add(blackCells[index] - Individual.N2 + 1);
-                mutableCells.Add(blackCells[index] + Individual.N2 + 1);
+                mutableCells.Add(blackCells[index] - n2 + 1);
+                mutableCells.Add(blackCells[index] + n2 + 1);
             }
 
-            if (SameLine(Individual.Genes[index], blackCells[index] - 1))
+            if (SameLine(Individual.Genes[index], blackCells[index] - 1, n2))
             {
                 mutableCells.Add(blackCells[index] - 1);
-                mutableCells.Add(blackCells[index] - Individual.N2 - 1);
-                mutableCells.Add(blackCells[index] + Individual.N2 - 1);
+                mutableCells.Add(blackCells[index] - n2 - 1);
+                mutableCells.Add(blackCells[index] + n2 - 1);
             }
                 
-            mutableCells.Add(blackCells[index] - Individual.N2);
-            mutableCells.Add(blackCells[index] + Individual.N2);
+            mutableCells.Add(blackCells[index] - n2);
+            mutableCells.Add(blackCells[index] + n2);
 
             for (int i = 0; i < mutableCells.Count; ++i)
             {
-                if (mutableCells[i] < 0 || mutableCells[i] >= Individual.N || blackCells.Contains(mutableCells[i]))
+                if (mutableCells[i] < 0 || mutableCells[i] >= n || blackCells.Contains(mutableCells[i]))
                 {
                     mutableCells.RemoveAt(i);
                     i--;
@@ -111,9 +123,9 @@ namespace Algorithms
             return mutableCells;
         }
 
-        public static bool SameLine(int gene, int gene2)
+        public static bool SameLine(int gene, int gene2, int n2)
         {
-            return gene / Individual.N2 == gene2 / Individual.N2;
+            return gene / n2 == gene2 / n2;
         }
 
     }

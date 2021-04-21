@@ -34,9 +34,15 @@ namespace Algorithms
             return Genes;
         }
 
+        private static List<int> CreateRandomSmallIndividual()
+        {
+            List<int> Genes = Enumerable.Range(0, Mirror.SmallerN).OrderBy(g => Random.Next(Mirror.SmallerN)).ToList();
+            return Genes;
+        }
+
         private static List<int> CreateMirrorIndividual()
         {
-            List<int> SmallGenes = CreateRandomIndividual().Take(Mirror.SmallerM).ToList();
+            List<int> SmallGenes = CreateRandomSmallIndividual().Take(Mirror.SmallerM).ToList(); 
             List<int> BigGenes = new();
 
             for (int i = 0; i < SmallGenes.Count; i++)

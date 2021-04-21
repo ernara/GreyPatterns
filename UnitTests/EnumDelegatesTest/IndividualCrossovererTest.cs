@@ -9,7 +9,7 @@ namespace UnitTests
     [TestClass]
     public class IndividualCrossovererTest
     {
-        public readonly Algorithm Algorithm = new(5, 5, 10, 1);
+        public readonly Algorithm Algorithm = new(10, 10, 20, 1);
         Individual Individual;
         Individual Individual2;
 

@@ -28,7 +28,7 @@ namespace Algorithms
             }
             else
             {
-                throw new ArgumentException("Wrong genes.Count");
+                throw new ArgumentException($"Wrong genes.Count. Should be {Individual.N} or {Mirror.SmallerN} and it is {genes.Count}");
             }
         }
 

@@ -71,11 +71,14 @@ namespace GUI
 
             Stopwatch stopwatchFPS = new();
             stopwatchFPS.Start();
-
             
 
             for (int i = 0; i < Convert.ToInt32(Iterations_Text.Text) || stopwatch.ElapsedMilliseconds < Convert.ToInt32(Time_Text.Text) * 1000; i++)
             {
+                if ((bool)PMirror.IsChecked)
+                {
+                    Algorithm.Population[0].MakeMirrored();
+                }
                 Algorithm.Next();
 
                 Paint();

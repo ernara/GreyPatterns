@@ -10,7 +10,7 @@ namespace Algorithms
     {
         private static readonly Random Random = new ();
 
-        private static Action<Individual, int, int> searcher = new(FastLocalSearch);
+        private static Action<Individual, int, int, int> searcher = new(FastLocalSearch);
 
 
         public static void LocalSearch(this Individual individual, bool? on)
@@ -19,12 +19,12 @@ namespace Algorithms
             {
                 if (individual.Genes.Count == Individual.N)
                 {
-                    searcher(individual, Individual.N, Individual.M);
+                    searcher(individual, Individual.N, Individual.N2, Individual.M);
 
                 }
                 else if (individual.Genes.Count == Mirror.SmallerN)
                 {
-                    searcher(individual, Mirror.SmallerN, Mirror.SmallerN);
+                    searcher(individual, Mirror.SmallerN, Mirror.SmallerN2, Mirror.SmallerN);
                 }
                 else
                 {
@@ -46,7 +46,7 @@ namespace Algorithms
             };
         }
 
-        private static void FastLocalSearch(this Individual individual, int n, int m)
+        private static void FastLocalSearch(this Individual individual, int n, int n2, int m)
         {
             Individual currentIndividual = new(individual);
             int localFitness;
@@ -66,19 +66,19 @@ namespace Algorithms
 
             individual.Genes = currentIndividual.Genes;
         }
-        private static void BestLocalSearch(Individual individual, int n, int m)
+        private static void BestLocalSearch(Individual individual, int n, int n2, int m)
         {
             int currentFitness = individual.Fitness;
             while (true)
             {
-                FastLocalSearch(individual, n, m);
+                FastLocalSearch(individual, n, n2, m);
                 if (currentFitness > individual.Fitness)
                     currentFitness = individual.Fitness;
                 else break;
             }
         }
 
-        private static void NearBestLocalSearch(Individual individual, int n, int m)
+        private static void NearBestLocalSearch(Individual individual, int n, int n2, int m)
         {
             Individual currentIndividual = new(individual);
             int localFitness = individual.Fitness;
@@ -86,9 +86,9 @@ namespace Algorithms
             List<int> mutuableVariations;
 
 
-            for (int i = 0; i < Individual.M; ++i)
+            for (int i = 0; i < m; ++i)
             {
-                mutuableVariations = new List<int>(individual.FindMutableGenes(i));
+                mutuableVariations = new List<int>(individual.FindMutableGenes(i,n,n2));
                 localFitness.FindBestIndividual(individual, currentIndividual, mutuableVariations, i);
 
             }
@@ -96,7 +96,7 @@ namespace Algorithms
             individual.Genes = currentIndividual.Genes;
         }
 
-        private static void NearMutateBestLocalSearch(Individual individual, int n, int m)
+        private static void NearMutateBestLocalSearch(Individual individual, int n, int n2, int m)
         {
             Individual currentIndividual = new(individual);
             int localFitness;
@@ -105,7 +105,7 @@ namespace Algorithms
 
             for (int i = 0; i < Individual.M; ++i)
             {
-                mutuableVariations = new List<int>(individual.FindMutableGenes(i));
+                mutuableVariations = new List<int>(individual.FindMutableGenes(i,n,n2));
 
                 if (mutuableVariations.Count>0)
                 {

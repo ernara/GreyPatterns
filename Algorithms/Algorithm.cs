@@ -22,7 +22,7 @@ namespace Algorithms
         public Algorithm(int n1, int n2, int m, int populationSize,
             MutateFlags mutateFlags,
             LocalSearchFlags localSearchFlags,
-            int oldPopulationSize = 10, int crossoverPopulationSize = 80, int newPopulationSize = 10, int mutateChance = 10,
+            int oldPopulationSize = 10, int crossoverPopulationSize = 80, int newPopulationSize = 10, int mutateChance = 100,
 
             LocalSearchType localSearchType = LocalSearchType.Fast,
             IndividualType individualType = IndividualType.Random,
@@ -42,7 +42,7 @@ namespace Algorithms
         }
 
         public Algorithm(int n1, int n2, int m, int populationSize,
-            int oldPopulationSize = 100, int crossoverPopulationSize = 0, int newPopulationSize = 0, int mutateChance = 0,
+            int oldPopulationSize = 10, int crossoverPopulationSize = 80, int newPopulationSize = 10, int mutateChance = 100,
             LocalSearchType localSearchType = LocalSearchType.Fast,
             IndividualType individualType = IndividualType.Random,
             MirrorType mirrorType = MirrorType.Best,
@@ -160,7 +160,7 @@ namespace Algorithms
         {
             n1 = n1 < 2 ? 2 : n1 > 64 ? 64 : n1;
             n2 = n2 < 2 ? 2 : n2 > 64 ? 64 : n2;
-            m = m < 1 ? 1 : m > n1 * n2 / 2 ? n1 * n2 / 2 : m;
+            m = m < 1 ? 1 : m > n1 * n2 ? n1 * n2  : m;
             populationSize = populationSize < 1 ? 1 : populationSize > 128 ? 128 : populationSize;
 
             oldPopulationSize = oldPopulationSize < 0 ? 0 : oldPopulationSize > 100 ? 100 : oldPopulationSize;

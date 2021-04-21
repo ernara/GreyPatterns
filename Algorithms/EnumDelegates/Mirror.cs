@@ -43,7 +43,7 @@ namespace Algorithms
 
             for (int i = 0; i < SmallerM; i++)
             {
-                genes.AddRange(i.ChangeToBiggerNumbers());
+                genes.AddRange(individual.Genes[i].ChangeToBiggerNumbers());
             }
 
             individual.Genes = individual.Genes.Take(Individual.M).Union(Enumerable.Range(0, Individual.N)).Distinct().ToList();
@@ -112,7 +112,8 @@ namespace Algorithms
             {
                 for (int j = 0; j < Individual.N2 / SmallerN2; j++)
                 {
-                    numbers.Add((coordinate.X + i * SmallerN2) * Individual.N2 + coordinate.Y + SmallerN1 * j);
+                    numbers.Add((coordinate.X + i * SmallerN2) * Individual.N2 + coordinate.Y + SmallerN1 * j); //0+ 3 + 4*1
+                  
                 }
             }
             return numbers;

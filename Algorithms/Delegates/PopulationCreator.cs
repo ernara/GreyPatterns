@@ -14,6 +14,7 @@ namespace Algorithms
             for (int i = 0; i < Algorithm.PopulationSize; ++i)
             {
                 population.Add(new Individual());
+                population[i].Mutate(MutateFlags.PopulationCreation);
                 population[i].LocalSearch(LocalSearchFlags.PopulationCreation);
             }
 

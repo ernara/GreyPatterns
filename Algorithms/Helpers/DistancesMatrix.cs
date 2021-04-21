@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Algorithms
@@ -19,10 +20,60 @@ namespace Algorithms
             int n = n1 * n2;
 
             Array = new int[n, n];
-            
+
+            if (n <= 256)
+            {
+                CalculateDistancesMatrix(n1, n2);
+            }
+            else
+            {
+                CalculateDistanceMatrixParallel(n1, n2);
+            }
+
+        }
+
+        public void CalculateDistanceMatrixParallel(int n1, int n2)
+        {
+            List<Thread> threads = new();
+
+            int onePart = Array.GetLength(0) / Environment.ProcessorCount;
+
+            for (int i = 0; i < Environment.ProcessorCount; i++)
+            {
+                int localNum = i;
+                int a = n1;
+                int a2 = n2;
+                threads.Add(new Thread(() => CalculatePart(localNum * onePart, localNum * onePart + onePart, a, a2)));
+            }
+
+            for (int i = 0; i < threads.Count; i++)
+            {
+                threads[i].Start();
+            }
+
+            for (int i = 0; i < threads.Count; i++) { threads[i].Join(); };
+        }
+
+        public void CalculateDistancesMatrix(int n1, int n2)
+        {
+            int n = n1 * n2;
+
+            Array = new int[n, n];
+
             for (int i = 0; i < Array.GetLength(0); ++i)
             {
                 for (int j = 0; j < Array.GetLength(1); ++j)
+                {
+                    Array[i, j] = CalculateDistance(i, j, n1, n2);
+                }
+            }
+        }
+
+        public void CalculatePart(int from, int to, int n1, int n2)
+        {
+            for (int i = 0; i < Array.GetLength(0); ++i)
+            {
+                for (int j = from; j < to; ++j)
                 {
                     Array[i, j] = CalculateDistance(i, j, n1, n2);
                 }
