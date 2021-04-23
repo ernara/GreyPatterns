@@ -18,7 +18,7 @@ namespace Algorithms
             individual.ChangeToSmallMirror();
 
             individual.Mutate(MutateFlags.SmallMirror);
-            individual.LocalSearch(LocalSearchFlags.SmallMirror);
+            //individual.LocalSearch(LocalSearchFlags.SmallMirror);
 
             individual.ChangeToBigMirror();
 
@@ -46,7 +46,7 @@ namespace Algorithms
                 genes.AddRange(individual.Genes[i].ChangeToBiggerNumbers());
             }
 
-            individual.Genes = individual.Genes.Take(Individual.M).Union(Enumerable.Range(0, Individual.N)).Distinct().ToList();
+            individual.Genes = genes.Take(Individual.M).Union(Enumerable.Range(0, Individual.N)).Distinct().ToList();
             individual.CalculateFitness();
         }
 

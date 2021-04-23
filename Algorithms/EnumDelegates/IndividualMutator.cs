@@ -17,11 +17,10 @@ namespace Algorithms
                 if (individual.Genes.Count == Individual.N)
                 {
                     mutator(individual, Individual.N, Individual.N2, Individual.M);
-
                 }
                 else if (individual.Genes.Count == Mirror.SmallerN)
                 {
-                    mutator(individual, Mirror.SmallerN, Individual.N2, Mirror.SmallerN);
+                    mutator(individual, Mirror.SmallerN, Mirror.SmallerN2, Mirror.SmallerM);
                 }
                 else
                 {

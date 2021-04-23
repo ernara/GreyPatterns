@@ -65,6 +65,7 @@ namespace GUI
             (CrossoverType)ACrossoverType.SelectedIndex, (MutateType)AMutateType.SelectedIndex);
 
             CreateCanvas();
+            Paint();
 
             Stopwatch stopwatch = new();
             stopwatch.Start();
@@ -82,7 +83,6 @@ namespace GUI
                 Algorithm.Next();
 
                 Paint();
-                //CurrentMatrix[0, 0].Fill = ON;
 
                 await Task.Delay((int)Math.Max(1.0, 1000.0 / FPS.Value - stopwatchFPS.ElapsedMilliseconds));
                 stopwatchFPS.Restart();
@@ -112,6 +112,18 @@ namespace GUI
 
         private void Board_Loaded2(object sender, RoutedEventArgs e)
         {
+        }
+
+        private void PopulationSize_Text_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (Convert.ToInt32(PopulationSize_Text.Text) > 1)
+            {
+                Board.Visibility = Visibility.Hidden;
+            }
+            else if (Convert.ToInt32(PopulationSize_Text.Text) == 1)
+            {
+                Board.Visibility = Visibility.Visible;
+            }
         }
     }
 }

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 
 namespace Algorithms
 {
-
     public class Individual
     {
         public static int N1 { get; private set; }

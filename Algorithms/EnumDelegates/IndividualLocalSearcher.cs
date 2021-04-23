@@ -24,7 +24,7 @@ namespace Algorithms
                 }
                 else if (individual.Genes.Count == Mirror.SmallerN)
                 {
-                    searcher(individual, Mirror.SmallerN, Mirror.SmallerN2, Mirror.SmallerN);
+                    searcher(individual, Mirror.SmallerN, Mirror.SmallerN2, Mirror.SmallerM);
                 }
                 else
                 {
