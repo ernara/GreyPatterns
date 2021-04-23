@@ -23,6 +23,11 @@ namespace GUI
         public MainWindow()
         {
             InitializeComponent();
+            double[] dataX = new double[] { 1, 2, 3, 4, 5 };
+            double[] dataY = new double[] { 1, 4, 9, 16, 25 };
+            Chart.Plot.AddScatter(dataX, dataY);
+
+
             ANewIndividualType.ItemsSource = Enum.GetValues(typeof(IndividualType));
             ANewIndividualType.SelectedIndex = 0;
 
@@ -67,6 +72,8 @@ namespace GUI
             CreateCanvas();
             Paint();
 
+            
+
             Stopwatch stopwatch = new();
             stopwatch.Start();
 
@@ -83,6 +90,10 @@ namespace GUI
                 Algorithm.Next();
 
                 Paint();
+
+                double[] dataX = new double[] { i };
+                double[] dataY = new double[] { i };
+                Chart.Plot.AddScatter(dataX, dataY);
 
                 await Task.Delay((int)Math.Max(1.0, 1000.0 / FPS.Value - stopwatchFPS.ElapsedMilliseconds));
                 stopwatchFPS.Restart();
@@ -116,14 +127,15 @@ namespace GUI
 
         private void PopulationSize_Text_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (Convert.ToInt32(PopulationSize_Text.Text) > 1)
-            {
-                Board.Visibility = Visibility.Hidden;
-            }
-            else if (Convert.ToInt32(PopulationSize_Text.Text) == 1)
-            {
-                Board.Visibility = Visibility.Visible;
-            }
+            //if (Convert.ToInt32(PopulationSize_Text.Text) > 1)
+            //{
+            //    Board.Visibility = Visibility.Hidden;
+            //}
+            //else if (Convert.ToInt32(PopulationSize_Text.Text) == 1)
+            //{
+            //    Board.Visibility = Visibility.Visible;
+            //}
         }
+
     }
 }
