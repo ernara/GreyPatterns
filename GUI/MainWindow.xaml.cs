@@ -20,12 +20,16 @@ namespace GUI
 {
     public partial class MainWindow : Window
     {
+        public bool DontStop;
         public MainWindow()
         {
             InitializeComponent();
             double[] dataX = new double[] { 1, 2, 3, 4, 5 };
             double[] dataY = new double[] { 1, 4, 9, 16, 25 };
             Chart.Plot.AddScatter(dataX, dataY);
+
+            AAlgorithmType.ItemsSource = Enum.GetValues(typeof(AlgorithmType));
+            AAlgorithmType.SelectedIndex = 0;
 
             ANewIndividualType.ItemsSource = Enum.GetValues(typeof(IndividualType));
             ANewIndividualType.SelectedIndex = 0;
@@ -64,20 +68,32 @@ namespace GUI
 
         private async void NewAlgorithm(object sender, RoutedEventArgs e)
         {
-            //Algorithm Algorithm = new(Convert.ToInt32(N1_Text.Text), Convert.ToInt32(N2_Text.Text),
-            //    Convert.ToInt32(M_Text.Text), Convert.ToInt32(PopulationSize_Text.Text),
-            //new MutateFlags(Mutate0.IsChecked, Mutate1.IsChecked, Mutate2.IsChecked, Mutate3.IsChecked, PMutate.IsChecked),
-            //new LocalSearchFlags(LocalSearch0.IsChecked, LocalSearch1.IsChecked, LocalSearch2.IsChecked, LocalSearch3.IsChecked, PLocalSearch.IsChecked),
-            //Convert.ToInt32(OldPopulationSize_Text.Text), Convert.ToInt32(CrossPopulationSize_Text.Text),
-            //Convert.ToInt32(NewPopulationSize_Text.Text), Convert.ToInt32(MutateChance_Text.Text),
-            //(LocalSearchType)ALocalSearchType.SelectedIndex, (IndividualType)ANewIndividualType.SelectedIndex,
-            //(MirrorType)AMirrorType.SelectedIndex, (RandomChooseType)AIndividualChooserType.SelectedIndex,
-            //(CrossoverType)ACrossoverType.SelectedIndex, (MutateType)AMutateType.SelectedIndex);
+
+            switch ((AlgorithmType)AAlgorithmType.SelectedIndex)
+            {
+                case (AlgorithmType.Strait):
+                    Algorithm = new Strait(Convert.ToInt32(N1_Text.Text), Convert.ToInt32(N2_Text.Text),
+                        Convert.ToInt32(M_Text.Text), Convert.ToInt32(PopulationSize_Text.Text));
+                    break;
+                case (AlgorithmType.Custom):
+                    Algorithm = new(Convert.ToInt32(N1_Text.Text), Convert.ToInt32(N2_Text.Text),
+                        Convert.ToInt32(M_Text.Text), Convert.ToInt32(PopulationSize_Text.Text),
+                        new MutateFlags(Mutate0.IsChecked, Mutate1.IsChecked, Mutate2.IsChecked, Mutate3.IsChecked, PMutate.IsChecked),
+                        new LocalSearchFlags(LocalSearch0.IsChecked, LocalSearch1.IsChecked, LocalSearch2.IsChecked, LocalSearch3.IsChecked, PLocalSearch.IsChecked),
+                        Convert.ToInt32(OldPopulationSize_Text.Text), Convert.ToInt32(CrossPopulationSize_Text.Text),
+                        Convert.ToInt32(NewPopulationSize_Text.Text), Convert.ToInt32(MutateChance_Text.Text),
+                        (LocalSearchType)ALocalSearchType.SelectedIndex, (IndividualType)ANewIndividualType.SelectedIndex,
+                        (MirrorType)AMirrorType.SelectedIndex, (RandomChooseType)AIndividualChooserType.SelectedIndex,
+                        (CrossoverType)ACrossoverType.SelectedIndex, (MutateType)AMutateType.SelectedIndex);
+                    break;
+                default:
+                    throw new Exception("Wrong value");
+            }
+
 
             Bigger.IsEnabled = true;
 
-            Algorithm = new Strait(Convert.ToInt32(N1_Text.Text), Convert.ToInt32(N2_Text.Text),
-            Convert.ToInt32(M_Text.Text), Convert.ToInt32(PopulationSize_Text.Text));
+            
 
             CreateCanvas();
             Paint();
@@ -93,6 +109,7 @@ namespace GUI
 
         private async Task Do()
         {
+            DontStop = true;
             Stopwatch stopwatch = new();
             stopwatch.Start();
 
@@ -101,7 +118,7 @@ namespace GUI
 
 
 
-            for (int i = 0; i < Convert.ToInt32(Iterations_Text.Text) || stopwatch.ElapsedMilliseconds < Convert.ToInt32(Time_Text.Text) * 1000; i++)
+            for (int i = 0; (i < Convert.ToInt32(Iterations_Text.Text) || stopwatch.ElapsedMilliseconds < Convert.ToInt32(Time_Text.Text) * 1000) && DontStop; i++)
             {
                 if ((bool)PMirror.IsChecked)
                 {
@@ -132,7 +149,7 @@ namespace GUI
 
         private async void StopAlgorithm(object sender, RoutedEventArgs e)
         {
-
+            DontStop = false;
         }
 
         private async void BiggerAlgorithm(object sender, RoutedEventArgs e)
@@ -174,5 +191,9 @@ namespace GUI
             //}
         }
 
+        private void AAlgorithmType_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+
+        }
     }
 }

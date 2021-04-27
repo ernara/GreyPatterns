@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Algorithms
 {
+    public enum AlgorithmType { Strait, Custom}
     public enum IndividualType { Random, Mirror }
 
     public enum MutateType { Random, Near, RandomAll, NearAll }
@@ -15,5 +16,6 @@ namespace Algorithms
     public enum RandomChooseType { Random, FormulaChoose, RankBasedChoose, FitnessBasedChoose }
 
     public enum MirrorType { Small, Best }
+
     
 }
