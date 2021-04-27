@@ -11,45 +11,55 @@ namespace Consolee
 {
     public static class Program
     {
-
+        public static int N;
+        public static int M;
+        static List<int> Genes;
         public static void Main()
         {
+            N = 256;
+            M = 5;
+            Genes = new(Enumerable.Range(0,M));
 
-            Console.WriteLine("startssss");
+            Algorithm algorithm = new Strait(16, 16, M, 1);
 
-            int n1 = 64;
-            int n2 = 64;
+            for (int i = 0; i < 10; i++)
+            {
+                for (int j = 0; j < Genes.Count; j++)
+                {
+                    Console.Write($"{Genes[j]} ");
+                }
+                Console.WriteLine();
 
+                Console.WriteLine(Algorithm.Population[0]);
 
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
+                NextPermutation();
+                algorithm.Next();
+            }
 
-            Hm hm = new ();
-            hm.Parralel(n1, n2);
-
-            Console.WriteLine(stopwatch.ElapsedMilliseconds);
-            Console.WriteLine($"result: :{hm.Array[0, 10] + hm.Array[10, 10] + hm.Array[20, 10] + hm.Array[7, 9] + hm.Array[n1 - 1, n2 - 2]}");
-
-            stopwatch.Restart();
-
-            hm.NotParralel(n1, n2);
-
-
-            Console.WriteLine(stopwatch.ElapsedMilliseconds);
-            Console.WriteLine($"result: :{hm.Array[0, 10] + hm.Array[10, 10] + hm.Array[20, 10] + hm.Array[7, 9] + hm.Array[n1 - 1, n2 - 2]}");
-
-            stopwatch.Restart();
-
-            hm.ParralelWithSignal(n1, n2);
-
-            Console.WriteLine(stopwatch.ElapsedMilliseconds);
-            Console.WriteLine($"result: :{hm.Array[0, 10] + hm.Array[10, 10] + hm.Array[20, 10] + hm.Array[7, 9] + hm.Array[n1 - 1, n2 - 2]}");
-
-
+            
 
         }
 
+        public static void NextPermutation()
+        {
+            for (int i = Genes.Count-1;i>=0;i--)
+            {
+                if (Genes[i]+M-i<N)
+                {
+                    Genes[i]++;
+                    for (int j = i+1; j < Genes.Count; j++)
+                    {
+                        Genes[j] = Genes[j-1]+1;
+                    }
+                    break;
+                }
+
+            }
+        }
+
     }
+
+   
 
     public class Hm
     {

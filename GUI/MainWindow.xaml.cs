@@ -27,7 +27,6 @@ namespace GUI
             double[] dataY = new double[] { 1, 4, 9, 16, 25 };
             Chart.Plot.AddScatter(dataX, dataY);
 
-
             ANewIndividualType.ItemsSource = Enum.GetValues(typeof(IndividualType));
             ANewIndividualType.SelectedIndex = 0;
 
@@ -48,6 +47,11 @@ namespace GUI
 
         }
 
+        public List<double> dataX = new();
+        public List<double> dataY = new();
+        public List<double> dataX2 = new();
+        public List<double> dataY2 = new();
+
         public Rectangle[,] CurrentMatrix;
 
         public Rectangle[,] BestMatrix;
@@ -56,30 +60,46 @@ namespace GUI
 
         private readonly Brush ON = Brushes.Black;
         private readonly Brush OFF = Brushes.LightGray;
+        public Algorithm Algorithm;
 
         private async void NewAlgorithm(object sender, RoutedEventArgs e)
         {
-            Algorithm Algorithm = new(Convert.ToInt32(N1_Text.Text), Convert.ToInt32(N2_Text.Text),
-                Convert.ToInt32(M_Text.Text), Convert.ToInt32(PopulationSize_Text.Text),
-            new MutateFlags(Mutate0.IsChecked, Mutate1.IsChecked, Mutate2.IsChecked, Mutate3.IsChecked, PMutate.IsChecked),
-            new LocalSearchFlags(LocalSearch0.IsChecked, LocalSearch1.IsChecked, LocalSearch2.IsChecked, LocalSearch3.IsChecked, PLocalSearch.IsChecked),
-            Convert.ToInt32(OldPopulationSize_Text.Text), Convert.ToInt32(CrossPopulationSize_Text.Text),
-            Convert.ToInt32(NewPopulationSize_Text.Text), Convert.ToInt32(MutateChance_Text.Text),
-            (LocalSearchType)ALocalSearchType.SelectedIndex, (IndividualType)ANewIndividualType.SelectedIndex,
-            (MirrorType)AMirrorType.SelectedIndex, (RandomChooseType)AIndividualChooserType.SelectedIndex,
-            (CrossoverType)ACrossoverType.SelectedIndex, (MutateType)AMutateType.SelectedIndex);
+            //Algorithm Algorithm = new(Convert.ToInt32(N1_Text.Text), Convert.ToInt32(N2_Text.Text),
+            //    Convert.ToInt32(M_Text.Text), Convert.ToInt32(PopulationSize_Text.Text),
+            //new MutateFlags(Mutate0.IsChecked, Mutate1.IsChecked, Mutate2.IsChecked, Mutate3.IsChecked, PMutate.IsChecked),
+            //new LocalSearchFlags(LocalSearch0.IsChecked, LocalSearch1.IsChecked, LocalSearch2.IsChecked, LocalSearch3.IsChecked, PLocalSearch.IsChecked),
+            //Convert.ToInt32(OldPopulationSize_Text.Text), Convert.ToInt32(CrossPopulationSize_Text.Text),
+            //Convert.ToInt32(NewPopulationSize_Text.Text), Convert.ToInt32(MutateChance_Text.Text),
+            //(LocalSearchType)ALocalSearchType.SelectedIndex, (IndividualType)ANewIndividualType.SelectedIndex,
+            //(MirrorType)AMirrorType.SelectedIndex, (RandomChooseType)AIndividualChooserType.SelectedIndex,
+            //(CrossoverType)ACrossoverType.SelectedIndex, (MutateType)AMutateType.SelectedIndex);
+
+            Bigger.IsEnabled = true;
+
+            Algorithm = new Strait(Convert.ToInt32(N1_Text.Text), Convert.ToInt32(N2_Text.Text),
+            Convert.ToInt32(M_Text.Text), Convert.ToInt32(PopulationSize_Text.Text));
 
             CreateCanvas();
             Paint();
 
-            
+            List<double> dataX = new();
+            List<double> dataY = new();
+            List<double> dataX2 = new();
+            List<double> dataY2 = new();
+            Chart.Plot.Clear();
+            await Do();
 
+        }
+
+        private async Task Do()
+        {
             Stopwatch stopwatch = new();
             stopwatch.Start();
 
             Stopwatch stopwatchFPS = new();
             stopwatchFPS.Start();
-            
+
+
 
             for (int i = 0; i < Convert.ToInt32(Iterations_Text.Text) || stopwatch.ElapsedMilliseconds < Convert.ToInt32(Time_Text.Text) * 1000; i++)
             {
@@ -91,9 +111,10 @@ namespace GUI
 
                 Paint();
 
-                double[] dataX = new double[] { i };
-                double[] dataY = new double[] { i };
-                Chart.Plot.AddScatter(dataX, dataY);
+                dataX.Add(i);
+                dataX2.Add(i);
+                dataY.Add(Algorithm.BestIndividual.Fitness);
+                dataY2.Add(Algorithm.Population[0].Fitness);
 
                 await Task.Delay((int)Math.Max(1.0, 1000.0 / FPS.Value - stopwatchFPS.ElapsedMilliseconds));
                 stopwatchFPS.Restart();
@@ -101,6 +122,22 @@ namespace GUI
 
             stopwatch.Stop();
 
+
+        }
+
+        private async void NextAlgorithm(object sender, RoutedEventArgs e)
+        {
+            await Do();
+        }
+
+        private async void StopAlgorithm(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private async void BiggerAlgorithm(object sender, RoutedEventArgs e)
+        {
+            CreateBoardBigger();
         }
 
 

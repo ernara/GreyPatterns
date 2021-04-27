@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:GUI"
         mc:Ignorable="d"
         Title="GUI"
-    WindowState = "Maximized"
-        WindowStyle = "None">
+        WindowState = "Maximized"
+        WindowStyle = "ThreeDBorderWindow">
     <Grid Width="1500" Height="915" >
         
         <!--Grid aukščiai-->
@@ -31,7 +31,7 @@
 
 
         <!--Canvas-->
-        <Grid Grid.Row="1" Grid.Column="1" Background="black">
+        <Grid Grid.Row="1" Grid.Column="1" >
 
             <!--Canvas ilgiai-->
             <Grid.ColumnDefinitions>
@@ -52,7 +52,7 @@
 
 
         <!--Menu-->
-        <Grid Grid.Row="1" Grid.Column="3" Background="Blue">
+        <Grid Grid.Row="1" Grid.Column="3">
 
             <!--Menu aukščiai-->
             <Grid.RowDefinitions  >
@@ -79,6 +79,8 @@
 
                 <!--Visi Pirmo Menu aukščiai-->
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
@@ -141,21 +143,25 @@
             </Grid>
 
 
-            <!--New ir Next-->
             <Grid Grid.Row="2"  >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Content="New" Click="NewAlgorithm" Width="145" Grid.Column="0" />
-                <Button Content="Next"  Width="145" Grid.Column="1" />
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
 
-                <!--<Button Content="Start!" Width="145" Grid.Column="0" Click="ButtonStart_Click" />
-                <Button Content="Next &gt;&gt;" Width="145" Grid.Column="1" Click="ButtonNext_Click"  />-->
+                <!--New ir Next-->
+                <Button Content="New" Click="NewAlgorithm" Width="145" Grid.Column="0" Grid.Row="0" />
+                <Button Content="Next" Click="NextAlgorithm"  Width="145" Grid.Column="1" Grid.Row="0" />
+                <!--Stop ir Bigger -->
+                <Button Content="Stop" Click="StopAlgorithm" Width="145" Grid.Column="0" Grid.Row="1" />
+                <Button Content="Bigger" x:Name="Bigger" Click="BiggerAlgorithm"  Width="145" Grid.Column="1" Grid.Row="1" IsEnabled="False" />
 
             </Grid>
-
 
             <!-- Antras Menu-->
             <Grid Grid.Row="4" IsEnabled="true" x:Name="OptionalParameters">

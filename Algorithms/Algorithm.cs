@@ -15,7 +15,7 @@ namespace Algorithms
         public static int MutateChance { get; private set; }
 
         public static List<Individual> Population { get; private set; }
-        public static Individual BestIndividual { get; private set; }
+        public static Individual BestIndividual;
 
         private Func<int, Individual> ChooseRandomIndividual;
 
@@ -56,6 +56,7 @@ namespace Algorithms
 
             _ = new MutateFlags(false, false, false, false);
             _ = new LocalSearchFlags(false, false, false, false);
+
             IndividualFitnessCalculator.SetUpParameters();
             Population = PopulationCreator.CreatePopulation();
             BestIndividual = new(Population[0]);
@@ -89,7 +90,7 @@ namespace Algorithms
             }
         }
 
-        public void Do()
+        public virtual void Do()
         {
             List<Individual> NewPopulation = new(Population.Take(OldPopulationSize));
 

@@ -83,5 +83,41 @@ namespace GUI
 				}
 			}
 		}
+
+		//Todo: bigeer board
+		private void CreateBoardBigger()
+        {
+			int size = CurrentMatrix.GetLength(0) * 2;
+
+			CurrentMatrix = new Rectangle[size, size];
+
+			Board.Children.RemoveRange(0, Board.Children.Count);
+
+			for (int y = 0; y < size; y++)
+			{
+				for (int x = 0; x < size; x++)
+				{
+					Rectangle r = new()
+					{
+						Width = Board.ActualWidth / size - spacing,
+						Height = Board.ActualHeight / size - spacing,
+						Fill = OFF
+					};
+					Board.Children.Add(r);
+
+					Canvas.SetLeft(r, x * Board.ActualWidth / size);
+					Canvas.SetTop(r, y * Board.ActualHeight / size);
+
+					CurrentMatrix[y, x] = r;
+
+					r.MouseDown += R_MouseEnter;
+					r.MouseEnter += R_MouseEnter;
+				}
+			}
+
+			PaintBiggerBoard();
+
+		}
+
 	}
 }

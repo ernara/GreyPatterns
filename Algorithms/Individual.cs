@@ -46,9 +46,9 @@ namespace Algorithms
         public override string ToString()
         {
             string genes = "";
-            foreach (int i in Genes)
+            for (int i=0; i < Individual.M; ++i)
             {
-                genes += i.ToString() + " ";
+                genes += Genes[i].ToString() + " ";
             }
             return $"Genes: {genes}| Fitness: {Fitness}";
         }
