@@ -19,7 +19,7 @@ namespace Algorithms
 
         private Func<int, Individual> ChooseRandomIndividual;
 
-        public Algorithm(int n1, int n2, int m, int populationSize,
+        public Algorithm(int n, int m, int populationSize,
             MutateFlags mutateFlags,
             LocalSearchFlags localSearchFlags,
             int oldPopulationSize = 10, int crossoverPopulationSize = 80, int newPopulationSize = 10, int mutateChance = 100,
@@ -32,7 +32,7 @@ namespace Algorithms
             MutateType mutateType = MutateType.Random
             )
         {
-            SetUpParameters(n1, n2, m, populationSize, oldPopulationSize, crossoverPopulationSize, newPopulationSize, mutateChance);
+            SetUpParameters(n, m, populationSize, oldPopulationSize, crossoverPopulationSize, newPopulationSize, mutateChance);
             SetUpDelegates(localSearchType, individualType, mirrorType, randomChooseType, crossoverType, mutateType);
 
             IndividualFitnessCalculator.SetUpParameters();
@@ -41,7 +41,7 @@ namespace Algorithms
 
         }
 
-        public Algorithm(int n1, int n2, int m, int populationSize,
+        public Algorithm(int n, int m, int populationSize,
             int oldPopulationSize = 10, int crossoverPopulationSize = 80, int newPopulationSize = 10, int mutateChance = 100,
             LocalSearchType localSearchType = LocalSearchType.Fast,
             IndividualType individualType = IndividualType.Random,
@@ -51,7 +51,7 @@ namespace Algorithms
             MutateType mutateType = MutateType.Random
             )
         {
-            SetUpParameters(n1, n2, m, populationSize, oldPopulationSize, crossoverPopulationSize, newPopulationSize, mutateChance);
+            SetUpParameters(n, m, populationSize, oldPopulationSize, crossoverPopulationSize, newPopulationSize, mutateChance);
             SetUpDelegates(localSearchType, individualType, mirrorType, randomChooseType, crossoverType, mutateType);
 
             _ = new MutateFlags(false, false, false, false);
@@ -120,11 +120,11 @@ namespace Algorithms
 
 
 
-        private static void SetUpParameters(int n1, int n2, int m, int populationSize,
+        private static void SetUpParameters(int n, int m, int populationSize,
             int oldPopulationSize, int crossoverPopulationSize, int newPopulationSize, int mutateChance)
         {
-            CheckParameters(ref n1, ref n2, ref m, ref populationSize, ref oldPopulationSize, ref crossoverPopulationSize, ref newPopulationSize, ref mutateChance);
-            Individual.SetUpParameters(n1, n2, m);
+            CheckParameters(ref n, ref m, ref populationSize, ref oldPopulationSize, ref crossoverPopulationSize, ref newPopulationSize, ref mutateChance);
+            Individual.SetUpParameters(n, m);
 
             PopulationSize = populationSize;
 
@@ -156,12 +156,12 @@ namespace Algorithms
             IndividualMutator.ChooseMutatorType(mutateType);
         }
 
-        private static void CheckParameters(ref int n1, ref int n2, ref int m, ref int populationSize,
+        private static void CheckParameters(ref int n, ref int m, ref int populationSize,
             ref int oldPopulationSize, ref int crossoverPopulationSize, ref int newPopulationSize, ref int mutateChance)
         {
-            n1 = n1 < 2 ? 2 : n1 > 64 ? 64 : n1;
-            n2 = n2 < 2 ? 2 : n2 > 64 ? 64 : n2;
-            m = m < 1 ? 1 : m > n1 * n2 ? n1 * n2  : m;
+            n = n<4 ? 4 : n>4096 ? 4096 : Math.Sqrt(n) * Math.Sqrt(n) == n ? n : (int)((Math.Sqrt(n) + 1) * (Math.Sqrt(n) + 1));
+
+            m = m < 1 ? 1 : m > n ? n : m;
             populationSize = populationSize < 1 ? 1 : populationSize > 128 ? 128 : populationSize;
 
             oldPopulationSize = oldPopulationSize < 0 ? 0 : oldPopulationSize > 100 ? 100 : oldPopulationSize;

@@ -7,20 +7,17 @@ namespace Algorithms
 {
     public class Individual
     {
-        public static int N1 { get; private set; }
         public static int N2 { get; private set; }
         public static int N { get; private set; }
-
         public static int M { get; private set; }
         
         public List<int> Genes;
         public int Fitness;
 
-        public static void SetUpParameters(int n1, int n2, int m)
+        public static void SetUpParameters(int n, int m)
         {
-            N1 = n1;
-            N2 = n2;
-            N = n1 * n2;
+            N2 = (int)Math.Sqrt(n);
+            N = n;
             M = m;
         }
 

@@ -52,7 +52,7 @@
 
 
         <!--Menu-->
-        <Grid Grid.Row="1" Grid.Column="3">
+        <Grid Grid.Row="1" Grid.Column="3" >
 
             <!--Menu aukščiai-->
             <Grid.RowDefinitions  >
@@ -100,25 +100,23 @@
                 </Grid.RowDefinitions>
 
                 <!--Pirmo Pirmo Menu tekstai-->
-                <TextBlock Text="N1: " Grid.Column="0" Grid.Row="0"  />
-                <TextBlock Text="N2: " Grid.Column="0" Grid.Row="1" />
-                <TextBlock Text="M: " Grid.Column="0" Grid.Row="2"/>
+                <TextBlock Text="White Cells: " Grid.Column="0" Grid.Row="1" />
+                <TextBlock Text="Black Cells: " Grid.Column="0" Grid.Row="2"/>
                 <TextBlock Text="AlgorithmType: " Grid.Column="0" Grid.Row="3" />
                 <TextBlock Text="NewIndividualType: " Grid.Column="0" Grid.Row="4" />
                 <TextBlock Text="CrossoverType:" Grid.Column="0" Grid.Row="5" />
                 <TextBlock Text="MutateType:" Grid.Column="0" Grid.Row="6" />
                 <TextBlock Text="LocalSearchType:" Grid.Column="0" Grid.Row="7" />
-                <TextBlock Text="IndividualChooserType" Grid.Column="0" Grid.Row="8" />
-                <TextBlock Text="MirrorType" Grid.Column="0" Grid.Row="9" />
+                <TextBlock Text="IndividualChooserType: " Grid.Column="0" Grid.Row="8" />
+                <TextBlock Text="MirrorType:" Grid.Column="0" Grid.Row="9" />
                 <TextBlock Text="Iterations: " Grid.Column="0" Grid.Row="10" />
                 <TextBlock Text="Time: " Grid.Column="0" Grid.Row="11" />
                 <TextBlock Text="Max FPS: " Grid.Column="0" Grid.Row="12" />
 
                 <!--Pirmo Menu values-->
-                <TextBox x:Name="N1_Text" Text="16" Grid.Column="1" Grid.Row="0" />
-                <TextBox x:Name="N2_Text" Text="16" Grid.Column="1" Grid.Row="1"  />
+                <TextBox x:Name="N_Text" Text="256" Grid.Column="1" Grid.Row="1"  />
                 <TextBox x:Name="M_Text" Text="32" Grid.Column="1" Grid.Row="2"  />
-                <ComboBox x:Name="AAlgorithmType"  Grid.Column="1" Grid.Row="3" DataContextChanged="AAlgorithmType_DataContextChanged" />
+                <ComboBox x:Name="AAlgorithmType"  Grid.Column="1" Grid.Row="3" SelectionChanged="AAlgorithmType_SelectionChanged" />
                 <ComboBox x:Name="ANewIndividualType"  Grid.Column="1" Grid.Row="4" />
                 <ComboBox x:Name="ACrossoverType"  Grid.Column="1" Grid.Row="5" />
                 <ComboBox x:Name="AMutateType"  Grid.Column="1" Grid.Row="6" />
@@ -135,10 +133,10 @@
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <Slider Maximum="1000" Minimum="1"  TickPlacement="None"  TickFrequency="1"  Grid.Column="0" Grid.Row="0" 
-                    IsSnapToTickEnabled="True"  x:Name="FPS"  Value="1000"  />
+                    <Slider Maximum="100" Minimum="1"  TickPlacement="None"  TickFrequency="1"  Grid.Column="0" Grid.Row="0" 
+                    IsSnapToTickEnabled="True"  x:Name="FPS"  Value="100"  />
 
-                    <TextBlock Margin="10, 0, 0, 0" Grid.Column="1" Grid.Row="0"
+                    <TextBox Margin="10, 0, 0, 0" Grid.Column="1" Grid.Row="0"
                     Text="{Binding ElementName=FPS, Path=Value, UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
 
@@ -166,7 +164,7 @@
             </Grid>
 
             <!-- Antras Menu-->
-            <Grid Grid.Row="4" IsEnabled="true" x:Name="OptionalParameters">
+            <Grid Grid.Row="4" x:Name="OptionalParameters" IsEnabled="False">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="*"/>
@@ -195,7 +193,7 @@
             </Grid>
 
             <!-- Flags Menu-->
-            <Grid Grid.Row="6" IsEnabled="true" x:Name="Flags">
+            <Grid Grid.Row="6"  x:Name="Flags" IsEnabled="False">
 
                 <!--Visi Flags Menu ilgiai-->
                 <Grid.ColumnDefinitions >
@@ -239,7 +237,7 @@
             </Grid>
 
             <!-- PopulationSizeIsOne Menu-->
-            <Grid Grid.Row="8" IsEnabled="true" x:Name="PopulationSizeIsOne">
+            <Grid Grid.Row="8"  x:Name="PopulationSizeIsOneParameters" IsEnabled="False">
 
                 <!--Visi PopulationSizeIsOne Menu ilgiai-->
                 <Grid.ColumnDefinitions >

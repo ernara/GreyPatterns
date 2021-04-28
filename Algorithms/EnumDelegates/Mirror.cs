@@ -8,7 +8,6 @@ namespace Algorithms
 {
     public static class Mirror
     {
-        public static int SmallerN1 { get; private set; }
         public static int SmallerN2 { get; private set; }
         public static int SmallerN { get; private set; }
         public static int SmallerM { get; private set; }
@@ -18,7 +17,7 @@ namespace Algorithms
             individual.ChangeToSmallMirror();
 
             individual.Mutate(MutateFlags.SmallMirror);
-            //individual.LocalSearch(LocalSearchFlags.SmallMirror);
+            individual.LocalSearch(LocalSearchFlags.SmallMirror);
 
             individual.ChangeToBigMirror();
 
@@ -52,7 +51,6 @@ namespace Algorithms
 
         public static void ChooseMirrorType(MirrorType mirrorType)
         {
-            SmallerN1 = Individual.N1;
             SmallerN2 = Individual.N2;
             SmallerM = Individual.M;
 
@@ -68,14 +66,14 @@ namespace Algorithms
                     throw new ArgumentException("Wrong MirrorType");
             }
 
-            SmallerN = SmallerN1 * SmallerN2;
+            SmallerN = SmallerN2 * SmallerN2;
+
         }
 
         private static void SmallMirror()
         {
-            while (SmallerN1 > 3 && SmallerN2 > 3 && SmallerM > 3)
+            while (SmallerN2 > 3 && SmallerM > 3)
             {
-                SmallerN1 /= 2;
                 SmallerN2 /= 2;
                 SmallerM /= 4;
             }
@@ -83,9 +81,8 @@ namespace Algorithms
 
         private static void BestMirror()
         {
-            while (SmallerN1 > 7 && SmallerN2 > 7 && SmallerM > 19)
+            while (SmallerN2 > 7 && SmallerM > 19)
             {
-                SmallerN1 /= 2;
                 SmallerN2 /= 2;
                 SmallerM /= 4;
             }
@@ -97,8 +94,8 @@ namespace Algorithms
             Coordinate coordinate = new(number, Individual.N2);
             while (coordinate.X >= SmallerN2)
                 coordinate.X -= SmallerN2;
-            while (coordinate.Y >= SmallerN1)
-                coordinate.Y -= SmallerN1;
+            while (coordinate.Y >= SmallerN2)
+                coordinate.Y -= SmallerN2;
 
             return coordinate.X * SmallerN2 + coordinate.Y;
         }
@@ -112,7 +109,7 @@ namespace Algorithms
             {
                 for (int j = 0; j < Individual.N2 / SmallerN2; j++)
                 {
-                    numbers.Add((coordinate.X + i * SmallerN2) * Individual.N2 + coordinate.Y + SmallerN1 * j); //0+ 3 + 4*1
+                    numbers.Add((coordinate.X + i * SmallerN2) * Individual.N2 + coordinate.Y + SmallerN2 * j); 
                   
                 }
             }

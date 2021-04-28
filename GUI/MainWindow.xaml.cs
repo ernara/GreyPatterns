@@ -24,9 +24,6 @@ namespace GUI
         public MainWindow()
         {
             InitializeComponent();
-            double[] dataX = new double[] { 1, 2, 3, 4, 5 };
-            double[] dataY = new double[] { 1, 4, 9, 16, 25 };
-            Chart.Plot.AddScatter(dataX, dataY);
 
             AAlgorithmType.ItemsSource = Enum.GetValues(typeof(AlgorithmType));
             AAlgorithmType.SelectedIndex = 0;
@@ -51,10 +48,10 @@ namespace GUI
 
         }
 
-        public List<double> dataX = new();
-        public List<double> dataY = new();
-        public List<double> dataX2 = new();
-        public List<double> dataY2 = new();
+        public List<double> dataX;
+        public List<double> dataY;
+        public List<double> dataX2;
+        public List<double> dataY2;
 
         public Rectangle[,] CurrentMatrix;
 
@@ -72,11 +69,11 @@ namespace GUI
             switch ((AlgorithmType)AAlgorithmType.SelectedIndex)
             {
                 case (AlgorithmType.Strait):
-                    Algorithm = new Strait(Convert.ToInt32(N1_Text.Text), Convert.ToInt32(N2_Text.Text),
+                    Algorithm = new Strait(Convert.ToInt32(N_Text.Text),
                         Convert.ToInt32(M_Text.Text), Convert.ToInt32(PopulationSize_Text.Text));
                     break;
                 case (AlgorithmType.Custom):
-                    Algorithm = new(Convert.ToInt32(N1_Text.Text), Convert.ToInt32(N2_Text.Text),
+                    Algorithm = new(Convert.ToInt32(N_Text.Text),
                         Convert.ToInt32(M_Text.Text), Convert.ToInt32(PopulationSize_Text.Text),
                         new MutateFlags(Mutate0.IsChecked, Mutate1.IsChecked, Mutate2.IsChecked, Mutate3.IsChecked, PMutate.IsChecked),
                         new LocalSearchFlags(LocalSearch0.IsChecked, LocalSearch1.IsChecked, LocalSearch2.IsChecked, LocalSearch3.IsChecked, PLocalSearch.IsChecked),
@@ -93,29 +90,27 @@ namespace GUI
 
             Bigger.IsEnabled = true;
 
-            
-
             CreateCanvas();
             Paint();
-
-            List<double> dataX = new();
-            List<double> dataY = new();
-            List<double> dataX2 = new();
-            List<double> dataY2 = new();
+            
             Chart.Plot.Clear();
             await Do();
+           
 
         }
 
         private async Task Do()
         {
+            List<double> dataX = new();
+            List<double> dataY = new();
+            List<double> dataX2 = new();
+            List<double> dataY2 = new();
             DontStop = true;
             Stopwatch stopwatch = new();
             stopwatch.Start();
 
             Stopwatch stopwatchFPS = new();
             stopwatchFPS.Start();
-
 
 
             for (int i = 0; (i < Convert.ToInt32(Iterations_Text.Text) || stopwatch.ElapsedMilliseconds < Convert.ToInt32(Time_Text.Text) * 1000) && DontStop; i++)
@@ -139,7 +134,8 @@ namespace GUI
 
             stopwatch.Stop();
 
-
+            Chart.Plot.AddScatter(dataX.ToArray(), dataY.ToArray());
+            Chart.Plot.AddScatter(dataX2.ToArray(), dataY2.ToArray());
         }
 
         private async void NextAlgorithm(object sender, RoutedEventArgs e)
@@ -171,7 +167,7 @@ namespace GUI
 
         private void Board_Loaded(object sender, RoutedEventArgs e)
         {
-            Algorithm Algorithm = new(Convert.ToInt32(N1_Text.Text), Convert.ToInt32(N2_Text.Text), Convert.ToInt32(M_Text.Text), 1);
+            Algorithm Algorithm = new(Convert.ToInt32(N_Text.Text), Convert.ToInt32(M_Text.Text), 1);
             CreateCanvas();
         }
 
@@ -191,9 +187,20 @@ namespace GUI
             //}
         }
 
-        private void AAlgorithmType_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        private void AAlgorithmType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            if ((AlgorithmType)AAlgorithmType.SelectedIndex == AlgorithmType.Custom)
+            {
+                Flags.IsEnabled = true;
+                OptionalParameters.IsEnabled = true;
+                PopulationSizeIsOneParameters.IsEnabled = true;
+            }
+            else
+            {
+                Flags.IsEnabled = false;
+                OptionalParameters.IsEnabled = false;
+                PopulationSizeIsOneParameters.IsEnabled = false;
+            }
         }
     }
 }

@@ -13,8 +13,8 @@ namespace Algorithms
 
         public static void SetUpParameters()
         {
-            DistancesMatrix = new(Individual.N1, Individual.N2);
-            SmallDistancesMatrix = new(Mirror.SmallerN1, Mirror.SmallerN2);
+            DistancesMatrix = new(Individual.N2, Individual.N2);
+            SmallDistancesMatrix = new(Mirror.SmallerN2, Mirror.SmallerN2);
         }
         public static int CalculateFitness(this List<int> genes)
         {
@@ -44,7 +44,7 @@ namespace Algorithms
                 }
             }
 
-            return fitness;
+            return fitness*2;
         }
 
         public static void CalculateFitness(this Individual individual)
