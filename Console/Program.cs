@@ -16,27 +16,33 @@ namespace Consolee
         static List<int> Genes;
         public static void Main()
         {
-            N = 256;
+            N = 10;
             M = 5;
-            Genes = new(Enumerable.Range(0,M));
+            int PopulationSize = 1;
+            int OldPopulationSize = 1;
+            int CrossoverPopulationSize = 0;
+            int NewPopulationSize = 0;
+            IndividualType IndividualType = IndividualType.Random;
+            CrossoverType CrossoverType = CrossoverType.Random;
+            RandomChooseType RandomChooseType = RandomChooseType.Random;
+            MutateType MutateType = MutateType.Random;
+            LocalSearchType LocalSearchType = LocalSearchType.Fast;
+            MirrorType MirrorType = MirrorType.Small;
+            int MutateChance = 100;
+            int LocalSearchChance = 100;
+            MutateFlags MutateFlags = new();
+            LocalSearchFlags LocalSearchFlags = new();
+            Algorithm Algorithm = new Algorithm(N, M, PopulationSize, OldPopulationSize, CrossoverPopulationSize, NewPopulationSize,
+                    IndividualType, CrossoverType, RandomChooseType, MutateType, LocalSearchType, MirrorType,
+                    MutateChance, LocalSearchChance, MutateFlags, LocalSearchFlags);
 
-            Algorithm algorithm = new Strait(16, 16, M, 1);
 
-            for (int i = 0; i < 10; i++)
-            {
-                for (int j = 0; j < Genes.Count; j++)
-                {
-                    Console.Write($"{Genes[j]} ");
-                }
-                Console.WriteLine();
 
-                Console.WriteLine(Algorithm.Population[0]);
+            Algorithm.Population[0] = new();
+            Individual Individual = new(Algorithm.Population[0]);
+            Algorithm.Next(1000, 0);
 
-                NextPermutation();
-                algorithm.Next();
-            }
-
-            
+            Console.WriteLine(Algorithm.BestIndividual);
 
         }
 

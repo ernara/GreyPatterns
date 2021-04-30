@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Algorithms
 {
@@ -11,7 +8,7 @@ namespace Algorithms
         private static readonly Random Random = new();
         private static int TotalSum;
 
-        public static Func<int, Individual> ChooseChooserType(RandomChooseType randomChooseType)
+        public static Func<Individual> ChooseChooserType(RandomChooseType randomChooseType)
         {
             return randomChooseType switch
             {
@@ -23,24 +20,18 @@ namespace Algorithms
             };
         }
 
-        private static Individual RandomChoose(int index)
+        private static Individual RandomChoose()
         {
-            return Algorithm.Population[RandomHelper.ReturnRandomNumber(index, Algorithm.PopulationSize)];
+            return Algorithm.Population[Random.Next(Algorithm.PopulationSize)];
         }
 
-        private static Individual FormulaChoose(int index)
+        private static Individual FormulaChoose()
         {
-            //int firstRandom = RandomHelper.ReturnRandomNumber(index,Algorithm.PopulationSize);
-            //int secondRandom = RandomHelper.ReturnRandomNumber(index,Algorithm.PopulationSize);
-
-            //return Algorithm.Population[Math.Max(firstRandom, secondRandom)-Math.Min(firstRandom, secondRandom)];
-
             //TODO: padaryti į formulę
-            return Algorithm.Population[RandomHelper.ReturnRandomNumber(index, Algorithm.PopulationSize)];
-
+            return Algorithm.Population[Random.Next(Algorithm.PopulationSize)];
         }
 
-        private static Individual RankBasedChoose(int index)
+        private static Individual RankBasedChoose()
         {
             List<int> FitnessList = new();
             TotalSum = 0;
@@ -52,30 +43,22 @@ namespace Algorithms
             }
 
             int randomValue;
+           
+            randomValue = Random.Next(TotalSum);
 
-            while (true)
+            for (int i = 0; i < FitnessList.Count; i++)
             {
-                randomValue = Random.Next(TotalSum);
-
-                for (int i = 0; i < FitnessList.Count; i++)
+                if (FitnessList[i] > randomValue)
                 {
-                    if (FitnessList[i] > randomValue)
-                    {
-                        randomValue = i;
-                        break;
-                    }
+                    randomValue = i;
+                    break;
                 }
-
-                if (randomValue!=index)
-                {
-                    return Algorithm.Population[randomValue];
-                }
-
             }
-
+               
+            return Algorithm.Population[randomValue];
         }
 
-        private static Individual FitnessBasedChoose(int index)
+        private static Individual FitnessBasedChoose()
         {
             List<int> FitnessList = new();
             TotalSum = 0;
@@ -88,26 +71,20 @@ namespace Algorithms
 
             int randomValue;
 
-            while (true)
+            
+            randomValue = Random.Next(TotalSum);
+
+            for (int i = 0; i < FitnessList.Count; i++)
             {
-                randomValue = Random.Next(TotalSum);
-
-                for (int i = 0; i < FitnessList.Count; i++)
+                if (FitnessList[i] > randomValue)  
                 {
-                    if (FitnessList[i] > randomValue)  
-                    {
-                        randomValue = i;
-                        break;
-                    }
+                    randomValue = i;
+                    break;
                 }
-
-                if (randomValue != index)
-                {
-                    return Algorithm.Population[randomValue];
-                }
-
             }
-
+                
+            return Algorithm.Population[randomValue];
+                
         }
 
     }

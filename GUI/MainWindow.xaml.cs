@@ -21,6 +21,7 @@ namespace GUI
     public partial class MainWindow : Window
     {
         public bool DontStop;
+        public bool BiggerClicked = false;
         public MainWindow()
         {
             InitializeComponent();
@@ -70,22 +71,22 @@ namespace GUI
             {
                 case (AlgorithmType.Strait):
                     Algorithm = new Strait(Convert.ToInt32(N_Text.Text),
-                        Convert.ToInt32(M_Text.Text), Convert.ToInt32(PopulationSize_Text.Text));
+                        Convert.ToInt32(M_Text.Text));
                     break;
                 case (AlgorithmType.Custom):
-                    Algorithm = new(Convert.ToInt32(N_Text.Text),
-                        Convert.ToInt32(M_Text.Text), Convert.ToInt32(PopulationSize_Text.Text),
-                        new MutateFlags(Mutate0.IsChecked, Mutate1.IsChecked, Mutate2.IsChecked, Mutate3.IsChecked, PMutate.IsChecked),
-                        new LocalSearchFlags(LocalSearch0.IsChecked, LocalSearch1.IsChecked, LocalSearch2.IsChecked, LocalSearch3.IsChecked, PLocalSearch.IsChecked),
-                        Convert.ToInt32(OldPopulationSize_Text.Text), Convert.ToInt32(CrossPopulationSize_Text.Text),
-                        Convert.ToInt32(NewPopulationSize_Text.Text), Convert.ToInt32(MutateChance_Text.Text),
-                        (LocalSearchType)ALocalSearchType.SelectedIndex, (IndividualType)ANewIndividualType.SelectedIndex,
-                        (MirrorType)AMirrorType.SelectedIndex, (RandomChooseType)AIndividualChooserType.SelectedIndex,
-                        (CrossoverType)ACrossoverType.SelectedIndex, (MutateType)AMutateType.SelectedIndex);
+                    Algorithm = new(Convert.ToInt32(N_Text.Text), Convert.ToInt32(M_Text.Text), Convert.ToInt32(PopulationSize_Text.Text),
+                        Convert.ToInt32(OldPopulationSize_Text.Text), Convert.ToInt32(CrossPopulationSize_Text.Text), Convert.ToInt32(NewPopulationSize_Text.Text),
+                        (IndividualType)ANewIndividualType.SelectedIndex, (CrossoverType)ACrossoverType.SelectedIndex, (RandomChooseType)AIndividualChooserType.SelectedIndex,
+                        (MutateType)AMutateType.SelectedIndex, (LocalSearchType)ALocalSearchType.SelectedIndex, (MirrorType)AMirrorType.SelectedIndex, 100, 100,
+                        new MutateFlags((bool)Mutate0.IsChecked, (bool)Mutate1.IsChecked, (bool)Mutate2.IsChecked, (bool)Mutate3.IsChecked, (bool)PMutate.IsChecked),
+                        new LocalSearchFlags((bool)LocalSearch0.IsChecked, (bool)LocalSearch1.IsChecked, (bool)LocalSearch2.IsChecked, (bool)LocalSearch3.IsChecked,
+                        (bool)PLocalSearch.IsChecked));
                     break;
                 default:
                     throw new Exception("Wrong value");
             }
+
+            
 
 
             Bigger.IsEnabled = true;
@@ -101,6 +102,7 @@ namespace GUI
 
         private async Task Do()
         {
+            Mute();
             List<double> dataX = new();
             List<double> dataY = new();
             List<double> dataX2 = new();
@@ -132,6 +134,8 @@ namespace GUI
                 stopwatchFPS.Restart();
             }
 
+            Unmute();
+
             stopwatch.Stop();
 
             Chart.Plot.AddScatter(dataX.ToArray(), dataY.ToArray());
@@ -140,17 +144,23 @@ namespace GUI
 
         private async void NextAlgorithm(object sender, RoutedEventArgs e)
         {
+            if (BiggerClicked==true)
+            {
+                CreateBoard();
+                BiggerClicked = false;
+            }
             await Do();
         }
 
-        private async void StopAlgorithm(object sender, RoutedEventArgs e)
+        private void StopAlgorithm(object sender, RoutedEventArgs e)
         {
             DontStop = false;
         }
 
-        private async void BiggerAlgorithm(object sender, RoutedEventArgs e)
+        private void BiggerAlgorithm(object sender, RoutedEventArgs e)
         {
             CreateBoardBigger();
+            BiggerClicked = true;
         }
 
 
@@ -167,12 +177,28 @@ namespace GUI
 
         private void Board_Loaded(object sender, RoutedEventArgs e)
         {
-            Algorithm Algorithm = new(Convert.ToInt32(N_Text.Text), Convert.ToInt32(M_Text.Text), 1);
+            Algorithm Algorithm = new(Convert.ToInt32(N_Text.Text), Convert.ToInt32(M_Text.Text));
             CreateCanvas();
         }
 
         private void Board_Loaded2(object sender, RoutedEventArgs e)
         {
+        }
+
+        private void Mute()
+        {
+            New.IsEnabled = false;
+            Next.IsEnabled = false;
+            Stop.IsEnabled = true;
+            Bigger.IsEnabled = false;
+        }
+
+        private void Unmute()
+        {
+            New.IsEnabled = true;
+            Next.IsEnabled = true;
+            Stop.IsEnabled = false;
+            Bigger.IsEnabled = true;
         }
 
         private void PopulationSize_Text_TextChanged(object sender, TextChangedEventArgs e)
@@ -201,6 +227,17 @@ namespace GUI
                 OptionalParameters.IsEnabled = false;
                 PopulationSizeIsOneParameters.IsEnabled = false;
             }
+        }
+
+        private void PopulationSize_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (OldPopulationSize!=null)
+            {
+                OldPopulationSize.Value = (int)PopulationSize.Value / 10;
+                NewPopulationSize.Value = (int)PopulationSize.Value / 10;
+                CrossPopulationSize.Value = PopulationSize.Value - OldPopulationSize.Value - NewPopulationSize.Value;
+            }
+           
         }
     }
 }

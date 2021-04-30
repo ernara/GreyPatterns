@@ -5,32 +5,8 @@ using System;
 namespace UnitTests
 {
     [TestClass]
-    public class IndividualLocalSearcherTest
+    public class IndividualLocalSearcherTest : ABaseClassTest
     {
-        int N1;
-        int N2;
-        int M;
-        int PopulationSize;
-        Algorithm Algorithm;
-        public Individual Individual;
-
-        [TestCleanup]
-        public void TestCleanup()
-        {
-        }
-
-        [TestInitialize]
-        public void TestInitialize()
-        {
-            N1 = 32;
-            N2 = 32;
-            M = 16;
-            PopulationSize = 1;
-
-            Algorithm = new Algorithm(N1, N2, M, PopulationSize);
-            Individual = new(Algorithm.BestIndividual);
-
-        }
 
         [TestMethod]
         public void TestPlaceboLocalSearch()

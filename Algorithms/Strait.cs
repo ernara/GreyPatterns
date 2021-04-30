@@ -1,26 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Algorithms
 {
     public class Strait : Algorithm
     {
-        public Strait(int n, int m, int populationSize, int oldPopulationSize = 10, int crossoverPopulationSize = 80, int newPopulationSize = 10, int mutateChance = 100, LocalSearchType localSearchType = LocalSearchType.Fast, IndividualType individualType = IndividualType.Random, MirrorType mirrorType = MirrorType.Best, RandomChooseType randomChooseType = RandomChooseType.Random, CrossoverType crossoverType = CrossoverType.Random, MutateType mutateType = MutateType.Random) : base(n, m, populationSize, oldPopulationSize, crossoverPopulationSize, newPopulationSize, mutateChance, localSearchType, individualType, mirrorType, randomChooseType, crossoverType, mutateType)
+        public Strait(int n, int m) : base(n, m)
         {
-            Population[0].Genes.Sort();
-            Population[0].CalculateFitness();
-            BestIndividual = new Individual(Population[0]);
+           
         }
 
-        public override void Do()
+        protected override void Do()
         {
             NextCombination();
         }
 
-        public static void NextCombination()
+        private static void NextCombination()
         {
             for (int i = Individual.M-1; i >= 0; i--)
             {
@@ -38,19 +34,5 @@ namespace Algorithms
             Population[0].Genes = Population[0].Genes.Union(Enumerable.Range(0, Individual.N)).Distinct().ToList();
             Population[0].CalculateFitness();
         }
-
-        //for (int i = Genes.Count-1;i>=0;i--)
-        //    {
-        //        if (Genes[i]+M-i<N)
-        //        {
-        //            Genes[i]++;
-        //            for (int j = i+1; j<Genes.Count; j++)
-        //            {
-        //                Genes[j] = Genes[j - 1]+1;
-        //            }
-        //            break;
-        //        }
-
-        //    }
     }
 }

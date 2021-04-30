@@ -7,32 +7,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace UnitTests
 {
     [TestClass]
-    public class IndividualFitnessCalculatorTest
+    public class IndividualFitnessCalculatorTest : ABaseClassTest
     {
-        int N1;
-        int N2;
-        int M;
-        int PopulationSize;
-        public Algorithm Algorithm;
-        Individual Individual;
-
-        [TestCleanup]
-        public void TestCleanup()
-        {
-
-        }
-
-        [TestInitialize]
-        public void TestInitialize()
-        {
-            N1 = 16;
-            N2 = 16;
-            M = 32;
-            PopulationSize = 1;
-
-            Algorithm = new Algorithm(N1, N2, M, PopulationSize);
-            Individual = new();
-        }
 
         [TestMethod]
         public void TestAllCalculateFitness()

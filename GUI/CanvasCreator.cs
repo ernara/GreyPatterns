@@ -24,9 +24,12 @@ namespace GUI
 		{
 			CreateBoard();
 			CreateBoard2();
+			OldPopulationSize.Value = (int)PopulationSize.Value / 10;
+			NewPopulationSize.Value = (int)PopulationSize.Value / 10;
+			CrossPopulationSize.Value = PopulationSize.Value - OldPopulationSize.Value - NewPopulationSize.Value;
 		}
 
-		private void CreateBoard()
+		public void CreateBoard()
         {
 			CurrentMatrix = new Rectangle[Individual.N2, Individual.N2];
 

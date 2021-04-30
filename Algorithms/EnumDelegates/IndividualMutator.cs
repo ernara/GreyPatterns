@@ -26,6 +26,7 @@ namespace Algorithms
                 {
                     throw new ArgumentException("Wrong individual.Genes.Count");
                 }
+                individual.CalculateFitness();
             }
 
         }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Algorithms
 {
@@ -13,55 +12,99 @@ namespace Algorithms
         public static int CrossoverPopulationSize { get; private set; }
         public static int NewPopulationSize { get; private set; }
         public static int MutateChance { get; private set; }
+        public static int LocalSearchChance { get; private set; }
 
         public static List<Individual> Population { get; private set; }
-        public static Individual BestIndividual;
+        public static Individual BestIndividual { get; protected set; }
 
-        private Func<int, Individual> ChooseRandomIndividual;
-
-        public Algorithm(int n, int m, int populationSize,
-            MutateFlags mutateFlags,
-            LocalSearchFlags localSearchFlags,
-            int oldPopulationSize = 10, int crossoverPopulationSize = 80, int newPopulationSize = 10, int mutateChance = 100,
-
-            LocalSearchType localSearchType = LocalSearchType.Fast,
-            IndividualType individualType = IndividualType.Random,
-            MirrorType mirrorType = MirrorType.Best,
-            RandomChooseType randomChooseType = RandomChooseType.Random,
-            CrossoverType crossoverType = CrossoverType.Random,
-            MutateType mutateType = MutateType.Random
-            )
-        {
-            SetUpParameters(n, m, populationSize, oldPopulationSize, crossoverPopulationSize, newPopulationSize, mutateChance);
-            SetUpDelegates(localSearchType, individualType, mirrorType, randomChooseType, crossoverType, mutateType);
-
-            IndividualFitnessCalculator.SetUpParameters();
-            Population = PopulationCreator.CreatePopulation();
-            BestIndividual = new(Population[0]);
-
-        }
+        private Func<Individual> ChooseRandomIndividual;
 
         public Algorithm(int n, int m, int populationSize,
-            int oldPopulationSize = 10, int crossoverPopulationSize = 80, int newPopulationSize = 10, int mutateChance = 100,
-            LocalSearchType localSearchType = LocalSearchType.Fast,
-            IndividualType individualType = IndividualType.Random,
-            MirrorType mirrorType = MirrorType.Best,
-            RandomChooseType randomChooseType = RandomChooseType.Random,
-            CrossoverType crossoverType = CrossoverType.Random,
-            MutateType mutateType = MutateType.Random
-            )
+            int oldPopulationSize, int crossoverPopulationSize, int newPopulationSize, 
+            IndividualType individualType, CrossoverType crossoverType, RandomChooseType randomChooseType, 
+            MutateType mutateType, LocalSearchType localSearchType , MirrorType mirrorType,
+            int mutateChance, int localSearchChance, MutateFlags mutateFlags, LocalSearchFlags localSearchFlags)
         {
-            SetUpParameters(n, m, populationSize, oldPopulationSize, crossoverPopulationSize, newPopulationSize, mutateChance);
-            SetUpDelegates(localSearchType, individualType, mirrorType, randomChooseType, crossoverType, mutateType);
+            SetUpParameters(n, m, populationSize, oldPopulationSize, crossoverPopulationSize, newPopulationSize);
+            SetUpDelegates(individualType, crossoverType, randomChooseType, mutateType, localSearchType, mirrorType);
+            SetUpChancesAndFlags(mutateChance, localSearchChance, mutateFlags, localSearchFlags);
 
-            _ = new MutateFlags(false, false, false, false);
-            _ = new LocalSearchFlags(false, false, false, false);
-
-            IndividualFitnessCalculator.SetUpParameters();
             Population = PopulationCreator.CreatePopulation();
             BestIndividual = new(Population[0]);
-
         }
+
+        public Algorithm(int n, int m)
+        {
+            n = n < 4 ? 4 : n > 4096 ? 4096 : Math.Sqrt(n) * Math.Sqrt(n) == n ? n : (int)((Math.Sqrt(n) + 1) * (Math.Sqrt(n) + 1));
+            m = m < 1 ? 1 : m > n ? n : m;
+
+            Population = new List<Individual>();
+            Individual.SetUpParameters(n, m);
+
+            List<int> genes = Enumerable.Range(0, n).ToList();
+
+            Population.Add(new Individual(genes, genes.CalculateFitness()));
+            BestIndividual = new Individual(Population[0]);
+        }
+
+        private static void SetUpParameters(int n, int m, int populationSize,
+           int oldPopulationSize, int crossoverPopulationSize, int newPopulationSize)
+        {
+            CheckParameters(ref n, ref m, ref populationSize, ref oldPopulationSize, ref crossoverPopulationSize, ref newPopulationSize);
+            Individual.SetUpParameters(n, m);
+
+            PopulationSize = populationSize;
+            OldPopulationSize = oldPopulationSize;
+            CrossoverPopulationSize = crossoverPopulationSize;
+            NewPopulationSize = newPopulationSize;
+        }
+
+        private void SetUpDelegates(IndividualType individualType, CrossoverType crossoverType, RandomChooseType chooseType,
+            MutateType mutateType, LocalSearchType localSearchType, MirrorType mirrorType)
+        {
+            IndividualCreator.ChooseCreatorType(individualType);
+            IndividualCrossoverer.ChooseCrossoverType(crossoverType);
+            ChooseRandomIndividual = IndividualRandomChooser.ChooseChooserType(chooseType);
+
+            IndividualMutator.ChooseMutatorType(mutateType);
+            IndividualLocalSearcher.ChooseLocalSearcherType(localSearchType);
+            Mirror.ChooseMirrorType(mirrorType);
+        }
+
+        private static void CheckParameters(ref int n, ref int m, ref int populationSize,
+            ref int oldPopulationSize, ref int crossoverPopulationSize, ref int newPopulationSize)
+        {
+            n = n < 4 ? 4 : n > 4096 ? 4096 : (int)Math.Sqrt(n) * (int)Math.Sqrt(n) == n ? n : (int)((Math.Sqrt(n) + 1) * (int)(Math.Sqrt(n) + 1));
+            m = m < 1 ? 1 : m > n ? n : m;
+
+            populationSize = populationSize < 1 ? 1 : populationSize > 128 ? 128 : populationSize;
+
+            oldPopulationSize = oldPopulationSize < 0 ? 0 : oldPopulationSize > populationSize ? populationSize : oldPopulationSize;
+            newPopulationSize = newPopulationSize < 0 ? 0 : newPopulationSize > populationSize ? populationSize : newPopulationSize;
+            crossoverPopulationSize = crossoverPopulationSize < 0 ? 0 : crossoverPopulationSize > populationSize ? populationSize : crossoverPopulationSize;
+
+            if (PopulationSize == 1)
+            {
+                oldPopulationSize = 1;
+                newPopulationSize = 0;
+                crossoverPopulationSize = 0;
+            }
+            else if (oldPopulationSize + crossoverPopulationSize + newPopulationSize != populationSize)
+            {
+                oldPopulationSize = PopulationSize / 10;
+                newPopulationSize = PopulationSize / 10;
+                crossoverPopulationSize = PopulationSize - oldPopulationSize - newPopulationSize;
+            }
+        }
+
+        private static void SetUpChancesAndFlags(int mutateChance, int localSearchChance, MutateFlags mutateFlags, LocalSearchFlags localSearchFlags)
+        {
+            MutateChance = mutateChance;
+            LocalSearchChance = localSearchChance;
+            _ = new MutateFlags(MutateFlags.PopulationCreation, MutateFlags.Crossover, MutateFlags.SmallMirror, MutateFlags.BigMirror);
+            _ = new LocalSearchFlags(LocalSearchFlags.PopulationCreation, LocalSearchFlags.Crossover, LocalSearchFlags.SmallMirror, LocalSearchFlags.BigMirror);
+        }
+
 
         public void Next()
         {
@@ -80,7 +123,7 @@ namespace Algorithms
             }
         }
 
-        public static void SaveBestIndividual()
+        private static void SaveBestIndividual()
         {
             Population = Population.OrderBy(i => i.Fitness).ToList();
 
@@ -90,16 +133,18 @@ namespace Algorithms
             }
         }
 
-        public virtual void Do()
+        protected virtual void Do()
         {
             List<Individual> NewPopulation = new(Population.Take(OldPopulationSize));
 
             Individual child;
 
-            for (int i = OldPopulationSize; i < CrossoverPopulationSize + OldPopulationSize; ++i)
+            for (int i = 0; i < CrossoverPopulationSize; ++i)
             {
-                child = new(Population[i]);
-                child.Crossover(ChooseRandomIndividual(i));
+                child = ChooseRandomIndividual();
+
+                child.Crossover(ChooseRandomIndividual());
+
                 NewPopulation.Add(child);
             }
 
@@ -115,68 +160,7 @@ namespace Algorithms
                 Population[0].Mutate(MutateFlags.PopulationSizeIsOne);
                 Population[0].LocalSearch(LocalSearchFlags.PopulationSizeIsOne);
             }
-
         }
-
-
-
-        private static void SetUpParameters(int n, int m, int populationSize,
-            int oldPopulationSize, int crossoverPopulationSize, int newPopulationSize, int mutateChance)
-        {
-            CheckParameters(ref n, ref m, ref populationSize, ref oldPopulationSize, ref crossoverPopulationSize, ref newPopulationSize, ref mutateChance);
-            Individual.SetUpParameters(n, m);
-
-            PopulationSize = populationSize;
-
-            if (populationSize==1)
-            {
-                OldPopulationSize = 1;
-                crossoverPopulationSize = 0;
-                NewPopulationSize = 0;
-            }
-
-            else
-            {
-                OldPopulationSize = Convert.ToInt32((double)oldPopulationSize / 100 * populationSize);
-                CrossoverPopulationSize = Convert.ToInt32((double)crossoverPopulationSize / 100 * populationSize);
-                NewPopulationSize = Convert.ToInt32((double)newPopulationSize / 100 * populationSize);
-            }
-            
-            MutateChance = mutateChance;
-        }
-
-        private void SetUpDelegates(LocalSearchType localSearchType, IndividualType individualType, MirrorType mirrorType,
-            RandomChooseType chooseType, CrossoverType crossoverType, MutateType mutateType)
-        {
-            IndividualLocalSearcher.ChooseLocalSearcherType(localSearchType);
-            IndividualCreator.ChooseCreatorType(individualType);
-            Mirror.ChooseMirrorType(mirrorType);
-            ChooseRandomIndividual = IndividualRandomChooser.ChooseChooserType(chooseType);
-            IndividualCrossoverer.ChooseCrossoverType(crossoverType);
-            IndividualMutator.ChooseMutatorType(mutateType);
-        }
-
-        private static void CheckParameters(ref int n, ref int m, ref int populationSize,
-            ref int oldPopulationSize, ref int crossoverPopulationSize, ref int newPopulationSize, ref int mutateChance)
-        {
-            n = n<4 ? 4 : n>4096 ? 4096 : Math.Sqrt(n) * Math.Sqrt(n) == n ? n : (int)((Math.Sqrt(n) + 1) * (Math.Sqrt(n) + 1));
-
-            m = m < 1 ? 1 : m > n ? n : m;
-            populationSize = populationSize < 1 ? 1 : populationSize > 128 ? 128 : populationSize;
-
-            oldPopulationSize = oldPopulationSize < 0 ? 0 : oldPopulationSize > 100 ? 100 : oldPopulationSize;
-            newPopulationSize = newPopulationSize < 0 ? 0 : newPopulationSize > 100 ? 100 : newPopulationSize;
-            mutateChance = mutateChance < 0 ? 0 : mutateChance > 100 ? 100 : mutateChance;
-
-            if (oldPopulationSize + crossoverPopulationSize + newPopulationSize > 100)
-            {
-                oldPopulationSize = oldPopulationSize > 10 ? 10 : oldPopulationSize;
-                newPopulationSize = newPopulationSize > 10 ? 10 : newPopulationSize;
-            }
-
-            crossoverPopulationSize = 100 - oldPopulationSize - newPopulationSize;
-        }
-
 
         public override string ToString()
         {

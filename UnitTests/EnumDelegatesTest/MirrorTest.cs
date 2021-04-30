@@ -6,32 +6,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace UnitTests
 {
     [TestClass]
-    public class MirrorTest
+    public class MirrorTest : ABaseClassTest
     {
-        int N1;
-        int N2;
-        int M;
-        int PopulationSize;
-        Algorithm Algorithm;
-        Individual Individual;
-        //Individual Individual2;
-
-        [TestCleanup]
-        public void TestCleanup()
-        {
-
-        }
-
-        [TestInitialize]
-        public void TestInitialize()
-        {
-            N1 = 16;
-            N2 = 16;
-            M = 32;
-            PopulationSize = 1;
-            Algorithm = new(N1, N2, M, PopulationSize);
-            Individual = new(Algorithm.BestIndividual);
-        }
 
         [TestMethod]
         public void TestMirrors()
@@ -40,8 +16,7 @@ namespace UnitTests
             {
                 Mirror.ChooseMirrorType((MirrorType)mirrorType);
 
-                Assert.IsTrue(Mirror.SmallerN1 < N1);
-                Assert.IsTrue(Mirror.SmallerN2 < N2);
+                Assert.IsTrue(Mirror.SmallerN2 < Individual.N2);
                 Assert.IsTrue(Mirror.SmallerM < M);
 
                 Individual.MakeMirrored();
@@ -92,8 +67,8 @@ namespace UnitTests
             Coordinate coordinate = new(15, Individual.N2);
             while (coordinate.X >= Mirror.SmallerN2)
                 coordinate.X -= Mirror.SmallerN2;
-            while (coordinate.Y >= Mirror.SmallerN1)
-                coordinate.Y -= Mirror.SmallerN1;
+            while (coordinate.Y >= Mirror.SmallerN2)
+                coordinate.Y -= Mirror.SmallerN2;
 
             Assert.AreEqual(7,coordinate.X * Mirror.SmallerN2 + coordinate.Y);
 
@@ -101,31 +76,30 @@ namespace UnitTests
             coordinate = new(255, Individual.N2);
             while (coordinate.X >= Mirror.SmallerN2)
                 coordinate.X -= Mirror.SmallerN2;
-            while (coordinate.Y >= Mirror.SmallerN1)
-                coordinate.Y -= Mirror.SmallerN1;
+            while (coordinate.Y >= Mirror.SmallerN2)
+                coordinate.Y -= Mirror.SmallerN2;
 
             Assert.AreEqual(63, coordinate.X * Mirror.SmallerN2 + coordinate.Y);
 
         }
 
-        [TestMethod]
-        public void TestMirrorsThrewCreatePopulation()
-        {
-            foreach (var mirrorType in Enum.GetValues(typeof(MirrorType)))
-            {
-                Algorithm = new(N1, N2, M, PopulationSize,10,80,10,100,(LocalSearchType)0,IndividualType.Mirror);
+        //[TestMethod]
+        //public void TestMirrorsThrewCreatePopulation()
+        //{
+        //    foreach (var mirrorType in Enum.GetValues(typeof(MirrorType)))
+        //    {
+        //        Algorithm = new(N, M, PopulationSize,10,80,10,100,(LocalSearchType)0,IndividualType.Mirror);
 
-                Mirror.ChooseMirrorType((MirrorType)mirrorType);
+        //        Mirror.ChooseMirrorType((MirrorType)mirrorType);
 
-                Assert.IsTrue(Mirror.SmallerN1 < N1);
-                Assert.IsTrue(Mirror.SmallerN2 < N2);
-                Assert.IsTrue(Mirror.SmallerM < M);
+        //        Assert.IsTrue(Mirror.SmallerN2 < Individual.N2);
+        //        Assert.IsTrue(Mirror.SmallerM < M);
 
-                Individual.MakeMirrored();
+        //        Individual.MakeMirrored();
 
-                Assert.AreNotEqual(Individual.ToString(), Algorithm.BestIndividual.ToString());
-                Assert.IsTrue(Individual.Fitness > 0);
-            }
-        }
+        //        Assert.AreNotEqual(Individual.ToString(), Algorithm.BestIndividual.ToString());
+        //        Assert.IsTrue(Individual.Fitness > 0);
+        //    }
+        //}
     }
 }
