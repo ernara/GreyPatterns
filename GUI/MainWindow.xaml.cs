@@ -22,6 +22,8 @@ namespace GUI
     {
         public bool DontStop;
         public bool BiggerClicked = false;
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -49,10 +51,9 @@ namespace GUI
 
         }
 
-        public List<double> dataX;
-        public List<double> dataY;
-        public List<double> dataX2;
-        public List<double> dataY2;
+        public List<double> dataX = new();
+        public List<double> dataY = new();
+        public List<double> dataY2 = new();
 
         public Rectangle[,] CurrentMatrix;
 
@@ -66,7 +67,9 @@ namespace GUI
 
         private async void NewAlgorithm(object sender, RoutedEventArgs e)
         {
-
+            dataX = new();
+             dataY = new();
+            dataY2 = new();
             switch ((AlgorithmType)AAlgorithmType.SelectedIndex)
             {
                 case (AlgorithmType.Strait):
@@ -80,7 +83,7 @@ namespace GUI
                         (MutateType)AMutateType.SelectedIndex, (LocalSearchType)ALocalSearchType.SelectedIndex, (MirrorType)AMirrorType.SelectedIndex, 100, 100,
                         new MutateFlags((bool)Mutate0.IsChecked, (bool)Mutate1.IsChecked, (bool)Mutate2.IsChecked, (bool)Mutate3.IsChecked, (bool)PMutate.IsChecked),
                         new LocalSearchFlags((bool)LocalSearch0.IsChecked, (bool)LocalSearch1.IsChecked, (bool)LocalSearch2.IsChecked, (bool)LocalSearch3.IsChecked,
-                        (bool)PLocalSearch.IsChecked));
+                        (bool)true));
                     break;
                 default:
                     throw new Exception("Wrong value");
@@ -93,8 +96,7 @@ namespace GUI
 
             CreateCanvas();
             Paint();
-            
-            Chart.Plot.Clear();
+
             await Do();
            
 
@@ -103,16 +105,15 @@ namespace GUI
         private async Task Do()
         {
             Mute();
-            List<double> dataX = new();
-            List<double> dataY = new();
-            List<double> dataX2 = new();
-            List<double> dataY2 = new();
+
             DontStop = true;
             Stopwatch stopwatch = new();
             stopwatch.Start();
 
             Stopwatch stopwatchFPS = new();
             stopwatchFPS.Start();
+
+           
 
 
             for (int i = 0; (i < Convert.ToInt32(Iterations_Text.Text) || stopwatch.ElapsedMilliseconds < Convert.ToInt32(Time_Text.Text) * 1000) && DontStop; i++)
@@ -125,21 +126,28 @@ namespace GUI
 
                 Paint();
 
-                dataX.Add(i);
-                dataX2.Add(i);
+                dataX.Add(dataX.Count);
                 dataY.Add(Algorithm.BestIndividual.Fitness);
                 dataY2.Add(Algorithm.Population[0].Fitness);
 
                 await Task.Delay((int)Math.Max(1.0, 1000.0 / FPS.Value - stopwatchFPS.ElapsedMilliseconds));
                 stopwatchFPS.Restart();
             }
+            Chart.Reset();
+            Chart.Plot.Title("Fitness Results");
+            Chart.Plot.XLabel("Generation");
+            Chart.Plot.YLabel("Fitness");
+
+            string[] labels = { "Current", "Best",  };
+            Chart.Plot.Legend(true,ScottPlot.Alignment.UpperRight);
+            Chart.Plot.AddScatter(dataX.ToArray(), dataY.ToArray(),null,1,5,ScottPlot.MarkerShape.filledCircle,ScottPlot.LineStyle.Solid, "Best");
+            Chart.Plot.AddScatter(dataX.ToArray(), dataY2.ToArray(), null, 1, 5, ScottPlot.MarkerShape.filledCircle, ScottPlot.LineStyle.Solid, "Current");
 
             Unmute();
 
             stopwatch.Stop();
 
-            Chart.Plot.AddScatter(dataX.ToArray(), dataY.ToArray());
-            Chart.Plot.AddScatter(dataX2.ToArray(), dataY2.ToArray());
+            
         }
 
         private async void NextAlgorithm(object sender, RoutedEventArgs e)

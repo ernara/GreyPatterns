@@ -16,8 +16,8 @@ namespace Consolee
         static List<int> Genes;
         public static void Main()
         {
-            N = 10;
-            M = 5;
+            N = 256;
+            M = 16;
             int PopulationSize = 1;
             int OldPopulationSize = 1;
             int CrossoverPopulationSize = 0;
@@ -26,23 +26,32 @@ namespace Consolee
             CrossoverType CrossoverType = CrossoverType.Random;
             RandomChooseType RandomChooseType = RandomChooseType.Random;
             MutateType MutateType = MutateType.Random;
-            LocalSearchType LocalSearchType = LocalSearchType.Fast;
+            LocalSearchType LocalSearchType = LocalSearchType.NearMutateBest;
             MirrorType MirrorType = MirrorType.Small;
             int MutateChance = 100;
             int LocalSearchChance = 100;
             MutateFlags MutateFlags = new();
-            LocalSearchFlags LocalSearchFlags = new();
+            LocalSearchFlags LocalSearchFlags = new(false,false,false,false,true);
             Algorithm Algorithm = new Algorithm(N, M, PopulationSize, OldPopulationSize, CrossoverPopulationSize, NewPopulationSize,
                     IndividualType, CrossoverType, RandomChooseType, MutateType, LocalSearchType, MirrorType,
                     MutateChance, LocalSearchChance, MutateFlags, LocalSearchFlags);
 
 
-
             Algorithm.Population[0] = new();
             Individual Individual = new(Algorithm.Population[0]);
-            Algorithm.Next(1000, 0);
+            Console.WriteLine(LocalSearchFlags.PopulationSizeIsOne);
 
-            Console.WriteLine(Algorithm.BestIndividual);
+            Individual.LocalSearch(LocalSearchFlags.PopulationSizeIsOne);
+
+
+
+            for (int i = 0; i < 1000; i++)
+            {
+                Algorithm.Next();
+                Console.WriteLine(Algorithm.Population[0]);
+
+            }
+
 
         }
 

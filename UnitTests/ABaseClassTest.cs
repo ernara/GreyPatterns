@@ -28,7 +28,7 @@ namespace UnitTests
         [AssemblyInitialize]
         public static void AssemblyInit(TestContext context)
         {
-            N = 256;
+            N = 64;
             M = 8;
             PopulationSize = 1;
             OldPopulationSize = 1;
@@ -44,19 +44,17 @@ namespace UnitTests
             LocalSearchChance = 100;
             MutateFlags = new();
             LocalSearchFlags = new();
-            Algorithm = new Algorithm(N, M, PopulationSize, OldPopulationSize, CrossoverPopulationSize, NewPopulationSize,
-                    IndividualType, CrossoverType, RandomChooseType, MutateType, LocalSearchType, MirrorType,
-                    MutateChance, LocalSearchChance, MutateFlags, LocalSearchFlags);
+            
         }
 
         [TestInitialize]
         public void Initialize()
         {
+            Algorithm = new Algorithm(N, M, PopulationSize, OldPopulationSize, CrossoverPopulationSize, NewPopulationSize,
+                    IndividualType, CrossoverType, RandomChooseType, MutateType, LocalSearchType, MirrorType,
+                    MutateChance, LocalSearchChance, MutateFlags, LocalSearchFlags);
             Algorithm.Population[0] = new();
             Individual = new(Algorithm.Population[0]);
         }
-
-        
-
     }
 }

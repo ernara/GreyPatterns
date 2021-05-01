@@ -10,9 +10,9 @@ namespace Algorithms
         private readonly static Random Random = new();
         private static Action<Individual, int, int, int> mutator = new(RandomMutate);
 
-        public static void Mutate(this Individual individual, bool? on)
+        public static void Mutate(this Individual individual, bool on)
         {
-            if ((bool)on)
+            if (on)
             {
                 if (individual.Genes.Count == Individual.N)
                 {

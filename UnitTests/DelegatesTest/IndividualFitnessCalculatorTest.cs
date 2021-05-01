@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Algorithms;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -9,48 +8,56 @@ namespace UnitTests
     [TestClass]
     public class IndividualFitnessCalculatorTest : ABaseClassTest
     {
-
         [TestMethod]
-        public void TestAllCalculateFitness()
+        public void TestSetUpParameters()
         {
-            IndividualFitnessCalculator.CalculateFitness(Individual.Genes);
-            int CalculatedFitnessByGenes = Individual.Fitness;
-            IndividualFitnessCalculator.CalculateFitness(Individual);
-            int CalculatedFitnessByIndividual = Individual.Fitness;
-
-            int CalculatedFitnessByReturn = IndividualFitnessCalculator.ReturnCalculatedFitness(Individual);
-
-            Assert.AreEqual(CalculatedFitnessByGenes,CalculatedFitnessByIndividual);
-            Assert.AreEqual(CalculatedFitnessByIndividual, CalculatedFitnessByReturn);
+            IndividualFitnessCalculator.SetUpParameters();
         }
 
         [TestMethod]
+        
         public void TestCalculateFitness()
         {
-            Individual Individual2 = new(Individual.Genes,0);
-            IndividualFitnessCalculator.CalculateFitness(Individual2);
-            Assert.IsTrue(Individual.Fitness>0);
-            Assert.AreEqual(Individual.Fitness, Individual2.Fitness);
+            List <int> Genes = new List<int>(Enumerable.Range(0, N));
+            Assert.IsTrue(Genes.CalculateFitness() > 0);
+
+            Genes = new List<int>(Enumerable.Range(0, Mirror.SmallerN));
+            Assert.IsTrue(Genes.CalculateFitness() > 0);
+
+            //Genes = new List<int>(Enumerable.Range(0,1));
+            //Assert.ThrowsException(   (List<int>) => Genes.CalculateFitness()    );
+            //Assert.ThrowsException(   (List<int>)=>  IndividualFitnessCalculator.CalculateFitness(Genes)      );
+            
+            
         }
 
-        [TestMethod]
-        public void TestCalculateFitnessMirror()
-        {
-            foreach (var mirrorType in Enum.GetValues(typeof(MirrorType)))
-            {
-                Mirror.ChooseMirrorType((MirrorType)mirrorType);
-                Individual.Genes = Enumerable.Range(0, Mirror.SmallerN).ToList();
-                IndividualFitnessCalculator.CalculateFitness(Individual);
-                Assert.IsTrue(Individual.Fitness > 0);
-            }
-        }
+        //[TestMethod]
+        //public int CalculateFitness(this List<int> genes, int m, DistancesMatrix distancesMatrix)
+        //{
+        //    int fitness = 0;
 
-        [TestMethod]
-        public void TestCalculateFitnessException()
-        {
-            Individual.Genes.RemoveAt(0);
-            Assert.ThrowsException<ArgumentException>(() => IndividualFitnessCalculator.CalculateFitness(Individual));
-        }
+        //    for (int i = 0; i < m - 1; ++i)
+        //    {
+        //        for (int j = i + 1; j < m; j++)
+        //        {
+        //            fitness += distancesMatrix[genes[i], genes[j]];
+        //        }
+        //    }
+
+        //    return fitness * 2;
+        //}
+
+        //[TestMethod]
+        //public void CalculateFitness(this Individual individual)
+        //{
+        //    individual.Fitness = individual.ReturnCalculatedFitness();
+        //}
+
+        //public int ReturnCalculatedFitness(this Individual individual)
+        //{
+        //    return individual.Genes.CalculateFitness();
+        //}
+
 
     }
 }

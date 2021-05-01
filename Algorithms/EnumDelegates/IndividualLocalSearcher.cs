@@ -13,9 +13,10 @@ namespace Algorithms
         private static Action<Individual, int, int, int> searcher = new(FastLocalSearch);
 
 
-        public static void LocalSearch(this Individual individual, bool? on)
+        public static void LocalSearch(this Individual individual, bool on)
         {
-            if ((bool)on)
+
+            if (on)
             {
                 if (individual.Genes.Count == Individual.N)
                 {
@@ -118,7 +119,6 @@ namespace Algorithms
                     localFitness.FindBestIndividual(individual, currentIndividual, mutuableVariations, i);
                 }
             }
-
             individual.Genes = currentIndividual.Genes;
         }
 

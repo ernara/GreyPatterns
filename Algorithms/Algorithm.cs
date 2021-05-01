@@ -101,8 +101,8 @@ namespace Algorithms
         {
             MutateChance = mutateChance;
             LocalSearchChance = localSearchChance;
-            _ = new MutateFlags(MutateFlags.PopulationCreation, MutateFlags.Crossover, MutateFlags.SmallMirror, MutateFlags.BigMirror);
-            _ = new LocalSearchFlags(LocalSearchFlags.PopulationCreation, LocalSearchFlags.Crossover, LocalSearchFlags.SmallMirror, LocalSearchFlags.BigMirror);
+            //_ = new MutateFlags(MutateFlags.PopulationCreation, MutateFlags.Crossover, MutateFlags.SmallMirror, MutateFlags.BigMirror);
+            //_ = new LocalSearchFlags(LocalSearchFlags.PopulationCreation, LocalSearchFlags.Crossover, LocalSearchFlags.SmallMirror, LocalSearchFlags.BigMirror);
         }
 
 
@@ -139,9 +139,9 @@ namespace Algorithms
 
             Individual child;
 
-            for (int i = 0; i < CrossoverPopulationSize; ++i)
+            for (int i = OldPopulationSize; i < OldPopulationSize+CrossoverPopulationSize; ++i)
             {
-                child = ChooseRandomIndividual();
+                child = new Individual(Population[i]);
 
                 child.Crossover(ChooseRandomIndividual());
 

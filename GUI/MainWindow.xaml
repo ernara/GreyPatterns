@@ -46,8 +46,8 @@
         </Grid>
 
         <!--Graph-->
-        <Grid Grid.Row="3" Grid.Column="1" >
-            <WpfPlot Name="Chart" Width="300" Height="300" />
+        <Grid Grid.Row="3" Grid.Column="1"  HorizontalAlignment="Left"  >
+            <WpfPlot Name="Chart" Width="1064" Height="300" />
         </Grid>
 
 
