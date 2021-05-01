@@ -20,7 +20,7 @@ namespace GUI
 {
     public partial class MainWindow : Window
     {
-        public void Paint()
+        public void PaintBoards()
         {
             PaintBoard();
             PaintBoard2();

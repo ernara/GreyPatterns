@@ -16,7 +16,7 @@ namespace Algorithms
         public static void LocalSearch(this Individual individual, bool on)
         {
 
-            if (on)
+            if (on && Random.Next(100)<Algorithm.LocalSearchChance)
             {
                 if (individual.Genes.Count == Individual.N)
                 {
@@ -29,7 +29,8 @@ namespace Algorithms
                 }
                 else
                 {
-                    throw new ArgumentException("Wrong individual.Genes.Count");
+                    throw new ArgumentException(Exceptions.WrongGenesCountMessage);
+                    
                 }
                 individual.CalculateFitness();
             }
@@ -41,6 +42,7 @@ namespace Algorithms
             {
                 LocalSearchType.Fast => new(FastLocalSearch),
                 LocalSearchType.Best => new(BestLocalSearch),
+                LocalSearchType.Near => new (NearLocalSearch),
                 LocalSearchType.NearBest => new (NearBestLocalSearch),
                 LocalSearchType.NearMutateBest => new (NearMutateBestLocalSearch),
                 _ => throw new ArgumentException("Wrong LocalSearchType"),
@@ -79,7 +81,7 @@ namespace Algorithms
             }
         }
 
-        private static void NearBestLocalSearch(Individual individual, int n, int n2, int m)
+        private static void NearLocalSearch(Individual individual, int n, int n2, int m)
         {
             Individual currentIndividual = new(individual);
             int localFitness = individual.Fitness;
@@ -95,6 +97,18 @@ namespace Algorithms
             }
 
             individual.Genes = currentIndividual.Genes;
+        }
+
+        private static void NearBestLocalSearch(Individual individual, int n, int n2, int m)
+        {
+            int currentFitness = individual.Fitness;
+            while (true)
+            {
+                NearLocalSearch(individual, n, n2, m);
+                if (currentFitness > individual.Fitness)
+                    currentFitness = individual.Fitness;
+                else break;
+            }
         }
 
         private static void NearMutateBestLocalSearch(Individual individual, int n, int n2, int m)

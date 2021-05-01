@@ -20,6 +20,15 @@ namespace GUI
 {
 	public partial class MainWindow : Window
 	{
+		public Rectangle[,] CurrentMatrix;
+
+		public Rectangle[,] BestMatrix;
+
+		private const double spacing = 1.0;
+
+		private readonly Brush ON = Brushes.Black;
+		private readonly Brush OFF = Brushes.LightGray;
+
 		public void CreateCanvas()
 		{
 			CreateBoard();
@@ -87,7 +96,6 @@ namespace GUI
 			}
 		}
 
-		//Todo: bigeer board
 		private void CreateBoardBigger()
         {
 			int size = CurrentMatrix.GetLength(0) * 2;
@@ -120,6 +128,23 @@ namespace GUI
 
 			PaintBiggerBoard();
 
+		}
+
+		private void Board_Loaded(object sender, RoutedEventArgs e)
+		{
+			Algorithm Algorithm = new(Convert.ToInt32(N_Text.Text), Convert.ToInt32(M_Text.Text));
+			CreateCanvas();
+
+
+            
+
+
+			
+		}
+
+		private void Board_Loaded2(object sender, RoutedEventArgs e)
+		{
+			
 		}
 
 	}

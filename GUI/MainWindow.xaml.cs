@@ -20,9 +20,12 @@ namespace GUI
 {
     public partial class MainWindow : Window
     {
+        public Algorithm Algorithm;
+
         public bool DontStop;
         public bool BiggerClicked = false;
 
+       
 
         public MainWindow()
         {
@@ -51,25 +54,11 @@ namespace GUI
 
         }
 
-        public List<double> dataX = new();
-        public List<double> dataY = new();
-        public List<double> dataY2 = new();
 
-        public Rectangle[,] CurrentMatrix;
-
-        public Rectangle[,] BestMatrix;
-
-        private const double spacing = 1.0;
-
-        private readonly Brush ON = Brushes.Black;
-        private readonly Brush OFF = Brushes.LightGray;
-        public Algorithm Algorithm;
+        
 
         private async void NewAlgorithm(object sender, RoutedEventArgs e)
         {
-            dataX = new();
-             dataY = new();
-            dataY2 = new();
             switch ((AlgorithmType)AAlgorithmType.SelectedIndex)
             {
                 case (AlgorithmType.Strait):
@@ -80,22 +69,19 @@ namespace GUI
                     Algorithm = new(Convert.ToInt32(N_Text.Text), Convert.ToInt32(M_Text.Text), Convert.ToInt32(PopulationSize_Text.Text),
                         Convert.ToInt32(OldPopulationSize_Text.Text), Convert.ToInt32(CrossPopulationSize_Text.Text), Convert.ToInt32(NewPopulationSize_Text.Text),
                         (IndividualType)ANewIndividualType.SelectedIndex, (CrossoverType)ACrossoverType.SelectedIndex, (RandomChooseType)AIndividualChooserType.SelectedIndex,
-                        (MutateType)AMutateType.SelectedIndex, (LocalSearchType)ALocalSearchType.SelectedIndex, (MirrorType)AMirrorType.SelectedIndex, 100, 100,
-                        new MutateFlags((bool)Mutate0.IsChecked, (bool)Mutate1.IsChecked, (bool)Mutate2.IsChecked, (bool)Mutate3.IsChecked, (bool)PMutate.IsChecked),
-                        new LocalSearchFlags((bool)LocalSearch0.IsChecked, (bool)LocalSearch1.IsChecked, (bool)LocalSearch2.IsChecked, (bool)LocalSearch3.IsChecked,
-                        (bool)true));
+                        (MutateType)AMutateType.SelectedIndex, (LocalSearchType)ALocalSearchType.SelectedIndex, (MirrorType)AMirrorType.SelectedIndex, 
+                        Convert.ToInt32(MutateChance_Text.Text), Convert.ToInt32(LocalSearchChance_Text.Text), new MutateFlags((bool)Mutate0.IsChecked, 
+                        (bool)Mutate1.IsChecked, (bool)Mutate2.IsChecked, (bool)Mutate3.IsChecked, (bool)PMutate.IsChecked), new LocalSearchFlags((bool)LocalSearch0.IsChecked,
+                        (bool)LocalSearch1.IsChecked, (bool)LocalSearch2.IsChecked, (bool)LocalSearch3.IsChecked, (bool)PLocalSearch.IsChecked));
                     break;
                 default:
                     throw new Exception("Wrong value");
             }
 
-            
-
-
             Bigger.IsEnabled = true;
 
             CreateCanvas();
-            Paint();
+            CreateChart();
 
             await Do();
            
@@ -113,9 +99,6 @@ namespace GUI
             Stopwatch stopwatchFPS = new();
             stopwatchFPS.Start();
 
-           
-
-
             for (int i = 0; (i < Convert.ToInt32(Iterations_Text.Text) || stopwatch.ElapsedMilliseconds < Convert.ToInt32(Time_Text.Text) * 1000) && DontStop; i++)
             {
                 if ((bool)PMirror.IsChecked)
@@ -124,25 +107,13 @@ namespace GUI
                 }
                 Algorithm.Next();
 
-                Paint();
-
-                dataX.Add(dataX.Count);
-                dataY.Add(Algorithm.BestIndividual.Fitness);
-                dataY2.Add(Algorithm.Population[0].Fitness);
+                PaintBoards();
+                PaintSignals();
 
                 await Task.Delay((int)Math.Max(1.0, 1000.0 / FPS.Value - stopwatchFPS.ElapsedMilliseconds));
                 stopwatchFPS.Restart();
             }
-            Chart.Reset();
-            Chart.Plot.Title("Fitness Results");
-            Chart.Plot.XLabel("Generation");
-            Chart.Plot.YLabel("Fitness");
-
-            string[] labels = { "Current", "Best",  };
-            Chart.Plot.Legend(true,ScottPlot.Alignment.UpperRight);
-            Chart.Plot.AddScatter(dataX.ToArray(), dataY.ToArray(),null,1,5,ScottPlot.MarkerShape.filledCircle,ScottPlot.LineStyle.Solid, "Best");
-            Chart.Plot.AddScatter(dataX.ToArray(), dataY2.ToArray(), null, 1, 5, ScottPlot.MarkerShape.filledCircle, ScottPlot.LineStyle.Solid, "Current");
-
+           
             Unmute();
 
             stopwatch.Stop();
@@ -183,16 +154,6 @@ namespace GUI
         }
 
 
-        private void Board_Loaded(object sender, RoutedEventArgs e)
-        {
-            Algorithm Algorithm = new(Convert.ToInt32(N_Text.Text), Convert.ToInt32(M_Text.Text));
-            CreateCanvas();
-        }
-
-        private void Board_Loaded2(object sender, RoutedEventArgs e)
-        {
-        }
-
         private void Mute()
         {
             New.IsEnabled = false;
@@ -209,31 +170,16 @@ namespace GUI
             Bigger.IsEnabled = true;
         }
 
-        private void PopulationSize_Text_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            //if (Convert.ToInt32(PopulationSize_Text.Text) > 1)
-            //{
-            //    Board.Visibility = Visibility.Hidden;
-            //}
-            //else if (Convert.ToInt32(PopulationSize_Text.Text) == 1)
-            //{
-            //    Board.Visibility = Visibility.Visible;
-            //}
-        }
 
         private void AAlgorithmType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if ((AlgorithmType)AAlgorithmType.SelectedIndex == AlgorithmType.Custom)
             {
-                Flags.IsEnabled = true;
-                OptionalParameters.IsEnabled = true;
-                PopulationSizeIsOneParameters.IsEnabled = true;
+                Enable();
             }
             else
             {
-                Flags.IsEnabled = false;
-                OptionalParameters.IsEnabled = false;
-                PopulationSizeIsOneParameters.IsEnabled = false;
+                Disable();
             }
         }
 
@@ -241,11 +187,47 @@ namespace GUI
         {
             if (OldPopulationSize!=null)
             {
-                OldPopulationSize.Value = (int)PopulationSize.Value / 10;
-                NewPopulationSize.Value = (int)PopulationSize.Value / 10;
-                CrossPopulationSize.Value = PopulationSize.Value - OldPopulationSize.Value - NewPopulationSize.Value;
+                if (PopulationSize.Value==1)
+                {
+                    OldPopulationSize.Value = 1;
+                    NewPopulationSize.Value = 0;
+                    CrossPopulationSize.Value = 0;
+                }
+                else
+                {
+                    OldPopulationSize.Value = (int)PopulationSize.Value / 10;
+                    NewPopulationSize.Value = (int)PopulationSize.Value / 10;
+                    CrossPopulationSize.Value = PopulationSize.Value - OldPopulationSize.Value - NewPopulationSize.Value;
+                }
+                
             }
            
+        }
+
+        private void Disable()
+        {
+            for (int i = 2; i < VisualTreeHelper.GetChildrenCount(Menuu); i++)
+            {
+                Menuu.Children[i].IsEnabled = false;
+            }
+
+
+            for (int i = 15; i < VisualTreeHelper.GetChildrenCount(MainParameters)-1; i++)
+            {
+                MainParameters.Children[i].IsEnabled = false;
+            }
+        }
+
+        private void Enable()
+        {
+            for (int i = 2; i < VisualTreeHelper.GetChildrenCount(Menuu); i++)
+            {
+                Menuu.Children[i].IsEnabled = true;
+            }
+            for (int i = 15; i < VisualTreeHelper.GetChildrenCount(MainParameters)-1; i++)
+            {
+                MainParameters.Children[i].IsEnabled = true;
+            }
         }
     }
 }

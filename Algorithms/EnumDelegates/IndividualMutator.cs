@@ -12,7 +12,7 @@ namespace Algorithms
 
         public static void Mutate(this Individual individual, bool on)
         {
-            if (on)
+            if (on && Random.Next(100) < Algorithm.MutateChance)
             {
                 if (individual.Genes.Count == Individual.N)
                 {
@@ -24,7 +24,7 @@ namespace Algorithms
                 }
                 else
                 {
-                    throw new ArgumentException("Wrong individual.Genes.Count");
+                    throw new ArgumentException(Exceptions.WrongGenesCountMessage);
                 }
                 individual.CalculateFitness();
             }

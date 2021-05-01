@@ -2,6 +2,7 @@
 using Algorithms;
 using System.Linq;
 using System.Collections.Generic;
+using System;
 
 namespace UnitTests
 {
@@ -19,9 +20,18 @@ namespace UnitTests
             Individual.LocalSearch(true);
             Assert.IsTrue(Individual.Fitness > 0);
 
-            //TODO: find how to do exceptions
-            //Individual = new Individual(Enumerable.Range(0, 1).ToList(), 0);
-            //Assert.ThrowsException(   (List<int>) => Individual.LocalSearch(true)   );
+            try
+            {
+                Individual = new Individual(Enumerable.Range(0, Individual.N * 2).ToList(), 0);
+                Individual.LocalSearch(true);
+            }
+
+            catch (ArgumentException e)
+            {
+                Assert.AreEqual(Exceptions.WrongGenesCountMessage, e.Message);
+            }
+
+
         }
     }
 }

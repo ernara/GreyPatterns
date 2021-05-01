@@ -16,6 +16,7 @@ namespace Consolee
         static List<int> Genes;
         public static void Main()
         {
+            Random Random = new Random();
             N = 256;
             M = 16;
             int PopulationSize = 1;
@@ -51,7 +52,6 @@ namespace Consolee
                 Console.WriteLine(Algorithm.Population[0]);
 
             }
-
 
         }
 
