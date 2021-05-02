@@ -32,18 +32,10 @@ namespace Consolee
             int MutateChance = 100;
             int LocalSearchChance = 100;
             MutateFlags MutateFlags = new();
-            LocalSearchFlags LocalSearchFlags = new(false,false,false,false,true);
+            LocalSearchFlags LocalSearchFlags = new(false, false, false, false, true);
             Algorithm Algorithm = new Algorithm(N, M, PopulationSize, OldPopulationSize, CrossoverPopulationSize, NewPopulationSize,
                     IndividualType, CrossoverType, RandomChooseType, MutateType, LocalSearchType, MirrorType,
                     MutateChance, LocalSearchChance, MutateFlags, LocalSearchFlags);
-
-
-            Algorithm.Population[0] = new();
-            Individual Individual = new(Algorithm.Population[0]);
-            Console.WriteLine(LocalSearchFlags.PopulationSizeIsOne);
-
-            Individual.LocalSearch(LocalSearchFlags.PopulationSizeIsOne);
-
 
 
             for (int i = 0; i < 1000; i++)
@@ -53,6 +45,7 @@ namespace Consolee
 
             }
 
+            
         }
 
         public static void NextPermutation()

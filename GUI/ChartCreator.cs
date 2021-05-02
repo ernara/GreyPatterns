@@ -19,7 +19,7 @@ namespace GUI
         
         public void CreateChart()
         {
-            Chart.Reset();
+            Chart.Plot.Clear();
 
             CurrentValues = new double[100_000];
             BestValues = new double[100_000];
@@ -35,17 +35,22 @@ namespace GUI
             string[] labels = { "Current", "Best", };
             Chart.Plot.Legend(true, ScottPlot.Alignment.UpperRight);
 
-            Chart.Height = 300;
-            Chart.Width = Board.ActualWidth + Board2.ActualWidth +100;
+            Chart.Height = 255;
+            Chart.Width = 1059;
+            PaintSignals();
+
         }
 
-        private void Chart_Loaded(object sender, RoutedEventArgs e)
-        {
-            Algorithm Algorithm = new(Convert.ToInt32(N_Text.Text), Convert.ToInt32(M_Text.Text));
-            CreateChart();
-        }
+        //Algorithm Algorithm = new Strait(256, 16);
+        //CreateChart();
+
+        //for (int i = 0; i < 10; i++)
+        //{
+        //    Algorithm.Next();
+        //    PaintSignals();
+        //}
 
     }
 
-    
+
 }

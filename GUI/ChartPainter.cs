@@ -25,7 +25,7 @@ namespace GUI
 
             double SmallestFitness = Chart.Plot.GetAxisLimits().YMin + Algorithm.Population[0].Fitness;
             if (Algorithm.BestIndividual.Fitness < SmallestFitness)
-                Chart.Plot.SetAxisLimits(yMin: Algorithm.BestIndividual.Fitness- Algorithm.Population[0].Fitness / 100);
+                Chart.Plot.SetAxisLimits(yMin: Algorithm.BestIndividual.Fitness- Algorithm.Population[0].Fitness / 10);
 
             double BiggestFitness = Chart.Plot.GetAxisLimits().YMax ;
             if (Algorithm.Population[0].Fitness > BiggestFitness )

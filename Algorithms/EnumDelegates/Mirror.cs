@@ -110,7 +110,6 @@ namespace Algorithms
                 for (int j = 0; j < Individual.N2 / SmallerN2; j++)
                 {
                     numbers.Add((coordinate.X + i * SmallerN2) * Individual.N2 + coordinate.Y + SmallerN2 * j); 
-                  
                 }
             }
             return numbers;

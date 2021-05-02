@@ -24,12 +24,13 @@ namespace GUI
 
         public bool DontStop;
         public bool BiggerClicked = false;
-
-       
+        public int N;
+        public int M;
 
         public MainWindow()
         {
             InitializeComponent();
+
 
             AAlgorithmType.ItemsSource = Enum.GetValues(typeof(AlgorithmType));
             AAlgorithmType.SelectedIndex = 0;
@@ -52,21 +53,29 @@ namespace GUI
             ALocalSearchType.ItemsSource = Enum.GetValues(typeof(LocalSearchType));
             ALocalSearchType.SelectedIndex = 0;
 
+            WhiteCellsBy.Items.Add("By Cells");
+            WhiteCellsBy.Items.Add("By Width");
+            WhiteCellsBy.SelectedIndex = 0;
+
+
+            BlackCellsBy.Items.Add("By Cells");
+            BlackCellsBy.Items.Add("By Width");
+            BlackCellsBy.SelectedIndex = 0;
         }
-
-
-        
 
         private async void NewAlgorithm(object sender, RoutedEventArgs e)
         {
+            N = WhiteCellsBy.SelectedIndex == 0 ? Convert.ToInt32(N_Text.Text) : Convert.ToInt32(N_Text.Text) * Convert.ToInt32(N_Text.Text);
+            M = BlackCellsBy.SelectedIndex == 0 ? Convert.ToInt32(M_Text.Text) : Convert.ToInt32(M_Text.Text) * (int)Math.Sqrt(N);
+
             switch ((AlgorithmType)AAlgorithmType.SelectedIndex)
             {
                 case (AlgorithmType.Strait):
-                    Algorithm = new Strait(Convert.ToInt32(N_Text.Text),
-                        Convert.ToInt32(M_Text.Text));
+                    Algorithm = new Strait(N,
+                        M);
                     break;
                 case (AlgorithmType.Custom):
-                    Algorithm = new(Convert.ToInt32(N_Text.Text), Convert.ToInt32(M_Text.Text), Convert.ToInt32(PopulationSize_Text.Text),
+                    Algorithm = new(N, M, Convert.ToInt32(PopulationSize_Text.Text),
                         Convert.ToInt32(OldPopulationSize_Text.Text), Convert.ToInt32(CrossPopulationSize_Text.Text), Convert.ToInt32(NewPopulationSize_Text.Text),
                         (IndividualType)ANewIndividualType.SelectedIndex, (CrossoverType)ACrossoverType.SelectedIndex, (RandomChooseType)AIndividualChooserType.SelectedIndex,
                         (MutateType)AMutateType.SelectedIndex, (LocalSearchType)ALocalSearchType.SelectedIndex, (MirrorType)AMirrorType.SelectedIndex, 
@@ -92,6 +101,23 @@ namespace GUI
         {
             Mute();
 
+            ProgressBar.Value = 0;
+
+            double tick;
+            bool by;
+
+            if (Convert.ToInt32(Iterations_Text.Text) == 0)
+            {
+                tick = 100.0 / (Convert.ToInt32(Time_Text.Text) * 1000 );
+                by = true;
+            }
+            else
+            {
+                tick = 100.0 / Convert.ToInt32(Iterations_Text.Text);  
+                by = false;
+            }
+
+
             DontStop = true;
             Stopwatch stopwatch = new();
             stopwatch.Start();
@@ -105,13 +131,26 @@ namespace GUI
                 {
                     Algorithm.Population[0].MakeMirrored();
                 }
+
                 Algorithm.Next();
 
                 PaintBoards();
                 PaintSignals();
 
+                if (by)
+                {
+                    ProgressBar.Value = Convert.ToDouble(stopwatch.ElapsedMilliseconds) * tick;
+                }
+                else
+                {
+                    ProgressBar.Value = Convert.ToDouble(i) * tick;
+                    Trace.WriteLine(ProgressBar.Value);
+                }
+
                 await Task.Delay((int)Math.Max(1.0, 1000.0 / FPS.Value - stopwatchFPS.ElapsedMilliseconds));
                 stopwatchFPS.Restart();
+
+                
             }
            
             Unmute();
@@ -136,10 +175,13 @@ namespace GUI
             DontStop = false;
         }
 
-        private void BiggerAlgorithm(object sender, RoutedEventArgs e)
+        private async void BiggerAlgorithm(object sender, RoutedEventArgs e)
         {
+            MuteAll();
+            await Task.Delay(1);
             CreateBoardBigger();
             BiggerClicked = true;
+            Unmute();
         }
 
 
@@ -159,6 +201,14 @@ namespace GUI
             New.IsEnabled = false;
             Next.IsEnabled = false;
             Stop.IsEnabled = true;
+            Bigger.IsEnabled = false;
+        }
+
+        private void MuteAll()
+        {
+            New.IsEnabled = false;
+            Next.IsEnabled = false;
+            Stop.IsEnabled = false;
             Bigger.IsEnabled = false;
         }
 

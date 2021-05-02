@@ -28,8 +28,8 @@ namespace UnitTests
         [AssemblyInitialize]
         public static void AssemblyInit(TestContext context)
         {
-            N = 64;
-            M = 8;
+            N = 256;
+            M = 32;
             PopulationSize = 1;
             OldPopulationSize = 1;
             CrossoverPopulationSize = 0;
