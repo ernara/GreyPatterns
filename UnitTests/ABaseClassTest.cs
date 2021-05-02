@@ -1,11 +1,13 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Algorithms;
+using System;
 
 namespace UnitTests
 {
     [TestClass]
     public class ABaseClassTest
     {
+        public Random Random = new Random();
         public static Algorithm Algorithm;
         public static Individual Individual;
         public static int N;

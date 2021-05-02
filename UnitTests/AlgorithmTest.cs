@@ -20,10 +20,16 @@ namespace UnitTests
         [TestMethod]
         public void TestToString()
         {
-            Assert.AreNotEqual("Genes: 0 1 2 3 4 5 6 7 | Fitness: 0", Individual.ToString());
+            string s = "";
+            for (int i = 0; i < M; i++)
+            {
+                s += $"{i} ";
+            }
+
+            Assert.AreNotEqual($"Genes: {s}| Fitness: 0", Algorithm.Population[0].ToString());
             Algorithm.Population[0].Genes = new List<int>(Enumerable.Range(0,Individual.N)) ;
             Algorithm.Population[0].Fitness = 0;
-            Assert.AreEqual("Genes: 0 1 2 3 4 5 6 7 | Fitness: 0", Algorithm.Population[0].ToString());
+            Assert.AreEqual($"Genes: {s}| Fitness: 0", Algorithm.Population[0].ToString());
         }
 
     }

@@ -7,14 +7,16 @@ namespace UnitTests
     [TestClass]
     public class IndividualMutatorTest : ABaseClassTest
     {
-
         [TestMethod]
-        public void TestPlaceboMutate()
+        public void TestMutate()
         {
             foreach (var mutateType in Enum.GetValues(typeof(MutateType)))
             {
+                Individual = new(Algorithm.BestIndividual);
                 IndividualMutator.ChooseMutatorType((MutateType)mutateType);
-                Assert.AreEqual(Individual.ToString(), Algorithm.ToString());
+                Individual.Mutate(true);
+
+                Assert.AreNotEqual(Individual.ToString(), Algorithm.ToString());
             }
         }
 
