@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Algorithms;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -10,56 +11,77 @@ namespace UnitTests
     {
 
         [TestMethod]
-        public void TestMirrors()
+        public void TestMakeMirrored()
         {
             foreach (var mirrorType in Enum.GetValues(typeof(MirrorType)))
             {
                 Mirror.ChooseMirrorType((MirrorType)mirrorType);
+                IndividualFitnessCalculator.SetUpParameters();
 
                 Assert.IsTrue(Mirror.SmallerN2 < Individual.N2);
                 Assert.IsTrue(Mirror.SmallerM < M);
 
                 Individual.MakeMirrored();
-                
+
                 Assert.AreNotEqual(Individual.ToString(), Algorithm.BestIndividual.ToString());
                 Assert.IsTrue(Individual.Fitness > 0);
             }
         }
 
-        [TestMethod]
 
-        public void TestChangeToBiggerNumbersWhenMirrorIsSmall()
+        private int ChangeToSmallerNumber(int number)
         {
-            Mirror.ChooseMirrorType(MirrorType.Small);
+            Coordinate coordinate = new(number, Individual.N2);
+            while (coordinate.X >= SmallerN2)
+                coordinate.X -= SmallerN2;
+            while (coordinate.Y >= SmallerN2)
+                coordinate.Y -= SmallerN2;
 
-            int number = 3;
-            List<int> bigNumbers = number.ChangeToBiggerNumbers(); 
-
-            Assert.AreEqual(3,bigNumbers[0] );
-            Assert.AreEqual(7,bigNumbers[1] );
-            Assert.AreEqual(11,bigNumbers[2] );
-            Assert.AreEqual(15,bigNumbers[3] );
-            Assert.AreEqual(207, bigNumbers[15]);
-
+            return coordinate.X * SmallerN2 + coordinate.Y;
         }
 
         [TestMethod]
-
-        public void TestChangeToBiggerNumbersWhenMirrorIsBest()
+        private static void TestChangeToSmallMirror()
         {
-            Mirror.ChooseMirrorType(MirrorType.Best);
+            foreach (var mirrorType in Enum.GetValues(typeof(MirrorType)))
+            {
+                Mirror.ChooseMirrorType((MirrorType)mirrorType);
 
-            int number = 7;
-            List<int> bigNumbers = number.ChangeToBiggerNumbers(); 
+                Individual.Genes = Individual.Genes.Take(Individual.M).Union(Enumerable.Range(0, SmallerN)).Distinct().ToList();
+                Individual.CalculateFitness();
 
-            Assert.AreEqual(7, bigNumbers[0]);
-            Assert.AreEqual(15, bigNumbers[1]);
-            Assert.AreEqual(143, bigNumbers[3]);
-
+                Assert.IsTrue(Individual.Fitness > 0);
+                Individual.Genes.Sort();
+                Assert.AreEqual(0, Individual.Genes[0]);
+                Assert.AreEqual(Mirror.SmallerN-1, Individual.Genes[^1]);
+            }
         }
 
         [TestMethod]
+        private static void TestChangeToBigMirror()
+        {
+            List<int> genes = new();
 
+            foreach (var mirrorType in Enum.GetValues(typeof(MirrorType)))
+            {
+                Mirror.ChooseMirrorType((MirrorType)mirrorType);
+
+                for (int i = 0; i < SmallerM; i++)
+                {
+                    genes.AddRange(Individual.Genes[i].ChangeToBiggerNumbers());
+                }
+
+                Individual.Genes = genes.Take(Individual.M).Union(Enumerable.Range(0, Individual.N)).Distinct().ToList();
+                Individual.CalculateFitness();
+
+                Assert.IsTrue(Individual.Fitness > 0);
+                Individual.Genes.Sort();
+                Assert.AreEqual(0, Individual.Genes[0]);
+                Assert.AreEqual(Individual.N - 1, Individual.Genes[^1]);
+            }
+        }
+
+        [TestMethod]
         public void TestChangeToSmallerNumber()
         {
             Mirror.ChooseMirrorType(MirrorType.Best);
@@ -70,8 +92,7 @@ namespace UnitTests
             while (coordinate.Y >= Mirror.SmallerN2)
                 coordinate.Y -= Mirror.SmallerN2;
 
-            Assert.AreEqual(7,coordinate.X * Mirror.SmallerN2 + coordinate.Y);
-
+            Assert.AreEqual(7, coordinate.X * Mirror.SmallerN2 + coordinate.Y);
 
             coordinate = new(255, Individual.N2);
             while (coordinate.X >= Mirror.SmallerN2)
@@ -81,25 +102,74 @@ namespace UnitTests
 
             Assert.AreEqual(63, coordinate.X * Mirror.SmallerN2 + coordinate.Y);
 
+            Mirror.ChooseMirrorType(MirrorType.Small);
+
+            coordinate = new(15, Individual.N2);
+            while (coordinate.X >= Mirror.SmallerN2)
+                coordinate.X -= Mirror.SmallerN2;
+            while (coordinate.Y >= Mirror.SmallerN2)
+                coordinate.Y -= Mirror.SmallerN2;
+
+            Assert.AreEqual(3, coordinate.X * Mirror.SmallerN2 + coordinate.Y);
+
+
+            coordinate = new(255, Individual.N2);
+            while (coordinate.X >= Mirror.SmallerN2)
+                coordinate.X -= Mirror.SmallerN2;
+            while (coordinate.Y >= Mirror.SmallerN2)
+                coordinate.Y -= Mirror.SmallerN2;
+
+            Assert.AreEqual(15, coordinate.X * Mirror.SmallerN2 + coordinate.Y);
+
         }
 
-        //[TestMethod]
-        //public void TestMirrorsThrewCreatePopulation()
-        //{
-        //    foreach (var mirrorType in Enum.GetValues(typeof(MirrorType)))
-        //    {
-        //        Algorithm = new(N, M, PopulationSize,10,80,10,100,(LocalSearchType)0,IndividualType.Mirror);
 
-        //        Mirror.ChooseMirrorType((MirrorType)mirrorType);
+        [TestMethod]
+        public void TestChangeToBiggerNumbers()
+        {
+            Mirror.ChooseMirrorType(MirrorType.Small);
+            int number = 3;
+            List<int> bigNumbers = number.ChangeToBiggerNumbers(); 
+            Assert.AreEqual(3,bigNumbers[0] );
+            Assert.AreEqual(7,bigNumbers[1] );
+            Assert.AreEqual(11,bigNumbers[2] );
+            Assert.AreEqual(15,bigNumbers[3] );
+            Assert.AreEqual(207, bigNumbers[15]);
 
-        //        Assert.IsTrue(Mirror.SmallerN2 < Individual.N2);
-        //        Assert.IsTrue(Mirror.SmallerM < M);
+            Mirror.ChooseMirrorType(MirrorType.Best);
+            number = 7;
+            bigNumbers = number.ChangeToBiggerNumbers();
 
-        //        Individual.MakeMirrored();
+            Assert.AreEqual(7, bigNumbers[0]);
+            Assert.AreEqual(15, bigNumbers[1]);
+            Assert.AreEqual(143, bigNumbers[3]);
+        }
 
-        //        Assert.AreNotEqual(Individual.ToString(), Algorithm.BestIndividual.ToString());
-        //        Assert.IsTrue(Individual.Fitness > 0);
-        //    }
-        //}
+        [TestMethod]
+        public void TestSmallMirror()
+        {
+            while (SmallerN2 > 3 && SmallerM > 3)
+            {
+                SmallerN2 /= 2;
+                SmallerM /= 4;
+            }
+
+            Assert.AreEqual(4, SmallerN2);
+            Assert.AreEqual(2, SmallerM);
+
+        }
+
+        [TestMethod]
+        public void TestBestMirror()
+        {
+            while (SmallerN2 > 7 && SmallerM > 19)
+            {
+                SmallerN2 /= 2;
+                SmallerM /= 4;
+            }
+
+            Assert.AreEqual(8, SmallerN2);
+            Assert.AreEqual(8, SmallerM);
+        }
     }
 }

@@ -6,41 +6,16 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace UnitTests
 {
     [TestClass]
-    public class DistanceMatrixTest
+    public class DistanceMatrixTest :ABaseClassTest
     {
-        int N1;
-        int N2;
-        DistancesMatrix DistancesMatrix;
-
-        [TestCleanup]
-        public void TestCleanup()
-        {
-        }
-
-        [TestInitialize]
-        public void TestInitialize()
-        {
-            N1 = 4;
-            N2 = 4;
-            DistancesMatrix = new DistancesMatrix(N1, N2);
-        }
-
+        
         [TestMethod]
-        public void TestDistanceMatrixGetLength()
+        public void TestCalculateDistance()
         {
-            Assert.AreEqual(N1*N2, DistancesMatrix.Array.GetLength(0));
-            Assert.AreEqual(N1*N2, DistancesMatrix.Array.GetLength(1));
-            DistancesMatrix = new DistancesMatrix(5, 10);
-            Assert.AreEqual(50, DistancesMatrix.Array.GetLength(0));
-            Assert.AreEqual(50, DistancesMatrix.Array.GetLength(1));
-        }
-
-        [TestMethod]
-        public void TestDistanceMatrixValues()
-        {
-            for (int i = 0; i < DistancesMatrix.Array.GetLength(0); ++i)
+            DistancesMatrix = new(N2, N2);
+            for (int i = 0; i < N; ++i)
             {
-                for (int j = 0; j < DistancesMatrix.Array.GetLength(1); ++j)
+                for (int j = 0; j < N; ++j)
                 {
                     if (i==j)
                     {

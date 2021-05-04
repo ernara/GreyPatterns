@@ -9,28 +9,18 @@ namespace UnitTests
     [TestClass]
     public class IndividualCrossovererTest : ABaseClassTest
     {
-        
-        [TestMethod]
-        public void TestPlaceboCrossover()
-        {
-            foreach (var crossoverType in Enum.GetValues(typeof(CrossoverType)))
-            {
-                Individual = new Individual();
-                Individual Individual2 = new Individual(Individual);
-                IndividualCrossoverer.ChooseCrossoverType((CrossoverType)crossoverType);
-                Individual.Crossover(Individual2);
-                Assert.AreEqual(Individual.Fitness, Individual2.Fitness);
-            }
-        }
-
         [TestMethod]
         public void TestCrossovers()
         {
             foreach (var crossoverType in Enum.GetValues(typeof(CrossoverType)))
             {
-                Individual = new Individual();
-                Individual Individual2 = new ();
+                Individual = new();
+                Individual2 = new(Individual);
                 IndividualCrossoverer.ChooseCrossoverType((CrossoverType)crossoverType);
+                Individual.Crossover(Individual2);
+                Assert.AreEqual(Individual.Fitness, Individual2.Fitness);
+                Individual = new ();
+                Individual2 = new ();
                 Individual.Crossover(Individual2);
                 Assert.AreNotEqual(Individual.Fitness, Individual2.Fitness);
             }

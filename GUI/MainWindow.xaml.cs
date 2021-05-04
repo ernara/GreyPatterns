@@ -65,6 +65,15 @@ namespace GUI
 
         private async void NewAlgorithm(object sender, RoutedEventArgs e)
         {
+            //int n = Convert.ToInt32(N_Text.Text);
+            //int m = Convert.ToInt32(M_Text.Text);
+
+            //n = n < 4 ? 4 : n > 4096 ? 4096 : Math.Sqrt(n) * Math.Sqrt(n) == n ? n : ((int)Math.Sqrt(n) + 1) * ((int)Math.Sqrt(n) + 1);
+            //m = m < 1 ? 1 : m > n ? n : m;
+
+            //N_Text.Text = n.ToString();
+            //M_Text.Text = m.ToString();
+
             N = WhiteCellsBy.SelectedIndex == 0 ? Convert.ToInt32(N_Text.Text) : Convert.ToInt32(N_Text.Text) * Convert.ToInt32(N_Text.Text);
             M = BlackCellsBy.SelectedIndex == 0 ? Convert.ToInt32(M_Text.Text) : Convert.ToInt32(M_Text.Text) * (int)Math.Sqrt(N);
 
@@ -152,7 +161,10 @@ namespace GUI
 
                 
             }
-           
+
+            ProgressBar.Value = 100;
+
+
             Unmute();
 
             stopwatch.Stop();
@@ -262,7 +274,7 @@ namespace GUI
             }
 
 
-            for (int i = 15; i < VisualTreeHelper.GetChildrenCount(MainParameters)-1; i++)
+            for (int i = 15; i < VisualTreeHelper.GetChildrenCount(MainParameters)-4; i++)
             {
                 MainParameters.Children[i].IsEnabled = false;
             }
@@ -274,7 +286,7 @@ namespace GUI
             {
                 Menuu.Children[i].IsEnabled = true;
             }
-            for (int i = 15; i < VisualTreeHelper.GetChildrenCount(MainParameters)-1; i++)
+            for (int i = 15; i < VisualTreeHelper.GetChildrenCount(MainParameters)-4; i++)
             {
                 MainParameters.Children[i].IsEnabled = true;
             }

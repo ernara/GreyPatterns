@@ -17,6 +17,12 @@ namespace Algorithms
             individual.Mutate(MutateFlags.Crossover);
             individual.LocalSearch(LocalSearchFlags.Crossover);
 
+            if (LocalSearchFlags.Crossover)
+            {
+                throw new Exception();
+            }
+
+
             individual.CalculateFitness();
         }
 

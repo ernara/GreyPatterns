@@ -8,7 +8,7 @@ namespace Algorithms
 {
     public class DistancesMatrix
     {
-        public int[,] Array;
+        private int[,] Array;
 
         public int this[int i, int j]
         {
@@ -29,10 +29,9 @@ namespace Algorithms
             {
                 CalculateDistanceMatrixParallel(n1, n2);
             }
-
         }
 
-        public void CalculateDistanceMatrixParallel(int n1, int n2)
+        private void CalculateDistanceMatrixParallel(int n1, int n2)
         {
             List<Thread> threads = new();
 
@@ -54,7 +53,7 @@ namespace Algorithms
             for (int i = 0; i < threads.Count; i++) { threads[i].Join(); };
         }
 
-        public void CalculateDistancesMatrix(int n1, int n2)
+        private void CalculateDistancesMatrix(int n1, int n2)
         {
             int n = n1 * n2;
 
@@ -69,7 +68,7 @@ namespace Algorithms
             }
         }
 
-        public void CalculatePart(int from, int to, int n1, int n2)
+        private void CalculatePart(int from, int to, int n1, int n2)
         {
             for (int i = 0; i < Array.GetLength(0); ++i)
             {
@@ -80,7 +79,7 @@ namespace Algorithms
             }
         }
 
-        public static int CalculateDistance(int i, int j, int n1, int n2)
+        private static int CalculateDistance(int i, int j, int n1, int n2)
         {
             double value = 0;
 

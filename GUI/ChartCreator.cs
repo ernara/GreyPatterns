@@ -25,7 +25,7 @@ namespace GUI
             BestValues = new double[100_000];
             SignalPlot = Chart.Plot.AddSignal(CurrentValues);
             SignalPlot = Chart.Plot.AddSignal(BestValues);
-            Chart.Plot.SetAxisLimits(0, 5, Algorithm.BestIndividual.Fitness-1, Algorithm.Population[0].Fitness+1);
+            Chart.Plot.SetAxisLimits(0, 5, Algorithm.BestIndividual.Fitness-1, Algorithm.Population[Math.Min(Algorithm.Population.Count - 1, Algorithm.CrossoverPopulationSize)].Fitness+1);
             NextPointIndex = 0;
 
             Chart.Plot.Title("Fitness Results");
@@ -35,7 +35,7 @@ namespace GUI
             string[] labels = { "Current", "Best", };
             Chart.Plot.Legend(true, ScottPlot.Alignment.UpperRight);
 
-            Chart.Height = 255;
+            Chart.Height = 235;
             Chart.Width = 1059;
             PaintSignals();
 

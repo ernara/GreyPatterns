@@ -19,8 +19,6 @@ namespace Algorithms
             N2 = (int)Math.Sqrt(n);
             N = n;
             M = m;
-
-            IndividualFitnessCalculator.SetUpParameters();
         }
 
         public Individual(List<int> genes, int fitness)

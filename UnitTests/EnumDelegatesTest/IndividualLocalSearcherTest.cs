@@ -12,26 +12,25 @@ namespace UnitTests
         [TestMethod]
         public void TestLocalSearch()
         {
-            Individual = new Individual(Enumerable.Range(0, N).ToList(), 0);
-            Individual.LocalSearch(true);
-            Assert.IsTrue(Individual.Fitness > 0);
-
-            Individual = new Individual(Enumerable.Range(0, N).ToList(), 0);
-            Individual.LocalSearch(true);
-            Assert.IsTrue(Individual.Fitness > 0);
-
-            try
+            foreach (var localSearchType in Enum.GetValues(typeof(LocalSearchType)))
             {
-                Individual = new Individual(Enumerable.Range(0, Individual.N * 2).ToList(), 0);
+                IndividualLocalSearcher.ChooseLocalSearcherType((LocalSearchType)localSearchType);
+                Individual = new Individual(Enumerable.Range(0, N).ToList(), 0);
                 Individual.LocalSearch(true);
+                Assert.IsTrue(Individual.Fitness > 0);
+
+                try
+                {
+                    Individual = new Individual(Enumerable.Range(0, Individual.N * 2).ToList(), 0);
+                    Individual.LocalSearch(true);
+                }
+
+                catch (ArgumentException e)
+                {
+                    Assert.AreEqual(Exceptions.WrongGenesCountMessage, e.Message);
+                }
+
             }
-
-            catch (ArgumentException e)
-            {
-                Assert.AreEqual(Exceptions.WrongGenesCountMessage, e.Message);
-            }
-
-
         }
     }
 }

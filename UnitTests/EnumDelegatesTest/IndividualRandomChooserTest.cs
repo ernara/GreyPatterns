@@ -5,27 +5,31 @@ using System;
 namespace UnitTests
 {
     [TestClass]
-    public class IndividualRandomChooserTest
+    public class IndividualRandomChooserTest : ABaseClassTest
     {
 
         [TestMethod]
-        public void TestRandomChooses()
+        public void TestRandomChoose()
         {
-            //foreach (var randomChooseType in Enum.GetValues(typeof(RandomChooseType)))
-            //{
-            //    Algorithm = new Algorithm(N1, N2, M, PopulationSize);
-            //    Algorithm.Population[1].Fitness = 10000;
-            //    Algorithm.Population[0].Fitness = 25000;
+            int FitnessSum = 0;
 
-            //    ChooseRandomIndividual = IndividualRandomChooser.ChooseChooserType((RandomChooseType)randomChooseType);
+            for (int i = 0; i < Algorithm.Population.Count; i++)
+            {
+                Algorithm.Population[i].Fitness = i;
+            }
 
-            //    for (int i = 0; i < 100; ++i)
-            //    {
-            //        //if (ChooseRandomIndividual(0).ToString() == Algorithm.ToString())
-            //        Assert.AreNotEqual(ChooseRandomIndividual(0).ToString(), Algorithm.Population[0].ToString());
-            //        Assert.AreEqual(ChooseRandomIndividual(1).ToString(), Algorithm.Population[0].ToString());
-            //    }
-            //}
+            foreach (var randomChooseType in Enum.GetValues(typeof(RandomChooseType)))
+            {
+                var ChooseRandomIndividual = IndividualRandomChooser.ChooseChooserType((RandomChooseType)randomChooseType);
+
+                for (int i = 0; i < 100; ++i)
+                {
+                    FitnessSum+= ChooseRandomIndividual().Fitness;
+                }
+
+                Assert.IsTrue(FitnessSum > 200);
+
+            }
         }
 
 

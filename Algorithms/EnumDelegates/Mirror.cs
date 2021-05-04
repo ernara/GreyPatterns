@@ -12,6 +12,27 @@ namespace Algorithms
         public static int SmallerN { get; private set; }
         public static int SmallerM { get; private set; }
 
+        public static void ChooseMirrorType(MirrorType mirrorType)
+        {
+            SmallerN2 = Individual.N2;
+            SmallerM = Individual.M;
+
+            switch (mirrorType)
+            {
+                case MirrorType.Small:
+                    SmallMirror();
+                    break;
+                case MirrorType.Best:
+                    BestMirror();
+                    break;
+                default:
+                    throw new ArgumentException("Wrong MirrorType");
+            }
+
+            SmallerN = SmallerN2 * SmallerN2;
+
+        }
+
         public static void MakeMirrored(this Individual individual)
         {
             individual.ChangeToSmallMirror();
@@ -48,29 +69,9 @@ namespace Algorithms
             individual.Genes = genes.Take(Individual.M).Union(Enumerable.Range(0, Individual.N)).Distinct().ToList();
             individual.CalculateFitness();
         }
+       
 
-        public static void ChooseMirrorType(MirrorType mirrorType)
-        {
-            SmallerN2 = Individual.N2;
-            SmallerM = Individual.M;
-
-            switch (mirrorType)
-            {
-                case MirrorType.Small:
-                    SmallMirror();
-                    break;
-                case MirrorType.Best:
-                    BestMirror();
-                    break;
-                default:
-                    throw new ArgumentException("Wrong MirrorType");
-            }
-
-            SmallerN = SmallerN2 * SmallerN2;
-
-        }
-
-        private static void SmallMirror()
+        public static void SmallMirror()
         {
             while (SmallerN2 > 3 && SmallerM > 3)
             {

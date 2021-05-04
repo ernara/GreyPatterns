@@ -32,13 +32,13 @@ namespace GUI
 
             for (int i = Individual.M; i < Individual.N; i++)
             {
-                coordinate = new Coordinate(Algorithm.Population[0].Genes[i], Individual.N2);
+                coordinate = new Coordinate(Algorithm.Population[Math.Min(Algorithm.Population.Count - 1, Algorithm.CrossoverPopulationSize)].Genes[i], Individual.N2);
                 CurrentMatrix[coordinate.X, coordinate.Y].Fill = OFF;
             }
 
             for (int i = 0; i < Individual.M; i++)
             {
-                coordinate = new Coordinate(Algorithm.Population[0].Genes[i], Individual.N2);
+                coordinate = new Coordinate(Algorithm.Population[Math.Min(Algorithm.Population.Count - 1, Algorithm.CrossoverPopulationSize)].Genes[i], Individual.N2);
                 CurrentMatrix[coordinate.X, coordinate.Y].Fill = ON;
             }
 

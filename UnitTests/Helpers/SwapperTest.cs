@@ -6,21 +6,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace UnitTests
 {
     [TestClass]
-    public class SwapperTest
+    public class SwapperTest : ABaseClassTest
     {
-        [TestCleanup]
-        public void TestCleanup()
-        {
-        }
-
-        [TestInitialize]
-        public void TestInitialize()
-        {
-            
-        }
-
         [TestMethod]
-        public void TestReturnRandomNumber()
+        public void TestSwap()
         {
             List<int> list = new() { 0, 1, 2, 3, 4, 5 };
 

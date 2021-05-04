@@ -6,48 +6,38 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace UnitTests
 {
     [TestClass]
-    public class CoordinateTest
+    public class CoordinateTest : ABaseClassTest
     {
-        Coordinate coordinate;
-        int N2;
-
-        [TestCleanup]
-        public void TestCleanup()
-        {
-        }
-
-        [TestInitialize]
-        public void TestInitialize()
-        {
-            N2 = 2;
-        }
-
         [TestMethod]
         public void TestNewCoordinates()
         {
-            coordinate = new Coordinate(0, N2);
-            Assert.AreEqual(0, coordinate.X);
-            Assert.AreEqual(0, coordinate.Y);
+            Coordinate = new Coordinate(0, N2);
+            Assert.AreEqual(0, Coordinate.X);
+            Assert.AreEqual(0, Coordinate.Y);
 
-            coordinate = new Coordinate(1, N2);
-            Assert.AreEqual(0, coordinate.X);
-            Assert.AreEqual(1, coordinate.Y);
+            Coordinate = new Coordinate(1, N2);
+            Assert.AreEqual(0, Coordinate.X);
+            Assert.AreEqual(1, Coordinate.Y);
 
-            coordinate = new Coordinate(2, N2);
-            Assert.AreEqual(1, coordinate.X);
-            Assert.AreEqual(0, coordinate.Y);
+            Coordinate = new Coordinate(16, N2);
+            Assert.AreEqual(1, Coordinate.X);
+            Assert.AreEqual(0, Coordinate.Y);
 
-            coordinate = new Coordinate(3, N2);
-            Assert.AreEqual(1, coordinate.X);
-            Assert.AreEqual(1, coordinate.Y);
+            Coordinate = new Coordinate(17, N2);
+            Assert.AreEqual(1, Coordinate.X);
+            Assert.AreEqual(1, Coordinate.Y);
 
-            coordinate = new Coordinate(4, N2);
-            Assert.AreEqual(2, coordinate.X);
-            Assert.AreEqual(0, coordinate.Y);
+            Coordinate = new Coordinate(32, N2);
+            Assert.AreEqual(2, Coordinate.X);
+            Assert.AreEqual(0, Coordinate.Y);
 
-            coordinate = new Coordinate(5, N2);
-            Assert.AreEqual(2, coordinate.X);
-            Assert.AreEqual(1, coordinate.Y);
+            Coordinate = new Coordinate(33, N2);
+            Assert.AreEqual(2, Coordinate.X);
+            Assert.AreEqual(1, Coordinate.Y);
+
+            Coordinate = new Coordinate(255, N2);
+            Assert.AreEqual(15, Coordinate.X);
+            Assert.AreEqual(15, Coordinate.Y);
         }
     }
 }

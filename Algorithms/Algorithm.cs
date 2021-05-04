@@ -35,11 +35,12 @@ namespace Algorithms
 
         public Algorithm(int n, int m)
         {
-            n = n < 4 ? 4 : n > 4096 ? 4096 : Math.Sqrt(n) * Math.Sqrt(n) == n ? n : (int)((Math.Sqrt(n) + 1) * (Math.Sqrt(n) + 1));
+            n = n < 4 ? 4 : n > 4096 ? 4096 : Math.Sqrt(n) * Math.Sqrt(n) == n ? n : ((int)Math.Sqrt(n) + 1) * ((int)Math.Sqrt(n) + 1);
             m = m < 1 ? 1 : m > n ? n : m;
 
             Population = new List<Individual>();
             Individual.SetUpParameters(n, m);
+            IndividualFitnessCalculator.SetUpParameters();
 
             List<int> genes = Enumerable.Range(0, n).ToList();
 
@@ -69,6 +70,9 @@ namespace Algorithms
             IndividualMutator.ChooseMutatorType(mutateType);
             IndividualLocalSearcher.ChooseLocalSearcherType(localSearchType);
             Mirror.ChooseMirrorType(mirrorType);
+
+            IndividualFitnessCalculator.SetUpParameters();
+
         }
 
         private static void CheckParameters(ref int n, ref int m, ref int populationSize,
@@ -83,7 +87,7 @@ namespace Algorithms
             newPopulationSize = newPopulationSize < 0 ? 0 : newPopulationSize > populationSize ? populationSize : newPopulationSize;
             crossoverPopulationSize = crossoverPopulationSize < 0 ? 0 : crossoverPopulationSize > populationSize ? populationSize : crossoverPopulationSize;
 
-            if (PopulationSize == 1)
+            if (populationSize == 1)
             {
                 oldPopulationSize = 1;
                 newPopulationSize = 0;
@@ -91,9 +95,9 @@ namespace Algorithms
             }
             else if (oldPopulationSize + crossoverPopulationSize + newPopulationSize != populationSize)
             {
-                oldPopulationSize = PopulationSize / 10;
-                newPopulationSize = PopulationSize / 10;
-                crossoverPopulationSize = PopulationSize - oldPopulationSize - newPopulationSize;
+                oldPopulationSize = populationSize / 10;
+                newPopulationSize = populationSize / 10;
+                crossoverPopulationSize = populationSize - oldPopulationSize - newPopulationSize;
             }
         }
 
@@ -101,6 +105,12 @@ namespace Algorithms
         {
             MutateChance = mutateChance;
             LocalSearchChance = localSearchChance;
+
+            if (mutateFlags==null || localSearchFlags==null)
+            {
+                throw new NullReferenceException(Exceptions.FlagsAreNullMessage);
+            }
+
             //_ = new MutateFlags(MutateFlags.PopulationCreation, MutateFlags.Crossover, MutateFlags.SmallMirror, MutateFlags.BigMirror);
             //_ = new LocalSearchFlags(LocalSearchFlags.PopulationCreation, LocalSearchFlags.Crossover, LocalSearchFlags.SmallMirror, LocalSearchFlags.BigMirror);
         }
@@ -160,11 +170,6 @@ namespace Algorithms
                 Population[0].Mutate(MutateFlags.PopulationSizeIsOne);
                 Population[0].LocalSearch(LocalSearchFlags.PopulationSizeIsOne);
             }
-        }
-
-        public override string ToString()
-        {
-            return BestIndividual.ToString();
         }
 
     }
