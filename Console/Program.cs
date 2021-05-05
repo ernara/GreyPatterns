@@ -16,7 +16,7 @@ namespace Consolee
         static List<int> Genes;
         public static void Main()
         {
-            Random Random = new Random();
+            //Random Random = new Random();
             N = 256;
             M = 16;
             int PopulationSize = 1;
@@ -33,7 +33,7 @@ namespace Consolee
             int LocalSearchChance = 100;
             MutateFlags MutateFlags = new();
             LocalSearchFlags LocalSearchFlags = new(false, false, false, false, true);
-            Algorithm Algorithm = new Algorithm(N, M, PopulationSize, OldPopulationSize, CrossoverPopulationSize, NewPopulationSize,
+            Algorithm Algorithm = new (N, M, PopulationSize, OldPopulationSize, CrossoverPopulationSize, NewPopulationSize,
                     IndividualType, CrossoverType, RandomChooseType, MutateType, LocalSearchType, MirrorType,
                     MutateChance, LocalSearchChance, MutateFlags, LocalSearchFlags);
 
@@ -45,7 +45,7 @@ namespace Consolee
 
             }
 
-            
+
         }
 
         public static void NextPermutation()
@@ -75,8 +75,6 @@ namespace Consolee
 
         public void NotParralel(int n1, int n2)
         {
-            int n = n1 * n2;
-
             for (int i = 0; i < Array.GetLength(0); ++i)
             {
                 for (int j = 0; j < Array.GetLength(1); ++j)
@@ -136,18 +134,16 @@ namespace Consolee
 
             int onePart = n / Environment.ProcessorCount;
 
-            using (CountdownEvent counter = new CountdownEvent(Environment.ProcessorCount))
-            {
+            using CountdownEvent counter = new(Environment.ProcessorCount);
 
-                for (int i = 0; i < Environment.ProcessorCount; i++)
-                {
-                    int localNum = i;
-                    int a = n1;
-                    int a2 = n2;
-                    ThreadPool.QueueUserWorkItem(_ => CalculatePart(localNum * onePart, localNum * onePart + onePart, a, a2,counter));
-                }
-                counter.Wait();
+            for (int i = 0; i < Environment.ProcessorCount; i++)
+            {
+                int localNum = i;
+                int a = n1;
+                int a2 = n2;
+                ThreadPool.QueueUserWorkItem(_ => CalculatePart(localNum * onePart, localNum * onePart + onePart, a, a2, counter));
             }
+            counter.Wait();
 
 
         }

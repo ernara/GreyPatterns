@@ -31,6 +31,8 @@ namespace Algorithms
 
             Population = PopulationCreator.CreatePopulation();
             BestIndividual = new(Population[0]);
+
+            BestResults.SetUpResults();
         }
 
         public Algorithm(int n, int m)
@@ -46,6 +48,9 @@ namespace Algorithms
 
             Population.Add(new Individual(genes, genes.CalculateFitness()));
             BestIndividual = new Individual(Population[0]);
+
+            BestResults.SetUpResults();
+
         }
 
         private static void SetUpParameters(int n, int m, int populationSize,

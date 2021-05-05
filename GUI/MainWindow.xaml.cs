@@ -77,32 +77,25 @@ namespace GUI
             N = WhiteCellsBy.SelectedIndex == 0 ? Convert.ToInt32(N_Text.Text) : Convert.ToInt32(N_Text.Text) * Convert.ToInt32(N_Text.Text);
             M = BlackCellsBy.SelectedIndex == 0 ? Convert.ToInt32(M_Text.Text) : Convert.ToInt32(M_Text.Text) * (int)Math.Sqrt(N);
 
-            switch ((AlgorithmType)AAlgorithmType.SelectedIndex)
+            Algorithm = (AlgorithmType)AAlgorithmType.SelectedIndex switch
             {
-                case (AlgorithmType.Strait):
-                    Algorithm = new Strait(N,
-                        M);
-                    break;
-                case (AlgorithmType.Custom):
-                    Algorithm = new(N, M, Convert.ToInt32(PopulationSize_Text.Text),
-                        Convert.ToInt32(OldPopulationSize_Text.Text), Convert.ToInt32(CrossPopulationSize_Text.Text), Convert.ToInt32(NewPopulationSize_Text.Text),
-                        (IndividualType)ANewIndividualType.SelectedIndex, (CrossoverType)ACrossoverType.SelectedIndex, (RandomChooseType)AIndividualChooserType.SelectedIndex,
-                        (MutateType)AMutateType.SelectedIndex, (LocalSearchType)ALocalSearchType.SelectedIndex, (MirrorType)AMirrorType.SelectedIndex, 
-                        Convert.ToInt32(MutateChance_Text.Text), Convert.ToInt32(LocalSearchChance_Text.Text), new MutateFlags((bool)Mutate0.IsChecked, 
-                        (bool)Mutate1.IsChecked, (bool)Mutate2.IsChecked, (bool)Mutate3.IsChecked, (bool)PMutate.IsChecked), new LocalSearchFlags((bool)LocalSearch0.IsChecked,
-                        (bool)LocalSearch1.IsChecked, (bool)LocalSearch2.IsChecked, (bool)LocalSearch3.IsChecked, (bool)PLocalSearch.IsChecked));
-                    break;
-                default:
-                    throw new Exception("Wrong value");
-            }
-
+                (AlgorithmType.Strait) => new Strait(N, M),
+                (AlgorithmType.Custom) => new Algorithm(N, M, Convert.ToInt32(PopulationSize_Text.Text),
+             Convert.ToInt32(OldPopulationSize_Text.Text), Convert.ToInt32(CrossPopulationSize_Text.Text), Convert.ToInt32(NewPopulationSize_Text.Text),
+             (IndividualType)ANewIndividualType.SelectedIndex, (CrossoverType)ACrossoverType.SelectedIndex, (RandomChooseType)AIndividualChooserType.SelectedIndex,
+             (MutateType)AMutateType.SelectedIndex, (LocalSearchType)ALocalSearchType.SelectedIndex, (MirrorType)AMirrorType.SelectedIndex,
+             Convert.ToInt32(MutateChance_Text.Text), Convert.ToInt32(LocalSearchChance_Text.Text), new MutateFlags((bool)Mutate0.IsChecked,
+             (bool)Mutate1.IsChecked, (bool)Mutate2.IsChecked, (bool)Mutate3.IsChecked, (bool)PMutate.IsChecked), new LocalSearchFlags((bool)LocalSearch0.IsChecked,
+             (bool)LocalSearch1.IsChecked, (bool)LocalSearch2.IsChecked, (bool)LocalSearch3.IsChecked, (bool)PLocalSearch.IsChecked)),
+                _ => throw new Exception("Wrong value"),
+            };
             Bigger.IsEnabled = true;
 
             CreateCanvas();
             CreateChart();
 
             await Do();
-           
+
 
         }
 
@@ -117,12 +110,12 @@ namespace GUI
 
             if (Convert.ToInt32(Iterations_Text.Text) == 0)
             {
-                tick = 100.0 / (Convert.ToInt32(Time_Text.Text) * 1000 );
+                tick = 100.0 / (Convert.ToInt32(Time_Text.Text) * 1000);
                 by = true;
             }
             else
             {
-                tick = 100.0 / Convert.ToInt32(Iterations_Text.Text);  
+                tick = 100.0 / Convert.ToInt32(Iterations_Text.Text);
                 by = false;
             }
 
@@ -159,7 +152,7 @@ namespace GUI
                 await Task.Delay((int)Math.Max(1.0, 1000.0 / FPS.Value - stopwatchFPS.ElapsedMilliseconds));
                 stopwatchFPS.Restart();
 
-                
+
             }
 
             ProgressBar.Value = 100;
@@ -169,12 +162,12 @@ namespace GUI
 
             stopwatch.Stop();
 
-            
+
         }
 
         private async void NextAlgorithm(object sender, RoutedEventArgs e)
         {
-            if (BiggerClicked==true)
+            if (BiggerClicked == true)
             {
                 CreateBoard();
                 BiggerClicked = false;
@@ -247,9 +240,9 @@ namespace GUI
 
         private void PopulationSize_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (OldPopulationSize!=null)
+            if (OldPopulationSize != null)
             {
-                if (PopulationSize.Value==1)
+                if (PopulationSize.Value == 1)
                 {
                     OldPopulationSize.Value = 1;
                     NewPopulationSize.Value = 0;
@@ -261,9 +254,9 @@ namespace GUI
                     NewPopulationSize.Value = (int)PopulationSize.Value / 10;
                     CrossPopulationSize.Value = PopulationSize.Value - OldPopulationSize.Value - NewPopulationSize.Value;
                 }
-                
+
             }
-           
+
         }
 
         private void Disable()
@@ -274,7 +267,7 @@ namespace GUI
             }
 
 
-            for (int i = 15; i < VisualTreeHelper.GetChildrenCount(MainParameters)-4; i++)
+            for (int i = 15; i < VisualTreeHelper.GetChildrenCount(MainParameters) - 4; i++)
             {
                 MainParameters.Children[i].IsEnabled = false;
             }
@@ -286,10 +279,12 @@ namespace GUI
             {
                 Menuu.Children[i].IsEnabled = true;
             }
-            for (int i = 15; i < VisualTreeHelper.GetChildrenCount(MainParameters)-4; i++)
+            for (int i = 15; i < VisualTreeHelper.GetChildrenCount(MainParameters) - 4; i++)
             {
                 MainParameters.Children[i].IsEnabled = true;
             }
         }
+
+
     }
 }

@@ -279,12 +279,12 @@
                                 <RowDefinition Height="auto" />
                             </Grid.RowDefinitions>
 
-
                             <!--Visi Flagu tekstai-->
                             <TextBlock Text="Creation" Grid.Column="2" Grid.Row="0" />
-                            <TextBlock Text="SmallMirror" Grid.Column="4" Grid.Row="0" />
-                            <TextBlock Text="BigMirror" Grid.Column="6" Grid.Row="0" />
-                            <TextBlock Text="Crossover" Grid.Column="8" Grid.Row="0" />
+                            <TextBlock Text="Crossover" Grid.Column="4" Grid.Row="0" />
+                            <TextBlock Text="SmallMirror" Grid.Column="6" Grid.Row="0" />
+                            <TextBlock Text="BigMirror" Grid.Column="8" Grid.Row="0" />
+                            
                             <TextBlock Text="Mutate" Grid.Column="0" Grid.Row="1" />
                             <TextBlock Text="LocalSearch" Grid.Column="0" Grid.Row="2" />
 
@@ -340,7 +340,12 @@
 
                 </Grid>
             </TabItem>
-            <TabItem Header="Results" />
+            <TabItem Header="Results">
+                <FlowDocument Name="FlowDoc">
+                    <Table x:Name="ResultsTable" Loaded="ResultsTable_Loaded">
+                    </Table>
+                </FlowDocument>
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>

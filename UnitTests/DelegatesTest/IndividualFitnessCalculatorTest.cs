@@ -12,7 +12,7 @@ namespace UnitTests
         [TestMethod]
         public void TestCalculateFitness()
         {
-            List <int> Genes = new List<int>(Enumerable.Range(0, N));
+            List <int> Genes = new (Enumerable.Range(0, N));
             Assert.IsTrue(Genes.CalculateFitness() > 0);
 
             Genes = new List<int>(Enumerable.Range(0, Mirror.SmallerN));

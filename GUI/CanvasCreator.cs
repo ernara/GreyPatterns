@@ -134,12 +134,6 @@ namespace GUI
 		{
 			Algorithm Algorithm = new(Convert.ToInt32(N_Text.Text), Convert.ToInt32(M_Text.Text));
 			CreateCanvas();
-
-
-            
-
-
-			
 		}
 
 		private void Board_Loaded2(object sender, RoutedEventArgs e)
