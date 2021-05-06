@@ -36,7 +36,7 @@ namespace GUI
             //string[] labels = { "Current", "Best", };
             Chart.Plot.Legend(true, ScottPlot.Alignment.UpperRight);
 
-            Chart.Height = 235;
+            Chart.Height = 275;
             Chart.Width = 1059;
             PaintSignals();
 

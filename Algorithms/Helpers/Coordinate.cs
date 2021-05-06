@@ -12,6 +12,11 @@
             Y = number % n2;
         }
 
+        public static int ReturnNumber(int x, int y, int n2)
+        {
+            return x * n2 + y;
+        }
+
     }
 
 }

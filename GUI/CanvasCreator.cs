@@ -20,6 +20,9 @@ namespace GUI
 {
 	public partial class MainWindow : Window
 	{
+		public int CountPainted = 0;
+		public int FirstM = 32;
+
 		public Rectangle[,] CurrentMatrix;
 
 		public Rectangle[,] BestMatrix;
@@ -31,17 +34,30 @@ namespace GUI
 
 		public void CreateCanvas()
 		{
-			CreateBoard();
-			CreateBoard2();
+			if (CountPainted>0 && Convert.ToInt32(M_Text.Text)==CountPainted)
+            {
+				
+			}
+			else
+            {
+				if (Convert.ToInt32(M_Text.Text)<=0)
+                {
+					M_Text.Text = FirstM.ToString();
+				}
+				CountPainted = 0;
+				CurrentMatrix = new Rectangle[Individual.N2, Individual.N2];
+				BestMatrix = new Rectangle[Individual.N2, Individual.N2];
+				Board.Children.RemoveRange(0, Board.Children.Count);
+				Board2.Children.RemoveRange(0, Board2.Children.Count);
+				CreateBoard();
+				CreateBoard2();
+			}
+			
 			
 		}
 
 		public void CreateBoard()
         {
-			CurrentMatrix = new Rectangle[Individual.N2, Individual.N2];
-
-			Board.Children.RemoveRange(0, Board.Children.Count);
-
 			for (int y = 0; y < Individual.N2; y++)
 			{
 				for (int x = 0; x < Individual.N2; x++)
@@ -67,10 +83,6 @@ namespace GUI
 
 		private void CreateBoard2()
 		{
-			BestMatrix = new Rectangle[Individual.N2, Individual.N2];
-
-			Board2.Children.RemoveRange(0, Board2.Children.Count);
-
 			for (int y = 0; y < Individual.N2; y++)
 			{
 				for (int x = 0; x < Individual.N2; x++)
@@ -88,8 +100,6 @@ namespace GUI
 
 					BestMatrix[y, x] = r;
 
-					r.MouseDown += R_MouseEnter;
-					r.MouseEnter += R_MouseEnter;
 				}
 			}
 		}
@@ -119,8 +129,6 @@ namespace GUI
 
 					CurrentMatrix[y, x] = r;
 
-					r.MouseDown += R_MouseEnter;
-					r.MouseEnter += R_MouseEnter;
 				}
 			}
 

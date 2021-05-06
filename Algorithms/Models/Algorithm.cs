@@ -39,6 +39,23 @@ namespace Algorithms
             BestResults.SetUpResults();
         }
 
+        public Algorithm(int n, int m, int populationSize,
+            int oldPopulationSize, int crossoverPopulationSize, int newPopulationSize,
+            IndividualType individualType, CrossoverType crossoverType, RandomChooseType randomChooseType,
+            MutateType mutateType, LocalSearchType localSearchType, MirrorType mirrorType,
+            int mutateChance, int localSearchChance, MutateFlags mutateFlags, LocalSearchFlags localSearchFlags, List<int> matrix)
+        {
+            SetUpParameters(n, m, populationSize, oldPopulationSize, crossoverPopulationSize, newPopulationSize);
+            SetUpDelegates(individualType, crossoverType, randomChooseType, mutateType, localSearchType, mirrorType);
+            SetUpChancesAndFlags(mutateChance, localSearchChance, mutateFlags, localSearchFlags);
+
+            Population = PopulationCreator.CreatePopulation(matrix);
+            BestIndividual = new(Population[0]);
+
+            Random = new Random();
+            BestResults.SetUpResults();
+        }
+
         public Algorithm(int n, int m)
         {
             n = n < 4 ? 4 : n > 4096 ? 4096 : Math.Sqrt(n) * Math.Sqrt(n) == n ? n : ((int)Math.Sqrt(n) + 1) * ((int)Math.Sqrt(n) + 1);

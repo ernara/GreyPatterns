@@ -31,7 +31,6 @@ namespace GUI
         {
             InitializeComponent();
 
-
             AAlgorithmType.ItemsSource = Enum.GetValues(typeof(AlgorithmType));
             AAlgorithmType.SelectedIndex = 0;
 
@@ -78,21 +77,57 @@ namespace GUI
             //N_Text.Text = n.ToString();
             //M_Text.Text = m.ToString();
 
+            if (Convert.ToInt32(M_Text.Text) <= 0)
+            {
+                M_Text.Text = FirstM.ToString();
+            }
             N = WhiteCellsBy.SelectedIndex == 0 ? Convert.ToInt32(N_Text.Text) : Convert.ToInt32(N_Text.Text) * Convert.ToInt32(N_Text.Text);
             M = BlackCellsBy.SelectedIndex == 0 ? Convert.ToInt32(M_Text.Text) : Convert.ToInt32(M_Text.Text) * (int)Math.Sqrt(N);
 
-            Algorithm = (AlgorithmType)AAlgorithmType.SelectedIndex switch
+            if (CountPainted>0 && Convert.ToInt32(M_Text.Text)==CountPainted)
             {
-                (AlgorithmType.Strait) => new Strait(N, M),
-                (AlgorithmType.Custom) => new Algorithm(N, M, Convert.ToInt32(PopulationSize_Text.Text),
+                List<int> m = new List<int>();
+
+                for (int i = 0; i < CurrentMatrix.GetLength(0); i++)
+                {
+                    for (int y = 0; y < CurrentMatrix.GetLength(1); y++)
+                    {
+                        if (CurrentMatrix[i, y].Fill==ON)
+                        {
+                            m.Add(Coordinate.ReturnNumber(i,y,Convert.ToInt32(Math.Sqrt(Convert.ToInt32(N_Text.Text)))));
+                        }
+                    }
+                }
+                m = m.Union(Enumerable.Range(0, Convert.ToInt32(N_Text.Text))).Distinct().ToList();
+
+                Algorithm = new Algorithm(N, M, Convert.ToInt32(PopulationSize_Text.Text),
              Convert.ToInt32(OldPopulationSize_Text.Text), Convert.ToInt32(CrossPopulationSize_Text.Text), Convert.ToInt32(NewPopulationSize_Text.Text),
              (IndividualType)ANewIndividualType.SelectedIndex, (CrossoverType)ACrossoverType.SelectedIndex, (RandomChooseType)AIndividualChooserType.SelectedIndex,
              (MutateType)AMutateType.SelectedIndex, (LocalSearchType)ALocalSearchType.SelectedIndex, (MirrorType)AMirrorType.SelectedIndex,
              Convert.ToInt32(MutateChance_Text.Text), Convert.ToInt32(LocalSearchChance_Text.Text), new MutateFlags((bool)Mutate0.IsChecked,
              (bool)Mutate1.IsChecked, (bool)Mutate2.IsChecked, (bool)Mutate3.IsChecked, (bool)PMutate.IsChecked), new LocalSearchFlags((bool)LocalSearch0.IsChecked,
-             (bool)LocalSearch1.IsChecked, (bool)LocalSearch2.IsChecked, (bool)LocalSearch3.IsChecked, (bool)PLocalSearch.IsChecked)),
-                _ => throw new Exception("Wrong value"),
-            };
+             (bool)LocalSearch1.IsChecked, (bool)LocalSearch2.IsChecked, (bool)LocalSearch3.IsChecked, (bool)PLocalSearch.IsChecked), m);
+            }
+
+            else
+            {
+                Algorithm = (AlgorithmType)AAlgorithmType.SelectedIndex switch
+                {
+                    (AlgorithmType.Strait) => new Strait(N, M),
+                    (AlgorithmType.Custom) => new Algorithm(N, M, Convert.ToInt32(PopulationSize_Text.Text),
+                 Convert.ToInt32(OldPopulationSize_Text.Text), Convert.ToInt32(CrossPopulationSize_Text.Text), Convert.ToInt32(NewPopulationSize_Text.Text),
+                 (IndividualType)ANewIndividualType.SelectedIndex, (CrossoverType)ACrossoverType.SelectedIndex, (RandomChooseType)AIndividualChooserType.SelectedIndex,
+                 (MutateType)AMutateType.SelectedIndex, (LocalSearchType)ALocalSearchType.SelectedIndex, (MirrorType)AMirrorType.SelectedIndex,
+                 Convert.ToInt32(MutateChance_Text.Text), Convert.ToInt32(LocalSearchChance_Text.Text), new MutateFlags((bool)Mutate0.IsChecked,
+                 (bool)Mutate1.IsChecked, (bool)Mutate2.IsChecked, (bool)Mutate3.IsChecked, (bool)PMutate.IsChecked), new LocalSearchFlags((bool)LocalSearch0.IsChecked,
+                 (bool)LocalSearch1.IsChecked, (bool)LocalSearch2.IsChecked, (bool)LocalSearch3.IsChecked, (bool)PLocalSearch.IsChecked)),
+                    _ => throw new Exception("Wrong value"),
+                };
+            }
+            
+
+
+
             Bigger.IsEnabled = true;
 
             CreateCanvas();
@@ -122,7 +157,6 @@ namespace GUI
                 tick = 100.0 / Convert.ToInt32(Iterations_Text.Text);
                 by = false;
             }
-
 
             DontStop = true;
             Stopwatch stopwatch = new();
@@ -163,6 +197,7 @@ namespace GUI
 
 
             Unmute();
+            CountPainted = Convert.ToInt32(M_Text.Text);
 
             stopwatch.Stop();
 
@@ -182,6 +217,7 @@ namespace GUI
         private void StopAlgorithm(object sender, RoutedEventArgs e)
         {
             DontStop = false;
+            CountPainted = Convert.ToInt32(M_Text.Text);
         }
 
         private async void BiggerAlgorithm(object sender, RoutedEventArgs e)
@@ -201,7 +237,22 @@ namespace GUI
 
             Rectangle pixel = (Rectangle)sender;
 
-            pixel.Fill = pixel.Fill == ON ? OFF : ON;
+            //pixel.Fill = pixel.Fill == ON ? OFF : ON;
+
+            if (pixel.Fill==ON)
+            {
+                pixel.Fill = OFF;
+                
+                CountPainted--;
+            }
+            else
+            {
+                pixel.Fill = ON;
+                CountPainted++;
+            }
+           
+            M_Text.Text = CountPainted.ToString();
+
         }
 
 
@@ -210,6 +261,14 @@ namespace GUI
             New.IsEnabled = false;
             Next.IsEnabled = false;
             Stop.IsEnabled = true;
+            Bigger.IsEnabled = false;
+        }
+
+        private void NewOnly()
+        {
+            New.IsEnabled = true;
+            Next.IsEnabled = false;
+            Stop.IsEnabled = false;
             Bigger.IsEnabled = false;
         }
 
@@ -289,6 +348,13 @@ namespace GUI
             }
         }
 
+        private void M_Text_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (New != null)
+            {
+                NewOnly();
 
+            }
+        }
     }
 }
