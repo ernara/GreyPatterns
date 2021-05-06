@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Algorithms
 {
@@ -37,7 +36,6 @@ namespace Algorithms
             {
                 MutateType.Random => new(RandomMutate),
                 MutateType.Near => new(RandomNearMutate),
-                MutateType.RandomAll => new(RandomAllMutate),
                 MutateType.NearAll => new(NearAllMutate),
                 _ => throw new ArgumentException("Wrong MutateType"),
             };
@@ -47,14 +45,14 @@ namespace Algorithms
 
         private static void RandomMutate(Individual individual, int n, int n2, int m)
         {
-            individual.Genes.Swap(Random.Next(m), Random.Next(m,n));
+            individual.Genes.Swap(Random.Next(m), Random.Next(m, n));
         }
 
         private static void RandomNearMutate(Individual individual, int n, int n2, int m)
         {
-            int randomGeneIndex = Random.Next(m); 
-            List<int> mutuableVariations = new(individual.FindMutableGenes(randomGeneIndex,n,n2)); 
-            
+            int randomGeneIndex = Random.Next(m);
+            List<int> mutuableVariations = new(individual.FindMutableGenes(randomGeneIndex, n, n2));
+
             if (mutuableVariations.Count > 0)
             {
                 int mutuableVariation = mutuableVariations[Random.Next(mutuableVariations.Count)];
@@ -64,21 +62,13 @@ namespace Algorithms
 
         }
 
-        private static void RandomAllMutate(Individual individual, int n, int n2, int m)
-        {
-            for (int i = 0; i < m; i++)
-            {
-                individual.Genes.Swap(i, Random.Next(m, n - m));
-            }
-        }
-
         private static void NearAllMutate(Individual individual, int n, int n2, int m)
         {
             List<int> mutuableVariations;
 
             for (int i = 0; i < Individual.M; ++i)
             {
-                mutuableVariations = new List<int>(individual.FindMutableGenes(i,n,n2));
+                mutuableVariations = new List<int>(individual.FindMutableGenes(i, n, n2));
                 if (mutuableVariations.Count > 0)
                 {
                     int mutuableVariation = mutuableVariations[Random.Next(mutuableVariations.Count)];
@@ -94,7 +84,7 @@ namespace Algorithms
             List<int> blackCells = new(Individual.Genes.Take(Individual.M));
             List<int> mutableCells = new();
 
-            if (SameLine(Individual.Genes[index], blackCells[index] + 1,n2))
+            if (SameLine(Individual.Genes[index], blackCells[index] + 1, n2))
             {
                 mutableCells.Add(blackCells[index] + 1);
                 mutableCells.Add(blackCells[index] - n2 + 1);
@@ -107,7 +97,7 @@ namespace Algorithms
                 mutableCells.Add(blackCells[index] - n2 - 1);
                 mutableCells.Add(blackCells[index] + n2 - 1);
             }
-                
+
             mutableCells.Add(blackCells[index] - n2);
             mutableCells.Add(blackCells[index] + n2);
 

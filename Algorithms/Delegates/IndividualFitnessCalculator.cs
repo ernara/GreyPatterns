@@ -15,11 +15,11 @@ namespace Algorithms
         }
         public static int CalculateFitness(this List<int> genes)
         {
-            if (genes.Count==Individual.N)
+            if (genes.Count == Individual.N)
             {
                 return genes.CalculateFitness(Individual.M, DistancesMatrix);
             }
-            else if (genes.Count==Mirror.SmallerN)
+            else if (genes.Count == Mirror.SmallerN)
             {
                 return genes.CalculateFitness(Mirror.SmallerM, SmallDistancesMatrix);
             }
@@ -33,7 +33,7 @@ namespace Algorithms
         {
             int fitness = 0;
 
-            for (int i = 0; i < m-1; ++i)
+            for (int i = 0; i < m - 1; ++i)
             {
                 for (int j = i + 1; j < m; j++)
                 {
@@ -41,7 +41,7 @@ namespace Algorithms
                 }
             }
 
-            return fitness*2;
+            return fitness * 2;
         }
 
         public static void CalculateFitness(this Individual individual)

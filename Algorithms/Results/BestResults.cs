@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 
 namespace Algorithms
 {
     public static class BestResults
     {
-        private static readonly string BestKnownValues = "C:/Users/Ernestas/source/repos/GreyPatterns/Algorithms/Results/BestKnownValues.txt";
-        private static readonly string BestFoundValues = "C:/Users/Ernestas/source/repos/GreyPatterns/Algorithms/Results/BestFoundValues.txt";
+        private static readonly string BestKnownValues = @"C:\Users\Ernestas\source\repos\GreyPatterns\Algorithms\Results\BestKnownValues.txt";
+        private static readonly string BestFoundValues = @"C:\Users\Ernestas\source\repos\GreyPatterns\Algorithms\Results\BestFoundValues.txt";
         public static List<Result> BestKnownResults;
         public static List<Result> BestFoundResults;
         public static void SetUpResults()
@@ -43,9 +38,8 @@ namespace Algorithms
             {
                 var parts = lines[i].Split('\t');
 
-                for (int j = 0; j < parts.Length-2; j+=2)
+                for (int j = 0; j < parts.Length - 2; j += 2)
                 {
-                    Console.WriteLine(Convert.ToInt32(parts[j]) + " "+ Convert.ToInt32(parts[j + 1]));
                     results.Add(new Result(n, Convert.ToInt32(parts[j]), Convert.ToInt32(parts[j + 1])));
                 }
             }
@@ -58,7 +52,6 @@ namespace Algorithms
 
                 for (int j = 0; j < parts.Length - 2; j += 2)
                 {
-                    Console.WriteLine(Convert.ToInt32(parts[j]) + " " + Convert.ToInt32(parts[j + 1]));
                     results.Add(new Result(n, Convert.ToInt32(parts[j]), Convert.ToInt32(parts[j + 1])));
                 }
             }

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Algorithms
 {
@@ -69,7 +67,7 @@ namespace Algorithms
             individual.Genes = genes.Take(Individual.M).Union(Enumerable.Range(0, Individual.N)).Distinct().ToList();
             individual.CalculateFitness();
         }
-       
+
 
         public static void SmallMirror()
         {
@@ -110,13 +108,13 @@ namespace Algorithms
             {
                 for (int j = 0; j < Individual.N2 / SmallerN2; j++)
                 {
-                    numbers.Add((coordinate.X + i * SmallerN2) * Individual.N2 + coordinate.Y + SmallerN2 * j); 
+                    numbers.Add((coordinate.X + i * SmallerN2) * Individual.N2 + coordinate.Y + SmallerN2 * j);
                 }
             }
             return numbers;
         }
 
-        
+
 
 
     }

@@ -8,7 +8,7 @@
         public static bool Crossover { get; private set; }
         public static bool PopulationSizeIsOne { get; private set; }
 
-        public MutateFlags(bool populationCreation= false, bool smallMirror = false, bool bigMirror = false, bool crossover = false,
+        public MutateFlags(bool populationCreation = false, bool crossover = false, bool smallMirror = false, bool bigMirror = false,
             bool populationSizeIsOne = false)
         {
             PopulationCreation = populationCreation;

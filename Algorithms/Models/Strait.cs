@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 namespace Algorithms
 {
@@ -8,7 +6,7 @@ namespace Algorithms
     {
         public Strait(int n, int m) : base(n, m)
         {
-           
+
         }
 
         protected override void Do()
@@ -18,11 +16,11 @@ namespace Algorithms
 
         private static void NextCombination()
         {
-            for (int i = Individual.M-1; i >= 0; i--)
+            for (int i = Individual.M - 1; i >= 0; i--)
             {
                 if (Population[0].Genes[i] + Individual.M - i < Individual.N)
                 {
-                    Population[0].Genes[i]++; 
+                    Population[0].Genes[i]++;
                     for (int j = i + 1; j < Individual.M; j++)
                     {
                         Population[0].Genes[j] = Population[0].Genes[j - 1] + 1;

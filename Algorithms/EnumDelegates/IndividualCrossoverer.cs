@@ -7,7 +7,7 @@ namespace Algorithms
     public static class IndividualCrossoverer
     {
         private readonly static Random Random = new();
-        private static Action<Individual,Individual> crossoverer = new(RandomCrossover);
+        private static Action<Individual, Individual> crossoverer = new(RandomCrossover);
 
         public static void Crossover(this Individual individual, Individual individual2)
         {
@@ -26,7 +26,7 @@ namespace Algorithms
             {
                 CrossoverType.Random => new(RandomCrossover),
                 CrossoverType.Part => new(PartCrossover),
-                
+
                 _ => throw new ArgumentException("Wrong CrossoverType"),
             };
         }

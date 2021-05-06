@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Algorithms
 {
@@ -42,7 +40,7 @@ namespace Algorithms
 
         private static List<int> CreateMirrorIndividual()
         {
-            List<int> SmallGenes = CreateRandomSmallIndividual().Take(Mirror.SmallerM).ToList(); 
+            List<int> SmallGenes = CreateRandomSmallIndividual().Take(Mirror.SmallerM).ToList();
             List<int> BigGenes = new();
 
             for (int i = 0; i < SmallGenes.Count; i++)

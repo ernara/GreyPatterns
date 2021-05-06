@@ -27,8 +27,8 @@ namespace Algorithms
 
         private static Individual FormulaChoose()
         {
-            //TODO: padaryti į formulę
-            return Algorithm.Population[Random.Next(Algorithm.PopulationSize)];
+            return Algorithm.Population[Algorithm.PopulationSize - 1 - Convert.ToInt32(
+                (Math.Ceiling(Math.Sqrt(Random.Next(1, Convert.ToInt32(Math.Pow(Algorithm.PopulationSize - 1, 2) / 4)) * 4))))];
         }
 
         private static Individual RankBasedChoose()
@@ -43,7 +43,7 @@ namespace Algorithms
             }
 
             int randomValue;
-           
+
             randomValue = Random.Next(TotalSum);
 
             for (int i = 0; i < FitnessList.Count; i++)
@@ -54,7 +54,7 @@ namespace Algorithms
                     break;
                 }
             }
-               
+
             return Algorithm.Population[randomValue];
         }
 
@@ -63,7 +63,7 @@ namespace Algorithms
             List<int> FitnessList = new();
             TotalSum = 0;
 
-            for (int i = Algorithm.PopulationSize-1; i >= 0; i--)
+            for (int i = Algorithm.PopulationSize - 1; i >= 0; i--)
             {
                 TotalSum += Algorithm.Population[i].Fitness;
                 FitnessList.Add(TotalSum);
@@ -71,20 +71,20 @@ namespace Algorithms
 
             int randomValue;
 
-            
+
             randomValue = Random.Next(TotalSum);
 
             for (int i = 0; i < FitnessList.Count; i++)
             {
-                if (FitnessList[i] > randomValue)  
+                if (FitnessList[i] > randomValue)
                 {
                     randomValue = i;
                     break;
                 }
             }
-                
+
             return Algorithm.Population[randomValue];
-                
+
         }
 
     }

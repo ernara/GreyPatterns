@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 
 namespace Algorithms
@@ -17,12 +18,14 @@ namespace Algorithms
         public static List<Individual> Population { get; private set; }
         public static Individual BestIndividual { get; protected set; }
 
+        public static Random Random;
+
         private Func<Individual> ChooseRandomIndividual;
 
         public Algorithm(int n, int m, int populationSize,
-            int oldPopulationSize, int crossoverPopulationSize, int newPopulationSize, 
-            IndividualType individualType, CrossoverType crossoverType, RandomChooseType randomChooseType, 
-            MutateType mutateType, LocalSearchType localSearchType , MirrorType mirrorType,
+            int oldPopulationSize, int crossoverPopulationSize, int newPopulationSize,
+            IndividualType individualType, CrossoverType crossoverType, RandomChooseType randomChooseType,
+            MutateType mutateType, LocalSearchType localSearchType, MirrorType mirrorType,
             int mutateChance, int localSearchChance, MutateFlags mutateFlags, LocalSearchFlags localSearchFlags)
         {
             SetUpParameters(n, m, populationSize, oldPopulationSize, crossoverPopulationSize, newPopulationSize);
@@ -32,6 +35,7 @@ namespace Algorithms
             Population = PopulationCreator.CreatePopulation();
             BestIndividual = new(Population[0]);
 
+            Random = new Random();
             BestResults.SetUpResults();
         }
 
@@ -111,7 +115,7 @@ namespace Algorithms
             MutateChance = mutateChance;
             LocalSearchChance = localSearchChance;
 
-            if (mutateFlags==null || localSearchFlags==null)
+            if (mutateFlags == null || localSearchFlags == null)
             {
                 throw new NullReferenceException(Exceptions.FlagsAreNullMessage);
             }
@@ -154,7 +158,7 @@ namespace Algorithms
 
             Individual child;
 
-            for (int i = OldPopulationSize; i < OldPopulationSize+CrossoverPopulationSize; ++i)
+            for (int i = OldPopulationSize; i < OldPopulationSize + CrossoverPopulationSize; ++i)
             {
                 child = new Individual(Population[i]);
 
@@ -175,6 +179,56 @@ namespace Algorithms
                 Population[0].Mutate(MutateFlags.PopulationSizeIsOne);
                 Population[0].LocalSearch(LocalSearchFlags.PopulationSizeIsOne);
             }
+        }
+
+        public virtual void NextResearch(int time, string fileName)
+        {
+            Stopwatch stopwatch = new();
+
+            List<List<int>> Result = new();
+
+            for (int i = 0; i < 10; i++)
+            {
+                Result.Add(new List<int>());
+            }
+
+            for (int i = 0; i < 10; ++i)
+            {
+                Population = PopulationCreator.CreatePopulation();
+                BestIndividual = new(Population[0]);
+
+                stopwatch.Restart();
+
+                for (int y = 0; stopwatch.ElapsedMilliseconds < time * 1000; ++y)
+                {
+                    if (Convert.ToDouble(stopwatch.ElapsedMilliseconds / 1000.0) > Convert.ToDouble(Result[i].Count))
+                    {
+                        Result[i].Add(BestIndividual.Fitness);
+                    }
+                    Do();
+                    SaveBestIndividual();
+                }
+
+                Console.WriteLine($"Done {i}");
+
+                Result[i].Add(BestIndividual.Fitness);
+            }
+
+            using StreamWriter sw = new(fileName, true);
+
+            sw.WriteLine();
+
+            for (int i = 0; i < Result[0].Count; i++)
+            {
+                int sum = 0;
+                for (int y = 0; y < Result.Count; y++)
+                {
+                    sum += Result[y][i];
+                }
+                sum /= Result.Count;
+                sw.Write($"{sum}\t");
+            }
+
         }
 
     }

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Algorithms
 {
@@ -10,7 +8,7 @@ namespace Algorithms
         public static int N2 { get; private set; }
         public static int N { get; private set; }
         public static int M { get; private set; }
-        
+
         public List<int> Genes;
         public int Fitness;
 
@@ -43,7 +41,7 @@ namespace Algorithms
         public override string ToString()
         {
             string genes = "";
-            for (int i=0; i < Individual.M; ++i)
+            for (int i = 0; i < Individual.M; ++i)
             {
                 genes += Genes[i].ToString() + " ";
             }

@@ -33,9 +33,7 @@ namespace GUI
 		{
 			CreateBoard();
 			CreateBoard2();
-			OldPopulationSize.Value = (int)PopulationSize.Value / 10;
-			NewPopulationSize.Value = (int)PopulationSize.Value / 10;
-			CrossPopulationSize.Value = PopulationSize.Value - OldPopulationSize.Value - NewPopulationSize.Value;
+			
 		}
 
 		public void CreateBoard()

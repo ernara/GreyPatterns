@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Algorithms
+﻿namespace Algorithms
 {
-    public enum AlgorithmType { Strait, Custom}
+    public enum AlgorithmType { Strait, Custom }
     public enum IndividualType { Random, Mirror }
 
-    public enum MutateType { Random, Near, RandomAll, NearAll }
+    public enum MutateType { Random, Near, NearAll }
 
     public enum LocalSearchType { Fast, Best, Near, NearBest, NearMutateBest }
 
@@ -17,5 +13,5 @@ namespace Algorithms
 
     public enum MirrorType { Small, Best }
 
-    
+
 }

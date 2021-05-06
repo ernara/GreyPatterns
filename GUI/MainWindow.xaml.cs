@@ -61,6 +61,10 @@ namespace GUI
             BlackCellsBy.Items.Add("By Cells");
             BlackCellsBy.Items.Add("By Width");
             BlackCellsBy.SelectedIndex = 0;
+
+            OldPopulationSize.Value = (int)PopulationSize.Value / 10;
+            NewPopulationSize.Value = (int)PopulationSize.Value / 10;
+            CrossPopulationSize.Value = PopulationSize.Value - OldPopulationSize.Value - NewPopulationSize.Value;
         }
 
         private async void NewAlgorithm(object sender, RoutedEventArgs e)
