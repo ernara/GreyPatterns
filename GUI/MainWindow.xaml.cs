@@ -64,7 +64,15 @@ namespace GUI
             OldPopulationSize.Value = (int)PopulationSize.Value / 10;
             NewPopulationSize.Value = (int)PopulationSize.Value / 10;
             CrossPopulationSize.Value = PopulationSize.Value - OldPopulationSize.Value - NewPopulationSize.Value;
+            //this.Top = 0;
+            //this.Left = 0;
+            //this.Height = System.Windows.SystemParameters.PrimaryScreenHeight;
+            //this.Width = System.Windows.SystemParameters.PrimaryScreenWidth;
+
+           
+
         }
+        
 
         private async void NewAlgorithm(object sender, RoutedEventArgs e)
         {
@@ -356,5 +364,6 @@ namespace GUI
 
             }
         }
+
     }
 }

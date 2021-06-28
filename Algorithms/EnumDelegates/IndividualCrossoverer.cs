@@ -48,5 +48,12 @@ namespace Algorithms
 
             individual.Genes = new List<int>(blackCells.Union(individual.Genes).Distinct().ToList());
         }
+
+        //private static void MultiCrossover(Individual individual, Individual individual2)
+        //{
+        //    var firstIndividualCells = individual.Genes.Skip(Individual.M / 3 * 2).Take(Individual.M / 3);
+        //    var secondIndividualCells = individual2.Genes.Take(Individual.M);
+        //    var blackCells = firstIndividualCells.Take(Individual.M / 3).Union();
+        //}
     }
 }

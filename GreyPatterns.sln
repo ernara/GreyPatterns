@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Console", "Console\Console.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GUI", "GUI\GUI.csproj", "{497C4810-A7AC-4817-A089-1C76A239A729}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "GAsetup", "GAsetup\GAsetup.vdproj", "{34FB233E-AB4C-47E3-8BE3-B793F982D3BD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,8 @@ Global
 		{497C4810-A7AC-4817-A089-1C76A239A729}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{497C4810-A7AC-4817-A089-1C76A239A729}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{497C4810-A7AC-4817-A089-1C76A239A729}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34FB233E-AB4C-47E3-8BE3-B793F982D3BD}.Debug|Any CPU.ActiveCfg = Debug
+		{34FB233E-AB4C-47E3-8BE3-B793F982D3BD}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
