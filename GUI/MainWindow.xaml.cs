@@ -92,7 +92,7 @@ namespace GUI
             N = WhiteCellsBy.SelectedIndex == 0 ? Convert.ToInt32(N_Text.Text) : Convert.ToInt32(N_Text.Text) * Convert.ToInt32(N_Text.Text);
             M = BlackCellsBy.SelectedIndex == 0 ? Convert.ToInt32(M_Text.Text) : Convert.ToInt32(M_Text.Text) * (int)Math.Sqrt(N);
 
-            if (CountPainted>0 && Convert.ToInt32(M_Text.Text)==CountPainted)
+            if (CountPainted > 0 && Convert.ToInt32(M_Text.Text) == CountPainted)
             {
                 List<int> m = new List<int>();
 
@@ -100,39 +100,17 @@ namespace GUI
                 {
                     for (int y = 0; y < CurrentMatrix.GetLength(1); y++)
                     {
-                        if (CurrentMatrix[i, y].Fill==ON)
+                        if (CurrentMatrix[i, y].Fill == ON1)
                         {
-                            m.Add(Coordinate.ReturnNumber(i,y,Convert.ToInt32(Math.Sqrt(Convert.ToInt32(N_Text.Text)))));
+                            m.Add(Coordinate.ReturnNumber(i, y, Convert.ToInt32(Math.Sqrt(Convert.ToInt32(N_Text.Text)))));
                         }
                     }
                 }
                 m = m.Union(Enumerable.Range(0, Convert.ToInt32(N_Text.Text))).Distinct().ToList();
-
-                Algorithm = new Algorithm(N, M, Convert.ToInt32(PopulationSize_Text.Text),
-             Convert.ToInt32(OldPopulationSize_Text.Text), Convert.ToInt32(CrossPopulationSize_Text.Text), Convert.ToInt32(NewPopulationSize_Text.Text),
-             (IndividualType)ANewIndividualType.SelectedIndex, (CrossoverType)ACrossoverType.SelectedIndex, (RandomChooseType)AIndividualChooserType.SelectedIndex,
-             (MutateType)AMutateType.SelectedIndex, (LocalSearchType)ALocalSearchType.SelectedIndex, (MirrorType)AMirrorType.SelectedIndex,
-             Convert.ToInt32(MutateChance_Text.Text), Convert.ToInt32(LocalSearchChance_Text.Text), new MutateFlags((bool)Mutate0.IsChecked,
-             (bool)Mutate1.IsChecked, (bool)Mutate2.IsChecked, (bool)Mutate3.IsChecked, (bool)PMutate.IsChecked), new LocalSearchFlags((bool)LocalSearch0.IsChecked,
-             (bool)LocalSearch1.IsChecked, (bool)LocalSearch2.IsChecked, (bool)LocalSearch3.IsChecked, (bool)PLocalSearch.IsChecked), m);
             }
 
-            else
-            {
-                Algorithm = (AlgorithmType)AAlgorithmType.SelectedIndex switch
-                {
-                    (AlgorithmType.Strait) => new Strait(N, M),
-                    (AlgorithmType.Custom) => new Algorithm(N, M, Convert.ToInt32(PopulationSize_Text.Text),
-                 Convert.ToInt32(OldPopulationSize_Text.Text), Convert.ToInt32(CrossPopulationSize_Text.Text), Convert.ToInt32(NewPopulationSize_Text.Text),
-                 (IndividualType)ANewIndividualType.SelectedIndex, (CrossoverType)ACrossoverType.SelectedIndex, (RandomChooseType)AIndividualChooserType.SelectedIndex,
-                 (MutateType)AMutateType.SelectedIndex, (LocalSearchType)ALocalSearchType.SelectedIndex, (MirrorType)AMirrorType.SelectedIndex,
-                 Convert.ToInt32(MutateChance_Text.Text), Convert.ToInt32(LocalSearchChance_Text.Text), new MutateFlags((bool)Mutate0.IsChecked,
-                 (bool)Mutate1.IsChecked, (bool)Mutate2.IsChecked, (bool)Mutate3.IsChecked, (bool)PMutate.IsChecked), new LocalSearchFlags((bool)LocalSearch0.IsChecked,
-                 (bool)LocalSearch1.IsChecked, (bool)LocalSearch2.IsChecked, (bool)LocalSearch3.IsChecked, (bool)PLocalSearch.IsChecked)),
-                    _ => throw new Exception("Wrong value"),
-                };
-            }
-            
+
+            AssignAlgorithm();
 
 
 
@@ -144,6 +122,22 @@ namespace GUI
             await Do();
 
 
+        }
+
+        private void AssignAlgorithm()
+        {
+            Algorithm = (AlgorithmType)AAlgorithmType.SelectedIndex switch
+            {
+                (AlgorithmType.Strait) => new Strait(N, M),
+                (AlgorithmType.Custom) => new Algorithm(N, M, Convert.ToInt32(PopulationSize_Text.Text),
+             Convert.ToInt32(OldPopulationSize_Text.Text), Convert.ToInt32(CrossPopulationSize_Text.Text), Convert.ToInt32(NewPopulationSize_Text.Text),
+             (IndividualType)ANewIndividualType.SelectedIndex, (CrossoverType)ACrossoverType.SelectedIndex, (RandomChooseType)AIndividualChooserType.SelectedIndex,
+             (MutateType)AMutateType.SelectedIndex, (LocalSearchType)ALocalSearchType.SelectedIndex, (MirrorType)AMirrorType.SelectedIndex,
+             Convert.ToInt32(MutateChance_Text.Text), Convert.ToInt32(LocalSearchChance_Text.Text), new MutateFlags((bool)Mutate0.IsChecked,
+             (bool)Mutate1.IsChecked, (bool)Mutate2.IsChecked, (bool)Mutate3.IsChecked, (bool)PMutate.IsChecked), new LocalSearchFlags((bool)LocalSearch0.IsChecked,
+             (bool)LocalSearch1.IsChecked, (bool)LocalSearch2.IsChecked, (bool)LocalSearch3.IsChecked, (bool)PLocalSearch.IsChecked)),
+                _ => throw new Exception("Wrong value"),
+            };
         }
 
         private async Task Do()
@@ -247,15 +241,15 @@ namespace GUI
 
             //pixel.Fill = pixel.Fill == ON ? OFF : ON;
 
-            if (pixel.Fill==ON)
+            if (pixel.Fill==ON1)
             {
-                pixel.Fill = OFF;
+                pixel.Fill = OFF1;
                 
                 CountPainted--;
             }
             else
             {
-                pixel.Fill = ON;
+                pixel.Fill = ON1;
                 CountPainted++;
             }
            

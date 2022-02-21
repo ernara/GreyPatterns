@@ -20,19 +20,30 @@ namespace GUI
 {
 	public partial class MainWindow : Window
 	{
-		public int CountPainted = 0;
-		public int FirstM = 32;
+        private int countPainted = 0;
+        private int firstM = 32;
 
-		public Rectangle[,] CurrentMatrix;
+        private Rectangle[,] currentMatrix;
 
-		public Rectangle[,] BestMatrix;
+        private Rectangle[,] bestMatrix;
 
-		private const double spacing = 1.0;
+        private const double spacing = 1.0;
 
 		private readonly Brush ON = Brushes.Black;
 		private readonly Brush OFF = Brushes.LightGray;
 
-		public void CreateCanvas()
+        public int CountPainted { get => countPainted; set => countPainted = value; }
+        public int FirstM { get => firstM; set => firstM = value; }
+        public Rectangle[,] CurrentMatrix { get => currentMatrix; set => currentMatrix = value; }
+        public Rectangle[,] BestMatrix { get => bestMatrix; set => bestMatrix = value; }
+
+        public static double Spacing => spacing;
+
+        public Brush ON1 => ON;
+
+        public Brush OFF1 => OFF;
+
+        public void CreateCanvas()
 		{
 			if (CountPainted>0 && Convert.ToInt32(M_Text.Text)==CountPainted)
             {
@@ -52,9 +63,9 @@ namespace GUI
 				CreateBoard();
 				CreateBoard2();
 			}
-			
-			
-		}
+
+
+        }
 
 		public void CreateBoard()
         {
@@ -63,10 +74,10 @@ namespace GUI
 				for (int x = 0; x < Individual.N2; x++)
 				{
 					Rectangle r = new()
-					{
-						Width = Board.ActualWidth / Individual.N2 - spacing,
-						Height = Board.ActualHeight / Individual.N2 - spacing,
-						Fill = OFF
+                    {
+						Width = Board.ActualWidth / Individual.N2 - Spacing,
+						Height = Board.ActualHeight / Individual.N2 - Spacing,
+						Fill = OFF1
 					};
 					Board.Children.Add(r);
 
@@ -89,9 +100,9 @@ namespace GUI
 				{
 					Rectangle r = new()
 					{
-						Width = Board2.ActualWidth / Individual.N2 - spacing,
-						Height = Board2.ActualHeight / Individual.N2 - spacing,
-						Fill = OFF
+						Width = Board2.ActualWidth / Individual.N2 - Spacing,
+						Height = Board2.ActualHeight / Individual.N2 - Spacing,
+						Fill = OFF1
 					};
 					Board2.Children.Add(r);
 
@@ -118,9 +129,9 @@ namespace GUI
 				{
 					Rectangle r = new()
 					{
-						Width = Board.ActualWidth / size - spacing,
-						Height = Board.ActualHeight / size - spacing,
-						Fill = OFF
+						Width = Board.ActualWidth / size - Spacing,
+						Height = Board.ActualHeight / size - Spacing,
+						Fill = OFF1
 					};
 					Board.Children.Add(r);
 
@@ -134,12 +145,12 @@ namespace GUI
 
 			PaintBiggerBoard();
 
-		}
+        }
 
 		private void Board_Loaded(object sender, RoutedEventArgs e)
 		{
-			Algorithm Algorithm = new(Convert.ToInt32(N_Text.Text), Convert.ToInt32(M_Text.Text));
-			CreateCanvas();
+            Algorithm Algorithm = new(Convert.ToInt32(N_Text.Text), Convert.ToInt32(M_Text.Text));
+            CreateCanvas();
 		}
 
 		private void Board_Loaded2(object sender, RoutedEventArgs e)
@@ -147,5 +158,5 @@ namespace GUI
 			
 		}
 
-	}
+    }
 }
