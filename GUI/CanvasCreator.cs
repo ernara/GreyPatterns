@@ -69,6 +69,10 @@ namespace GUI
 
 		public void CreateBoard()
         {
+			Board.Children.Clear();
+			int size = BestMatrix.GetLength(0);
+			CurrentMatrix = new Rectangle[size, size];
+
 			for (int y = 0; y < Individual.N2; y++)
 			{
 				for (int x = 0; x < Individual.N2; x++)
