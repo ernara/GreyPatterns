@@ -14,8 +14,8 @@ namespace Algorithms
         {
             BestKnownResults = new List<Result>();
             BestFoundResults = new List<Result>();
-            ReadFile(BestKnownValues, BestKnownResults);
-            ReadFile(BestFoundValues, BestFoundResults);
+            //ReadFile(BestKnownValues, BestKnownResults); // atitirinti kazkada reikes
+            //ReadFile(BestFoundValues, BestFoundResults); //atitirinti kazkada reikes
 
             //Results = new List<Result>();
             //ReadFromFile();

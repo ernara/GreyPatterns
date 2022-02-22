@@ -30,6 +30,8 @@ namespace GUI
         {
             Coordinate coordinate;
 
+            FixIfBoardIsNotRightSize();
+
             for (int i = Individual.M; i < Individual.N; i++)
             {
                 coordinate = new Coordinate(Algorithm.Population[Math.Min(Algorithm.Population.Count - 1, Algorithm.CrossoverPopulationSize)].Genes[i], Individual.N2);
@@ -41,7 +43,14 @@ namespace GUI
                 coordinate = new Coordinate(Algorithm.Population[Math.Min(Algorithm.Population.Count - 1, Algorithm.CrossoverPopulationSize)].Genes[i], Individual.N2);
                 CurrentMatrix[coordinate.X, coordinate.Y].Fill = ON1;
             }
+        }
 
+        private void FixIfBoardIsNotRightSize()
+        {
+            if (!(currentMatrix.Length == bestMatrix.Length && currentMatrix.LongLength == bestMatrix.LongLength))
+            {
+                CreateBoard();
+            }
         }
 
         private void PaintBiggerBoard()
