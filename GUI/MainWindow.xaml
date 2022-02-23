@@ -122,7 +122,7 @@
                     <TextBlock Text="MirrorType:" Grid.Column="0" Grid.Row="9" />
                     <TextBlock Text="Iterations: " Grid.Column="0" Grid.Row="10" />
                     <TextBlock Text="Time: " Grid.Column="0" Grid.Row="11" />
-                    <TextBlock Text="Max FPS: " Grid.Column="0" Grid.Row="12" />
+                    <TextBlock Text="ShowingType:" Grid.Column="0" Grid.Row="12" />
 
                     <!--Pirmo Menu values-->
 
@@ -154,11 +154,13 @@
                     <ComboBox x:Name="AMirrorType"  Grid.Column="1" Grid.Row="9" />
                     <TextBox x:Name="Iterations_Text" Text="0"   Grid.Column="1" Grid.Row="10" />
                     <TextBox x:Name="Time_Text" Text="2"   Grid.Column="1" Grid.Row="11" />
+                    <ComboBox x:Name="AShowingType"  Grid.Column="1" Grid.Row="12" />
+
 
                     <ProgressBar x:Name="ProgressBar" Height="15" Margin="0,5,0,0" Value="0" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="13" Foreground="Black"></ProgressBar>
 
                     <!--Fps pirmo meniu Fps Slideris su Value-->
-                    <Grid Grid.Column="1"  Grid.Row="12" >
+                    <!--<Grid Grid.Column="1"  Grid.Row="12" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="auto"/>
@@ -169,7 +171,7 @@
 
                         <TextBox Margin="10, 0, 0, 0" Grid.Column="1" Grid.Row="0"
                     Text="{Binding ElementName=FPS, Path=Value, UpdateSourceTrigger=PropertyChanged}" />
-                    </Grid>
+                    </Grid>-->
 
                 </Grid>
 
