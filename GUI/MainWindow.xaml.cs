@@ -132,12 +132,16 @@ namespace GUI
             {
                 (AlgorithmType.Strait) => new Strait(N, M),
                 (AlgorithmType.Custom) => new Algorithm(N, M, Convert.ToInt32(PopulationSize_Text.Text),
-             Convert.ToInt32(OldPopulationSize_Text.Text), Convert.ToInt32(CrossPopulationSize_Text.Text), Convert.ToInt32(NewPopulationSize_Text.Text),
-             (IndividualType)ANewIndividualType.SelectedIndex, (CrossoverType)ACrossoverType.SelectedIndex, (RandomChooseType)AIndividualChooserType.SelectedIndex,
-             (MutateType)AMutateType.SelectedIndex, (LocalSearchType)ALocalSearchType.SelectedIndex, (MirrorType)AMirrorType.SelectedIndex,
-             Convert.ToInt32(MutateChance_Text.Text), Convert.ToInt32(LocalSearchChance_Text.Text), new MutateFlags((bool)Mutate0.IsChecked,
-             (bool)Mutate1.IsChecked, (bool)Mutate2.IsChecked, (bool)Mutate3.IsChecked, (bool)PMutate.IsChecked), new LocalSearchFlags((bool)LocalSearch0.IsChecked,
-             (bool)LocalSearch1.IsChecked, (bool)LocalSearch2.IsChecked, (bool)LocalSearch3.IsChecked, (bool)PLocalSearch.IsChecked)),
+                     Convert.ToInt32(OldPopulationSize_Text.Text), Convert.ToInt32(CrossPopulationSize_Text.Text), 
+                     Convert.ToInt32(NewPopulationSize_Text.Text), (IndividualType)ANewIndividualType.SelectedIndex,
+                     (CrossoverType)ACrossoverType.SelectedIndex, (RandomChooseType)AIndividualChooserType.SelectedIndex,
+                     (MutateType)AMutateType.SelectedIndex, (LocalSearchType)ALocalSearchType.SelectedIndex, 
+                     (MirrorType)AMirrorType.SelectedIndex, Convert.ToInt32(MutateChance_Text.Text),
+                     Convert.ToInt32(LocalSearchChance_Text.Text), new MutateFlags((bool)Mutate0.IsChecked,
+                     (bool)Mutate1.IsChecked, (bool)Mutate2.IsChecked, (bool)Mutate3.IsChecked, (bool)PMutate.IsChecked), 
+                     new LocalSearchFlags((bool)LocalSearch0.IsChecked, (bool)LocalSearch1.IsChecked, (bool)LocalSearch2.IsChecked,
+                     (bool)LocalSearch3.IsChecked, (bool)PLocalSearch.IsChecked)),
+
                 _ => throw new Exception("Wrong value"),
             };
         }
@@ -165,9 +169,7 @@ namespace GUI
             DontStop = true;
             Stopwatch stopwatch = new();
             stopwatch.Start();
-
-            Stopwatch stopwatchFPS = new();
-            stopwatchFPS.Start();
+            
 
             for (int i = 0; (i < Convert.ToInt32(Iterations_Text.Text) || stopwatch.ElapsedMilliseconds < Convert.ToInt32(Time_Text.Text) * 1000) && DontStop; i++)
             {
@@ -178,8 +180,8 @@ namespace GUI
 
                 Algorithm.Next();
 
-                PaintBoards();
                 PaintSignals();
+
 
                 if (by)
                 {
@@ -188,22 +190,18 @@ namespace GUI
                 else
                 {
                     ProgressBar.Value = Convert.ToDouble(i) * tick;
-                    Trace.WriteLine(ProgressBar.Value);
                 }
                
-                stopwatchFPS.Restart();
-
                 if (AShowingType.SelectedIndex == 0)
                 {
                     await Task.Delay(1);
                 }
 
+                PaintBoards();
+
             }
 
-            await Task.Delay(1);
-
             ProgressBar.Value = 100;
-
 
             Unmute();
             CountPainted = Convert.ToInt32(M_Text.Text);
