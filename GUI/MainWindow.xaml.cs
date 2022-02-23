@@ -52,6 +52,9 @@ namespace GUI
             ALocalSearchType.ItemsSource = Enum.GetValues(typeof(LocalSearchType));
             ALocalSearchType.SelectedIndex = 0;
 
+            AShowingType.ItemsSource = new string[] { "AllSteps", "Fast" };
+            AShowingType.SelectedIndex = 0;
+
             WhiteCellsBy.Items.Add("By Cells");
             WhiteCellsBy.Items.Add("By Width");
             WhiteCellsBy.SelectedIndex = 0;
@@ -76,6 +79,7 @@ namespace GUI
 
         private async void NewAlgorithm(object sender, RoutedEventArgs e)
         {
+            CheckBiggerClickedFlag();
             //int n = Convert.ToInt32(N_Text.Text);
             //int m = Convert.ToInt32(M_Text.Text);
 
@@ -111,8 +115,6 @@ namespace GUI
 
 
             AssignAlgorithm();
-
-
 
             Bigger.IsEnabled = true;
 
@@ -188,12 +190,17 @@ namespace GUI
                     ProgressBar.Value = Convert.ToDouble(i) * tick;
                     Trace.WriteLine(ProgressBar.Value);
                 }
-
-                await Task.Delay((int)Math.Max(1.0, 1000.0 / FPS.Value - stopwatchFPS.ElapsedMilliseconds));
+               
                 stopwatchFPS.Restart();
 
+                if (AShowingType.SelectedIndex == 0)
+                {
+                    await Task.Delay(1);
+                }
 
             }
+
+            await Task.Delay(1);
 
             ProgressBar.Value = 100;
 
@@ -208,12 +215,17 @@ namespace GUI
 
         private async void NextAlgorithm(object sender, RoutedEventArgs e)
         {
+            CheckBiggerClickedFlag();
+            await Do();
+        }
+
+        private void CheckBiggerClickedFlag()
+        {
             if (BiggerClicked == true)
             {
                 CreateBoard();
                 BiggerClicked = false;
             }
-            await Do();
         }
 
         private void StopAlgorithm(object sender, RoutedEventArgs e)
