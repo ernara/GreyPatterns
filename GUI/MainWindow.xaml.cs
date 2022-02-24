@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -32,7 +33,7 @@ namespace GUI
             InitializeComponent();
 
             AAlgorithmType.ItemsSource = Enum.GetValues(typeof(AlgorithmType));
-            AAlgorithmType.SelectedIndex = 0;
+            AAlgorithmType.SelectedIndex = 1;
 
             ANewIndividualType.ItemsSource = Enum.GetValues(typeof(IndividualType));
             ANewIndividualType.SelectedIndex = 0;
@@ -72,10 +73,10 @@ namespace GUI
             //this.Height = System.Windows.SystemParameters.PrimaryScreenHeight;
             //this.Width = System.Windows.SystemParameters.PrimaryScreenWidth;
 
-           
+
 
         }
-        
+
 
         private async void NewAlgorithm(object sender, RoutedEventArgs e)
         {
@@ -98,7 +99,7 @@ namespace GUI
 
             if (CountPainted > 0 && Convert.ToInt32(M_Text.Text) == CountPainted)
             {
-                List<int> m = new List<int>();
+                List<int> m = new();
 
                 for (int i = 0; i < CurrentMatrix.GetLength(0); i++)
                 {
@@ -121,8 +122,8 @@ namespace GUI
             CreateCanvas();
             CreateChart();
 
-            await Do();
-
+            Do();
+            await Task.Delay(100);
 
         }
 
@@ -132,13 +133,13 @@ namespace GUI
             {
                 (AlgorithmType.Strait) => new Strait(N, M),
                 (AlgorithmType.Custom) => new Algorithm(N, M, Convert.ToInt32(PopulationSize_Text.Text),
-                     Convert.ToInt32(OldPopulationSize_Text.Text), Convert.ToInt32(CrossPopulationSize_Text.Text), 
+                     Convert.ToInt32(OldPopulationSize_Text.Text), Convert.ToInt32(CrossPopulationSize_Text.Text),
                      Convert.ToInt32(NewPopulationSize_Text.Text), (IndividualType)ANewIndividualType.SelectedIndex,
                      (CrossoverType)ACrossoverType.SelectedIndex, (RandomChooseType)AIndividualChooserType.SelectedIndex,
-                     (MutateType)AMutateType.SelectedIndex, (LocalSearchType)ALocalSearchType.SelectedIndex, 
+                     (MutateType)AMutateType.SelectedIndex, (LocalSearchType)ALocalSearchType.SelectedIndex,
                      (MirrorType)AMirrorType.SelectedIndex, Convert.ToInt32(MutateChance_Text.Text),
                      Convert.ToInt32(LocalSearchChance_Text.Text), new MutateFlags((bool)Mutate0.IsChecked,
-                     (bool)Mutate1.IsChecked, (bool)Mutate2.IsChecked, (bool)Mutate3.IsChecked, (bool)PMutate.IsChecked), 
+                     (bool)Mutate1.IsChecked, (bool)Mutate2.IsChecked, (bool)Mutate3.IsChecked, (bool)PMutate.IsChecked),
                      new LocalSearchFlags((bool)LocalSearch0.IsChecked, (bool)LocalSearch1.IsChecked, (bool)LocalSearch2.IsChecked,
                      (bool)LocalSearch3.IsChecked, (bool)PLocalSearch.IsChecked)),
 
@@ -146,9 +147,26 @@ namespace GUI
             };
         }
 
-        private async Task Do()
+        private async void Do()
         {
-            Mute();
+            this.Dispatcher.Invoke(() =>
+            {
+                Calculate();
+            });
+
+
+            this.Dispatcher.Invoke(() =>
+            {
+                ReadAndDisplay();
+            });
+
+            await Task.Delay(100);
+
+        }
+
+        private async void Calculate()
+        {
+            //Mute();
 
             ProgressBar.Value = 0;
 
@@ -169,7 +187,7 @@ namespace GUI
             DontStop = true;
             Stopwatch stopwatch = new();
             stopwatch.Start();
-            
+
 
             for (int i = 0; (i < Convert.ToInt32(Iterations_Text.Text) || stopwatch.ElapsedMilliseconds < Convert.ToInt32(Time_Text.Text) * 1000) && DontStop; i++)
             {
@@ -191,15 +209,17 @@ namespace GUI
                 {
                     ProgressBar.Value = Convert.ToDouble(i) * tick;
                 }
-               
-                if (AShowingType.SelectedIndex == 0)
-                {
-                    await Task.Delay(1);
-                }
 
-                PaintBoards();
+                //if (AShowingType.SelectedIndex == 0)
+                //{
+                //    await Task.Delay(1); //nereik jei veiks
+                //}
+
+                await Task.Delay(1);
 
             }
+
+            await Task.Delay(1); 
 
             ProgressBar.Value = 100;
 
@@ -208,13 +228,22 @@ namespace GUI
 
             stopwatch.Stop();
 
+        }
 
+        private async void ReadAndDisplay()
+        {
+            while (true) //reiks patobulinti laika su timeriu
+            {
+                await Task.Delay(10);
+                PaintBoards();
+            }
         }
 
         private async void NextAlgorithm(object sender, RoutedEventArgs e)
         {
             CheckBiggerClickedFlag();
-            await Do();
+            Do();
+            await Task.Delay(100);
         }
 
         private void CheckBiggerClickedFlag()
@@ -251,10 +280,10 @@ namespace GUI
 
             //pixel.Fill = pixel.Fill == ON ? OFF : ON;
 
-            if (pixel.Fill==ON1)
+            if (pixel.Fill == ON1)
             {
                 pixel.Fill = OFF1;
-                
+
                 CountPainted--;
             }
             else
@@ -262,7 +291,7 @@ namespace GUI
                 pixel.Fill = ON1;
                 CountPainted++;
             }
-           
+
             M_Text.Text = CountPainted.ToString();
 
         }
