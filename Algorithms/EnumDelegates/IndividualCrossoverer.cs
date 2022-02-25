@@ -24,11 +24,22 @@ namespace Algorithms
         {
             crossoverer = crossoverType switch
             {
+                CrossoverType.OnePoint => new (OnePointCrossover),
                 CrossoverType.Random => new(RandomCrossover),
                 CrossoverType.Part => new(PartCrossover),
 
                 _ => throw new ArgumentException("Wrong CrossoverType"),
             };
+        }
+
+        private static void OnePointCrossover(Individual individual, Individual individual2)
+        {
+            int cutPoint = Random.Next(Individual.M);
+            List<int> blackCells = individual.Genes.Take(cutPoint)
+                .Union(individual2.Genes.Take(Individual.M-cutPoint))
+                .Distinct().ToList();
+
+            individual.Genes = new List<int>(blackCells.Union(individual.Genes).Distinct().ToList());
         }
 
         private static void RandomCrossover(Individual individual, Individual individual2)
