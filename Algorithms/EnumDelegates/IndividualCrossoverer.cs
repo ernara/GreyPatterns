@@ -24,11 +24,12 @@ namespace Algorithms
         {
             crossoverer = crossoverType switch
             {
-                CrossoverType.OnePoint => new (OnePointCrossover),
-                CrossoverType.TwoPoint => new (TwoPointCrossover),
-                CrossoverType.Order    => new (OrderCrossover),
-                CrossoverType.Random   => new (RandomCrossover),
-                CrossoverType.Part     => new (PartCrossover),
+                CrossoverType.OnePoint =>   new (OnePointCrossover),
+                CrossoverType.TwoPoint =>   new (TwoPointCrossover),
+                CrossoverType.Order    =>   new (OrderCrossover),
+                CrossoverType.Sinusoidal => new (SinusoidalCrossOver),
+                CrossoverType.Random   =>   new (RandomCrossover),
+                CrossoverType.Part     =>   new (PartCrossover),
 
                 _ => throw new ArgumentException("Wrong CrossoverType"),
             };
@@ -65,6 +66,25 @@ namespace Algorithms
             List<int> blackCells = individual.Genes.Skip(cutPoint).Take(cutPoint2 - cutPoint)
             .Union(individual2.Genes.Take(Individual.M))
             .Distinct().ToList();
+
+            individual.Genes = new List<int>(blackCells.Union(individual.Genes).Distinct().ToList());
+        }
+
+        private static void SinusoidalCrossOver(Individual individual, Individual individual2)
+        {
+            List<int> blackCells = new();
+            for (int i=0; blackCells.Count<Individual.M;i++)
+            {
+                if (!blackCells.Contains(individual.Genes[i]))
+                {
+                    blackCells.Add(individual.Genes[i]);
+                }
+
+                if(!blackCells.Contains(individual2.Genes[i]))
+                {
+                    blackCells.Add(individual2.Genes[i]);
+                }
+            }
 
             individual.Genes = new List<int>(blackCells.Union(individual.Genes).Distinct().ToList());
         }
