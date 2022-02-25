@@ -7,7 +7,7 @@
 
     public enum LocalSearchType { Fast, Best, Near, NearBest, NearMutateBest }
 
-    public enum CrossoverType { OnePoint, TwoPoint, Random, Part }
+    public enum CrossoverType { OnePoint, TwoPoint, Order, Random, Part }
 
     public enum RandomChooseType { Random, FormulaChoose, RankBasedChoose, FitnessBasedChoose }
 
