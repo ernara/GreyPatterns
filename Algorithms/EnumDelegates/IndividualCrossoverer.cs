@@ -25,6 +25,7 @@ namespace Algorithms
             crossoverer = crossoverType switch
             {
                 CrossoverType.OnePoint => new (OnePointCrossover),
+                CrossoverType.TwoPoint => new (TwoPointCrossover),
                 CrossoverType.Random => new(RandomCrossover),
                 CrossoverType.Part => new(PartCrossover),
 
@@ -39,6 +40,19 @@ namespace Algorithms
                 .Union(individual2.Genes.Take(Individual.M-cutPoint))
                 .Distinct().ToList();
 
+            individual.Genes = new List<int>(blackCells.Union(individual.Genes).Distinct().ToList());
+        }
+
+        private static void TwoPointCrossover(Individual individual, Individual individual2)
+        {
+            int cutPoint = Random.Next(Individual.M);
+            int cutPoint2 = Random.Next(cutPoint, Individual.M);
+           
+            List<int> blackCells = individual.Genes.Take(cutPoint)
+            .Union(individual2.Genes.Skip(cutPoint).Take(cutPoint2-cutPoint))
+            .Union(individual.Genes.Skip(cutPoint2).Take(Individual.M-cutPoint2))
+            .Distinct().ToList();
+            
             individual.Genes = new List<int>(blackCells.Union(individual.Genes).Distinct().ToList());
         }
 
