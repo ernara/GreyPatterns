@@ -210,12 +210,11 @@ namespace GUI
                     ProgressBar.Value = Convert.ToDouble(i) * tick;
                 }
 
-                //if (AShowingType.SelectedIndex == 0)
-                //{
-                //    await Task.Delay(1); //nereik jei veiks
-                //}
+                if (AShowingType.SelectedIndex == 0)
+                {
+                    await Task.Delay(1); 
+                }
 
-                await Task.Delay(1);
 
             }
 
