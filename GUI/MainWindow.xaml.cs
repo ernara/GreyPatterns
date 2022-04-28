@@ -153,6 +153,8 @@ namespace GUI
 
         private async void Do()
         {
+            CheckErrors();
+
             if (AShowingType.SelectedIndex == 0 || AShowingType.SelectedIndex == 1)
             {
                 this.Dispatcher.Invoke(() =>
@@ -172,6 +174,19 @@ namespace GUI
 
         }
 
+        private void CheckErrors()
+        {
+            if (Iterations_Text.Text == "")
+            {
+                Iterations_Text.Text = "0";
+            }
+
+            if (Time_Text.Text == "")
+            {
+                Time_Text.Text = "0";
+            }
+        }
+
         private async void Calculate()
         {
             Mute();
@@ -181,9 +196,9 @@ namespace GUI
             double tick;
             bool by;
 
-            if (Convert.ToInt32(Iterations_Text.Text) == 0)
+            if (Convert.ToInt32(Iterations_Text.Text) == 0) //cia
             {
-                tick = 100.0 / (Convert.ToInt32(Time_Text.Text) * 1000);
+                tick = 100.0 / (Convert.ToInt32(Time_Text.Text) * 1000); //cia
                 by = true;
             }
             else
