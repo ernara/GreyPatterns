@@ -20,7 +20,7 @@ namespace GUI
 
             double GenerationsLimit = Chart.Plot.GetAxisLimits().XMax;
             if (NextPointIndex > GenerationsLimit)
-                Chart.Plot.SetAxisLimits(xMax: GenerationsLimit + 100);
+                Chart.Plot.SetAxisLimits(xMax: GenerationsLimit + 100); 
 
             double SmallestFitness = Chart.Plot.GetAxisLimits().YMin + Algorithm.Population[Math.Min(Algorithm.Population.Count - 1, Algorithm.CrossoverPopulationSize)].Fitness;
             if (Algorithm.BestIndividual.Fitness < SmallestFitness)

@@ -258,6 +258,8 @@ namespace GUI
             Mute();
 
             ProgressBar.Value = 0;
+           
+            await Task.Delay(1);
 
 
             DontStop = true;
