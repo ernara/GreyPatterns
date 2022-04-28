@@ -25,6 +25,8 @@ namespace GUI
 
         public bool DontStop;
         public bool BiggerClicked = false;
+        public bool NotInProcess = true;
+
         public int N;
         public int M;
 
@@ -46,6 +48,7 @@ namespace GUI
 
             AMirrorType.ItemsSource = Enum.GetValues(typeof(MirrorType));
             AMirrorType.SelectedIndex = 0;
+
 
             AMutateType.ItemsSource = Enum.GetValues(typeof(MutateType));
             AMutateType.SelectedIndex = 0;
@@ -73,14 +76,12 @@ namespace GUI
             //this.Height = System.Windows.SystemParameters.PrimaryScreenHeight;
             //this.Width = System.Windows.SystemParameters.PrimaryScreenWidth;
 
-
-
         }
-
 
         private async void NewAlgorithm(object sender, RoutedEventArgs e)
         {
             CheckBiggerClickedFlag();
+            NotInProcess = false;
             //int n = Convert.ToInt32(N_Text.Text);
             //int m = Convert.ToInt32(M_Text.Text);
 
@@ -114,6 +115,7 @@ namespace GUI
                 m = m.Union(Enumerable.Range(0, Convert.ToInt32(N_Text.Text))).Distinct().ToList();
             }
 
+            ChangeIndividualComboBoxNumbers();
 
             AssignAlgorithm();
 
@@ -123,7 +125,9 @@ namespace GUI
             CreateChart();
 
             Do();
-            await Task.Delay(100);
+
+            await Task.Delay(1);
+            NotInProcess = true;
 
         }
 
@@ -160,13 +164,13 @@ namespace GUI
                 ReadAndDisplay();
             });
 
-            await Task.Delay(100);
+            await Task.Delay(1);
 
         }
 
         private async void Calculate()
         {
-            //Mute();
+            Mute();
 
             ProgressBar.Value = 0;
 
@@ -199,6 +203,7 @@ namespace GUI
                 Algorithm.Next();
 
                 PaintSignals();
+                PaintBoards();
 
 
                 if (by)
@@ -212,7 +217,7 @@ namespace GUI
 
                 if (AShowingType.SelectedIndex == 0)
                 {
-                    await Task.Delay(1); 
+                    await Task.Delay(1);  //padaryti superfastshowtime kad GUI neestu laiko
                 }
 
 
@@ -231,18 +236,16 @@ namespace GUI
 
         private async void ReadAndDisplay()
         {
-            while (true) //reiks patobulinti laika su timeriu
-            {
-                await Task.Delay(10);
-                PaintBoards();
-            }
+            PaintBoards();
+            await Task.Delay(1);
+
         }
 
         private async void NextAlgorithm(object sender, RoutedEventArgs e)
         {
             CheckBiggerClickedFlag();
             Do();
-            await Task.Delay(100);
+            await Task.Delay(1);
         }
 
         private void CheckBiggerClickedFlag()
@@ -341,10 +344,34 @@ namespace GUI
             }
         }
 
+        private async void Individuals_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (NotInProcess)
+            {
+                PaintIndividual();
+            }
+           
+            await Task.Delay(1);
+        }
+
+
+
+        private void ChangeIndividualComboBoxNumbers()
+        {
+            Individuals.Items.Clear();
+            for (int i = 0; i < PopulationSize.Value; i++)
+            {
+                Individuals.Items.Add(i);
+            }
+
+            Individuals.SelectedIndex = 0;
+        }
+
         private void PopulationSize_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (OldPopulationSize != null)
             {
+
                 if (PopulationSize.Value == 1)
                 {
                     OldPopulationSize.Value = 1;
@@ -359,7 +386,6 @@ namespace GUI
                 }
 
             }
-
         }
 
         private void Disable()
@@ -397,5 +423,6 @@ namespace GUI
             }
         }
 
+        
     }
 }

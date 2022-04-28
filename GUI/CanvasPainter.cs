@@ -30,15 +30,36 @@ namespace GUI
         {
             Coordinate coordinate;
 
-            for (int i = Individual.M; i < Individual.N; i++)
+            int Show = Math.Min(Algorithm.Population.Count - 1, Algorithm.CrossoverPopulationSize);
+
+            for (int i = 0; i < Individual.N; i++)
             {
-                coordinate = new Coordinate(Algorithm.Population[Math.Min(Algorithm.Population.Count - 1, Algorithm.CrossoverPopulationSize)].Genes[i], Individual.N2);
+                coordinate = new Coordinate(i, Individual.N2);
                 CurrentMatrix[coordinate.X, coordinate.Y].Fill = OFF1;
             }
 
             for (int i = 0; i < Individual.M; i++)
             {
-                coordinate = new Coordinate(Algorithm.Population[Math.Min(Algorithm.Population.Count - 1, Algorithm.CrossoverPopulationSize)].Genes[i], Individual.N2);
+                coordinate = new Coordinate(Algorithm.Population[Show].Genes[i], Individual.N2);
+                CurrentMatrix[coordinate.X, coordinate.Y].Fill = ON1;
+            }
+        }
+
+        private void PaintIndividual()
+        {
+            Coordinate coordinate;
+
+            int Show = Individuals.SelectedIndex;
+
+            for (int i = 0; i < Individual.N; i++)
+            {
+                coordinate = new Coordinate(i, Individual.N2);
+                CurrentMatrix[coordinate.X, coordinate.Y].Fill = OFF1;
+            }
+
+            for (int i = 0; i < Individual.M; i++)
+            {
+                coordinate = new Coordinate(Algorithm.Population[Show].Genes[i], Individual.N2);
                 CurrentMatrix[coordinate.X, coordinate.Y].Fill = ON1;
             }
         }
