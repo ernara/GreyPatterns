@@ -56,7 +56,7 @@ namespace GUI
             ALocalSearchType.ItemsSource = Enum.GetValues(typeof(LocalSearchType));
             ALocalSearchType.SelectedIndex = 0;
 
-            AShowingType.ItemsSource = new string[] { "AllSteps", "Fast" };
+            AShowingType.ItemsSource = new string[] { "AllSteps", "Fast", "SuperFast" };
             AShowingType.SelectedIndex = 0;
 
             WhiteCellsBy.Items.Add("By Cells");
@@ -153,18 +153,22 @@ namespace GUI
 
         private async void Do()
         {
-            this.Dispatcher.Invoke(() =>
+            if (AShowingType.SelectedIndex == 0 || AShowingType.SelectedIndex == 1)
             {
-                Calculate();
-            });
+                this.Dispatcher.Invoke(() =>
+                {
+                    Calculate();
+                });
+            }
 
-
-            this.Dispatcher.Invoke(() =>
+            else
             {
-                ReadAndDisplay();
-            });
+                FastCalculate();
+            }
 
             await Task.Delay(1);
+
+            
 
         }
 
@@ -232,6 +236,28 @@ namespace GUI
 
             stopwatch.Stop();
 
+        }
+
+        private async void FastCalculate()
+        {
+            Mute();
+
+            ProgressBar.Value = 0;
+
+
+            DontStop = true;
+
+            Algorithm.Next(Convert.ToInt32(Iterations_Text.Text), Convert.ToInt32(Time_Text.Text));
+
+            PaintSignals();
+            PaintBoards();
+
+            await Task.Delay(1);
+
+            ProgressBar.Value = 100;
+
+            Unmute();
+            CountPainted = Convert.ToInt32(M_Text.Text);
         }
 
         private async void ReadAndDisplay()
