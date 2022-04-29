@@ -223,6 +223,7 @@ namespace GUI
 
                 PaintSignals();
                 PaintBoards();
+                Trace.WriteLine($"hm test1 {i} {Algorithm.Population[Math.Min(Algorithm.Population.Count - 1, Algorithm.CrossoverPopulationSize)].Fitness} {Algorithm.BestIndividual.Fitness}");
 
 
                 if (by)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,9 +15,12 @@ namespace GUI
         public void PaintSignals()
         {
             CurrentValues[NextPointIndex] = Algorithm.Population[Math.Min(Algorithm.Population.Count - 1, Algorithm.CrossoverPopulationSize)].Fitness;
-            BestValues[NextPointIndex] = Algorithm.BestIndividual.Fitness;
             SignalPlot.MaxRenderIndex = NextPointIndex;
             NextPointIndex++;
+
+            BestValues[NextPointIndex] = Algorithm.BestIndividual.Fitness;
+            SignalPlot2.MaxRenderIndex = NextPointIndex2;
+            NextPointIndex2++;
 
             double GenerationsLimit = Chart.Plot.GetAxisLimits().XMax;
             if (NextPointIndex > GenerationsLimit)
