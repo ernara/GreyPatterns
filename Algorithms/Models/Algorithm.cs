@@ -36,7 +36,7 @@ namespace Algorithms
             BestIndividual = new(Population[0]);
 
             Random = new Random();
-            BestResults.SetUpResults();
+            //BestResults.SetUpResults();
         }
 
         public Algorithm(int n, int m, int populationSize,
@@ -53,7 +53,7 @@ namespace Algorithms
             BestIndividual = new(Population[0]);
 
             Random = new Random();
-            BestResults.SetUpResults();
+            //BestResults.SetUpResults();
         }
 
         public Algorithm(int n, int m)
@@ -70,7 +70,7 @@ namespace Algorithms
             Population.Add(new Individual(genes, genes.CalculateFitness()));
             BestIndividual = new Individual(Population[0]);
 
-            BestResults.SetUpResults();
+            //BestResults.SetUpResults();
 
         }
 
@@ -157,6 +157,7 @@ namespace Algorithms
                 Do();
                 SaveBestIndividual();
             }
+            
         }
 
         private static void SaveBestIndividual()
@@ -196,6 +197,7 @@ namespace Algorithms
                 Population[0].Mutate(MutateFlags.PopulationSizeIsOne);
                 Population[0].LocalSearch(LocalSearchFlags.PopulationSizeIsOne);
             }
+
         }
 
         public virtual void NextResearch(int time, string fileName)

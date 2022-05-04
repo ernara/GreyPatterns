@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -75,7 +76,28 @@ namespace GUI
             //this.Left = 0;
             //this.Height = System.Windows.SystemParameters.PrimaryScreenHeight;
             //this.Width = System.Windows.SystemParameters.PrimaryScreenWidth;
+            ChangeHistoryComboBoxNumbers();
+            Historys.SelectedIndex = 0;
+            
+        }
 
+        private void savePNG()
+        {
+            Rect rect = new Rect(Board.RenderSize);
+            RenderTargetBitmap rtb = new RenderTargetBitmap((int)rect.Right,
+              (int)rect.Bottom, 96d, 96d, System.Windows.Media.PixelFormats.Default);
+            rtb.Render(Board);
+            //endcode as PNG
+            BitmapEncoder pngEncoder = new PngBitmapEncoder();
+            pngEncoder.Frames.Add(BitmapFrame.Create(rtb));
+
+            //save to memory stream
+            System.IO.MemoryStream ms = new System.IO.MemoryStream();
+
+            pngEncoder.Save(ms);
+            ms.Close();
+            System.IO.File.WriteAllBytes("logo.png", ms.ToArray());
+            Console.WriteLine("Done");
         }
 
         private async void NewAlgorithm(object sender, RoutedEventArgs e)
@@ -128,7 +150,7 @@ namespace GUI
 
             await Task.Delay(1);
             NotInProcess = true;
-
+            savePNG();
         }
 
         private void AssignAlgorithm()
@@ -154,13 +176,14 @@ namespace GUI
         private async void Do()
         {
             CheckErrors();
+            Mute();
 
             if (AShowingType.SelectedIndex == 0 || AShowingType.SelectedIndex == 1)
             {
-                this.Dispatcher.Invoke(() =>
-                {
+                //this.Dispatcher.Invoke(() =>
+                //{
                     Calculate();
-                });
+                //});
             }
 
             else
@@ -169,9 +192,7 @@ namespace GUI
             }
 
             await Task.Delay(1);
-
             
-
         }
 
         private void CheckErrors()
@@ -189,7 +210,7 @@ namespace GUI
 
         private async void Calculate()
         {
-            Mute();
+            DontStop = true;
 
             ProgressBar.Value = 0;
 
@@ -207,7 +228,6 @@ namespace GUI
                 by = false;
             }
 
-            DontStop = true;
             Stopwatch stopwatch = new();
             stopwatch.Start();
 
@@ -223,7 +243,6 @@ namespace GUI
 
                 PaintSignals();
                 PaintBoards();
-                Trace.WriteLine($"hm test1 {i} {Algorithm.Population[Math.Min(Algorithm.Population.Count - 1, Algorithm.CrossoverPopulationSize)].Fitness} {Algorithm.BestIndividual.Fitness}");
 
 
                 if (by)
@@ -237,7 +256,7 @@ namespace GUI
 
                 if (AShowingType.SelectedIndex == 0)
                 {
-                    await Task.Delay(1);  //padaryti superfastshowtime kad GUI neestu laiko
+                    await Task.Delay(1);
                 }
 
 
@@ -247,16 +266,22 @@ namespace GUI
 
             ProgressBar.Value = 100;
 
-            Unmute();
             CountPainted = Convert.ToInt32(M_Text.Text);
 
             stopwatch.Stop();
+
+            Result result = new(Algorithm.BestIndividual);
+
+            result.SaveFile();
+            ChangeHistoryComboBoxNumbers();
+
+            Unmute();
 
         }
 
         private async void FastCalculate()
         {
-            Mute();
+            DontStop = true;
 
             ProgressBar.Value = 0;
            
@@ -274,8 +299,16 @@ namespace GUI
 
             ProgressBar.Value = 100;
 
-            Unmute();
             CountPainted = Convert.ToInt32(M_Text.Text);
+
+            DontStop = false;
+
+            Result result = new(Algorithm.BestIndividual);
+            result.SaveFile();
+            ChangeHistoryComboBoxNumbers();
+
+            Unmute();
+
         }
 
         private async void ReadAndDisplay()
@@ -392,13 +425,21 @@ namespace GUI
         {
             if (NotInProcess)
             {
-                PaintIndividual();
+                PaintIndividualBySelectedIndividual();
             }
            
             await Task.Delay(1);
         }
 
+        private async void Historys_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (NotInProcess)
+            {
+                PaintIndividualBySelectedHistory();
+            }
 
+            await Task.Delay(1);
+        }
 
         private void ChangeIndividualComboBoxNumbers()
         {
@@ -409,6 +450,32 @@ namespace GUI
             }
 
             Individuals.SelectedIndex = 0;
+        }
+
+        private void ChangeHistoryComboBoxNumbers()
+        {
+            NotInProcess = true;
+
+            DirectoryInfo dir = new DirectoryInfo(Directory.GetCurrentDirectory());
+            
+            List<FileInfo> files = new(dir.GetFiles("2022*", SearchOption.TopDirectoryOnly));
+
+            while (files.Count>10)
+            {
+                File.Delete(files[0].Name);
+                files.RemoveAt(0);
+            }
+
+            Historys.Items.Clear();
+            
+            for(int i= files.Count-1 ; i>0 ; i--)
+            {
+                 Historys.Items.Add(files[i].Name);
+            }
+
+            Historys.SelectedIndex = 0;
+
+            NotInProcess = false;
         }
 
         private void PopulationSize_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

@@ -45,7 +45,7 @@ namespace GUI
             }
         }
 
-        private void PaintIndividual()
+        private void PaintIndividualBySelectedIndividual()
         {
             Coordinate coordinate;
 
@@ -61,6 +61,25 @@ namespace GUI
             {
                 coordinate = new Coordinate(Algorithm.Population[Show].Genes[i], Individual.N2);
                 CurrentMatrix[coordinate.X, coordinate.Y].Fill = ON1;
+            }
+        }
+
+        private void PaintIndividualBySelectedHistory()
+        {
+            Coordinate coordinate;
+
+            string Show = Historys.Text;
+
+            for (int i = 0; i < Individual.N; i++)
+            {
+                coordinate = new Coordinate(i, Individual.N2);
+                CurrentMatrix[coordinate.X, coordinate.Y].Fill = OFF1;
+            }
+
+            for (int i = 0; i < Individual.M; i++)
+            {
+                //coordinate = new Coordinate(Algorithm.Population[Show].Genes[i], Individual.N2); sita pakeisti eilute
+                //CurrentMatrix[coordinate.X, coordinate.Y].Fill = ON1;
             }
         }
 

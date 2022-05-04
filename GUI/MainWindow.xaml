@@ -77,8 +77,10 @@
                 </Grid.RowDefinitions>
 
 
-                <TextBlock Text="Individual: " Grid.Column="0" Grid.Row="1" />
-                <ComboBox x:Name="Individuals" Grid.Column="1" Grid.Row="1" SelectionChanged="Individuals_SelectionChanged" />
+                <TextBlock Text="Individual: " Grid.Column="0" Grid.Row="0" />
+                <ComboBox x:Name="Individuals" Grid.Column="1" Grid.Row="0" SelectionChanged="Individuals_SelectionChanged" />
+                <TextBlock Text="History: " Grid.Column="0" Grid.Row="1" />
+                <ComboBox x:Name="Historys" Grid.Column="1" Grid.Row="1" SelectionChanged="Historys_SelectionChanged" />
                 
             </Grid>
 
@@ -218,7 +220,7 @@
                     <!--Stop ir Bigger -->
                     <Button Content="Stop" Click="StopAlgorithm" Width="145" Grid.Column="0" Grid.Row="1" IsEnabled="False" x:Name="Stop" />
                     <Button Content="Bigger" x:Name="Bigger" Click="BiggerAlgorithm"  Width="145" Grid.Column="1" Grid.Row="1" IsEnabled="False" />
-
+                    
                 </Grid>
 
                 <!-- Antras Menu-->

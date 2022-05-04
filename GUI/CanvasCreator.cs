@@ -43,7 +43,12 @@ namespace GUI
 
         public Brush OFF1 => OFF;
 
-        public void CreateCanvas()
+		private void SavePng()
+		{
+			//Bitmap bmp = new Bitmap(panel1.Width, panel1.Height);//to create bmp of same size as panel
+		}
+
+		public void CreateCanvas()
 		{
 			if (CountPainted>0 && Convert.ToInt32(M_Text.Text)==CountPainted)
             {
