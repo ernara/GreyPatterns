@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -180,10 +181,7 @@ namespace GUI
 
             if (AShowingType.SelectedIndex == 0 || AShowingType.SelectedIndex == 1)
             {
-                //this.Dispatcher.Invoke(() =>
-                //{
-                    Calculate();
-                //});
+                Calculate();
             }
 
             else
@@ -271,8 +269,9 @@ namespace GUI
             stopwatch.Stop();
 
             Result result = new(Algorithm.BestIndividual);
-
             result.SaveFile();
+
+
             ChangeHistoryComboBoxNumbers();
 
             Unmute();
@@ -305,6 +304,7 @@ namespace GUI
 
             Result result = new(Algorithm.BestIndividual);
             result.SaveFile();
+            Trace.WriteLine($"hm{result.ToString()}");
             ChangeHistoryComboBoxNumbers();
 
             Unmute();
@@ -435,7 +435,7 @@ namespace GUI
         {
             if (NotInProcess)
             {
-                PaintIndividualBySelectedHistory();
+                //PaintIndividualBySelectedHistory();
             }
 
             await Task.Delay(1);
@@ -458,7 +458,7 @@ namespace GUI
 
             DirectoryInfo dir = new DirectoryInfo(Directory.GetCurrentDirectory());
             
-            List<FileInfo> files = new(dir.GetFiles("2022*", SearchOption.TopDirectoryOnly));
+            List<FileInfo> files = new(dir.GetFiles("22*", SearchOption.TopDirectoryOnly));
 
             while (files.Count>10)
             {
@@ -470,13 +470,15 @@ namespace GUI
             
             for(int i= files.Count-1 ; i>0 ; i--)
             {
-                 Historys.Items.Add(files[i].Name);
+                var ss = Result.ReadFileAndRename(files[i].Name);
+                Historys.Items.Add(ss);
             }
 
             Historys.SelectedIndex = 0;
 
             NotInProcess = false;
         }
+        
 
         private void PopulationSize_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {

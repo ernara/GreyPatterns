@@ -9,12 +9,20 @@ namespace Algorithms
 {
     public class Result
     {
+        [JsonInclude]
         public int N { get; set; }
+        [JsonInclude]
         public int M { get; set; }
+        [JsonInclude]
         public int Fitness { get; set; }
+        [JsonInclude]
         public List<int>? Genes { get; set; }
 
-        [JsonConstructor]
+        public Result()
+        {
+
+        }
+
         public Result(Individual individual)
         {
             N = Individual.N;
@@ -23,25 +31,30 @@ namespace Algorithms
             Genes = new List<int>(individual.Genes);
         }
 
+
         public override string ToString()
         {
             return $"{N} {M} {Fitness}";
         }
 
+        public static string ReadFileAndRename(string fileName)
+        {
+            //Trace.WriteLine
+            //Trace.WriteLine(File.ReadAllText(fileName));
+            var result = JsonSerializer.Deserialize<Result>(File.ReadAllText(fileName));
+
+            return fileName.Substring(0,fileName.Length - 5) + " N:" + result.N + " M:" +  result.M;
+
+        }
+
         public void SaveFile()
         {
-            string fileName = DateTime.Now.ToString("yyyyMMdd_hhmmss") + ".json";
+            string fileName = DateTime.Now.ToString("yy;MM;dd_hh;mm;ss") + ".json";
             string jsonString = JsonSerializer.Serialize(this);
             File.WriteAllText(fileName, jsonString);
         }
 
-        public static string ReadFileAndRename(string fileName)
-        {
-            Result? result = JsonSerializer.Deserialize<Result>(File.ReadAllText(fileName));
-
-            return fileName + result.N + result.M;
-
-        }
+        
        
 
         public static Result? ReadRenamedFileAndReturnResult(string fileName)
