@@ -270,10 +270,9 @@ namespace GUI
 
             Result result = new(Algorithm.BestIndividual);
             result.SaveFile();
-
-
+            Trace.WriteLine(result.M + " " + result.N);
             ChangeHistoryComboBoxNumbers();
-
+            PaintBoards();
             Unmute();
 
         }
@@ -425,20 +424,22 @@ namespace GUI
         {
             if (NotInProcess)
             {
+                CheckBiggerClickedFlag();
                 PaintIndividualBySelectedIndividual();
             }
+            
            
             await Task.Delay(1);
         }
 
-        private async void Historys_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void Historys_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (NotInProcess)
             {
-                //PaintIndividualBySelectedHistory();
+                CheckBiggerClickedFlag();
+                PaintIndividualBySelectedHistory();
             }
 
-            await Task.Delay(1);
         }
 
         private void ChangeIndividualComboBoxNumbers()
@@ -454,8 +455,6 @@ namespace GUI
 
         private void ChangeHistoryComboBoxNumbers()
         {
-            NotInProcess = true;
-
             DirectoryInfo dir = new DirectoryInfo(Directory.GetCurrentDirectory());
             
             List<FileInfo> files = new(dir.GetFiles("22*", SearchOption.TopDirectoryOnly));
@@ -468,17 +467,15 @@ namespace GUI
 
             Historys.Items.Clear();
             
-            for(int i= files.Count-1 ; i>0 ; i--)
+            for(int i= files.Count-1 ; i>=0 ; i--)
             {
                 var ss = Result.ReadFileAndRename(files[i].Name);
                 Historys.Items.Add(ss);
             }
 
             Historys.SelectedIndex = 0;
-
-            NotInProcess = false;
         }
-        
+
 
         private void PopulationSize_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {

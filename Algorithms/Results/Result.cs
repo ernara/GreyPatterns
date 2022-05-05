@@ -44,24 +44,19 @@ namespace Algorithms
             var result = JsonSerializer.Deserialize<Result>(File.ReadAllText(fileName));
 
             return fileName.Substring(0,fileName.Length - 5) + " N:" + result.N + " M:" +  result.M;
-
         }
 
         public void SaveFile()
         {
-            string fileName = DateTime.Now.ToString("yy;MM;dd_hh;mm;ss") + ".json";
+            string fileName = DateTime.Now.ToString("yy-MM-dd HH;mm;ss") + ".json";
             string jsonString = JsonSerializer.Serialize(this);
             File.WriteAllText(fileName, jsonString);
         }
 
-        
-       
 
-        public static Result? ReadRenamedFileAndReturnResult(string fileName)
+        public static Result? ReadFile(string fileName)
         {
-            return NotImplementedException();
-            Result? result = JsonSerializer.Deserialize<Result>(File.ReadAllText(fileName));
-            return result;
+            return JsonSerializer.Deserialize<Result>(File.ReadAllText(fileName));
         }
 
         private static Result? NotImplementedException()

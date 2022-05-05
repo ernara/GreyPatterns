@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -76,10 +77,29 @@ namespace GUI
                 CurrentMatrix[coordinate.X, coordinate.Y].Fill = OFF1;
             }
 
+            DirectoryInfo dir = new DirectoryInfo(Directory.GetCurrentDirectory());
+
+            List<FileInfo> files = new(dir.GetFiles("22*", SearchOption.TopDirectoryOnly));
+
+            int neededIndex= Historys.Items.Count - Historys.SelectedIndex - 1;
+
+            Result result = new Result();
+
+            for (int i =0  - 1; i < files.Count; i++)
+            {
+                if (i==neededIndex)
+                {
+                    result = Result.ReadFile(files[i].Name);
+                    break;
+                }
+            }
+
+            //TODO: uztrigs sekantis loopas, jei N ar M bus kitoks nei globalus N ar M.
+
             for (int i = 0; i < Individual.M; i++)
             {
-                //coordinate = new Coordinate(Algorithm.Population[Show].Genes[i], Individual.N2); sita pakeisti eilute
-                //CurrentMatrix[coordinate.X, coordinate.Y].Fill = ON1;
+                coordinate = new Coordinate(result.Genes[i], Individual.N2); 
+                CurrentMatrix[coordinate.X, coordinate.Y].Fill = ON1;
             }
         }
 
