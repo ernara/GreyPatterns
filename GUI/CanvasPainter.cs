@@ -96,10 +96,13 @@ namespace GUI
 
             //TODO: uztrigs sekantis loopas, jei N ar M bus kitoks nei globalus N ar M.
 
-            for (int i = 0; i < Individual.M; i++)
+            if (result.N == Individual.N && result.M == Individual.M)
             {
-                coordinate = new Coordinate(result.Genes[i], Individual.N2); 
-                CurrentMatrix[coordinate.X, coordinate.Y].Fill = ON1;
+                for (int i = 0; i < Individual.M; i++)
+                {
+                    coordinate = new Coordinate(result.Genes[i], Individual.N2);
+                    CurrentMatrix[coordinate.X, coordinate.Y].Fill = ON1;
+                }
             }
         }
 

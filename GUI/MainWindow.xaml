@@ -159,7 +159,7 @@
                             <ColumnDefinition Width="9*" />
                         </Grid.ColumnDefinitions>
 
-                        <TextBox x:Name="N_Text" Text="256" Grid.Column="0" ></TextBox>
+                        <TextBox x:Name="N_Text" Text="256" Grid.Column="0" TextChanged="N_Text_TextChanged" ></TextBox>
                         <ComboBox x:Name="WhiteCellsBy" Grid.Column="1" />
                     </Grid>
 
@@ -168,7 +168,7 @@
                             <ColumnDefinition Width="11*" />
                             <ColumnDefinition Width="9*" />
                         </Grid.ColumnDefinitions>
-                        <TextBox x:Name="M_Text" Text="32" Grid.Column="0"  TextChanged="M_Text_TextChanged"  />
+                        <TextBox x:Name="M_Text" Text="32" Grid.Column="0"    />
                         <ComboBox x:Name="BlackCellsBy" Grid.Column="1" />
                     </Grid>
 

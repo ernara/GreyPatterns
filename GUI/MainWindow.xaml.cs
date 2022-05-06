@@ -529,10 +529,15 @@ namespace GUI
             if (New != null)
             {
                 NewOnly();
-
             }
         }
 
-        
+        private void N_Text_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (New != null)
+            {
+                NewOnly();
+            }
+        }
     }
 }
