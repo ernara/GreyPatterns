@@ -31,7 +31,6 @@ namespace Algorithms
             Genes = new List<int>(individual.Genes);
         }
 
-
         public override string ToString()
         {
             return $"{N} {M} {Fitness}";
@@ -43,7 +42,9 @@ namespace Algorithms
             //Trace.WriteLine(File.ReadAllText(fileName));
             var result = JsonSerializer.Deserialize<Result>(File.ReadAllText(fileName));
 
-            return fileName.Substring(0,fileName.Length - 5) + " N:" + result.N + " M:" +  result.M;
+            string file = fileName.Substring(0, fileName.Length - 5) + " N:" + result.N + " M:" + result.M;
+
+            return file;
         }
 
         public void SaveFile()
