@@ -8,6 +8,7 @@ namespace Algorithms
 {
     public class Algorithm
     {
+        AlgorithmType AlgorithmType;
         public static int PopulationSize { get; private set; }
         public static int OldPopulationSize { get; private set; }
         public static int CrossoverPopulationSize { get; private set; }
@@ -22,12 +23,14 @@ namespace Algorithms
 
         private Func<Individual> ChooseRandomIndividual;
 
-        public Algorithm(int n, int m, int populationSize,
-            int oldPopulationSize, int crossoverPopulationSize, int newPopulationSize,
+        public Algorithm(int n, int m, AlgorithmType algorithmType,
+            int populationSize,
+            int oldPopulationSize, int crossoverPopulationSize, int newPopulationSize, 
             IndividualType individualType, CrossoverType crossoverType, RandomChooseType randomChooseType,
             MutateType mutateType, LocalSearchType localSearchType, MirrorType mirrorType,
             int mutateChance, int localSearchChance, MutateFlags mutateFlags, LocalSearchFlags localSearchFlags)
         {
+            AlgorithmType = algorithmType;
             SetUpParameters(n, m, populationSize, oldPopulationSize, crossoverPopulationSize, newPopulationSize);
             SetUpDelegates(individualType, crossoverType, randomChooseType, mutateType, localSearchType, mirrorType);
             SetUpChancesAndFlags(mutateChance, localSearchChance, mutateFlags, localSearchFlags);
@@ -172,6 +175,18 @@ namespace Algorithms
 
         protected virtual void Do()
         {
+            if (AlgorithmType == AlgorithmType.Strait)
+            {
+                DoStrait();
+            }
+            else
+            {
+                DoCustom();
+            }
+        }
+
+        private void DoCustom()
+        {
             List<Individual> NewPopulation = new(Population.Take(OldPopulationSize));
 
             Individual child;
@@ -197,7 +212,26 @@ namespace Algorithms
                 Population[0].Mutate(MutateFlags.PopulationSizeIsOne);
                 Population[0].LocalSearch(LocalSearchFlags.PopulationSizeIsOne);
             }
+        }
 
+
+        private  void DoStrait()
+        {
+            for (int i = Individual.M - 1; i >= 0; i--)
+            {
+                if (Population[0].Genes[i] + Individual.M - i < Individual.N)
+                {
+                    Population[0].Genes[i]++;
+                    for (int j = i + 1; j < Individual.M; j++)
+                    {
+                        Population[0].Genes[j] = Population[0].Genes[j - 1] + 1;
+                    }
+                    break;
+                }
+            }
+
+            Population[0].Genes = Population[0].Genes.Union(Enumerable.Range(0, Individual.N)).Distinct().ToList();
+            Population[0].CalculateFitness();
         }
 
         public virtual void NextResearch(int time, string fileName)
